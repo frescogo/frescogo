@@ -65,8 +65,8 @@ loop do
     var u32 time   = 0;
     var int hit    = 0;
     var int seqs   = 0;
-    var int p0     = 0;
-    var int p1     = 0;
+    var u32 p0     = 0;
+    var u32 p1     = 0;
 
     code/call Out (none) -> none do
         var u32 total = _min( _min(outer.p0,outer.p1)*1.2, _max(outer.p0,outer.p1) );
@@ -105,8 +105,13 @@ loop do
             if i % 2 == 1 then
                 _Serial.print("     ");
             end
+
             var int v = _map(outer.game.hits[i], 0,255, 100,3000);
-            _Serial.println(v);
+            {{
+                char str[5];
+                sprintf(str, "%4d", @v);
+                Serial.println(str);
+            }}
         end
     end
 
@@ -208,9 +213,6 @@ loop do
                     end
                 end
             end
-
-            game.hits[hit] = 0;
-            hit = hit+1;
 
             _tone(8, 300, 100);
             await 150ms;
