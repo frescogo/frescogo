@@ -69,7 +69,10 @@ loop do
     var int p1     = 0;
 
     code/call Out (none) -> none do
-        _Serial.print("> ");
+        var u32 total = _min( _min(outer.p0,outer.p1)*1.2, _max(outer.p0,outer.p1) );
+        var int pct   = 100 - _min(100, (outer.seqs-1)*3);
+        total = total * pct/100;
+        _Serial.print(">>> ");
         _Serial.print(outer.time);
         _Serial.print(" ");
         _Serial.print(outer.seqs);
@@ -79,7 +82,32 @@ loop do
         _Serial.print(outer.p0);
         _Serial.print(" ");
         _Serial.print(outer.p1);
+        _Serial.print(" => ");
+        _Serial.print(total);
         _Serial.println();
+    end
+
+    code/call Dump (none) -> none do
+        var int i = -1;
+        loop do
+            i = i + 1;
+            if i == outer.hit then
+                break;
+            end
+            if outer.game.hits[i] == 0 then
+                _Serial.println("---------");
+                i = i + 1;
+            end
+            if outer.game.hits[i] == 0 then
+                continue;
+            end
+
+            if i % 2 == 1 then
+                _Serial.print("     ");
+            end
+            var int v = _map(outer.game.hits[i], 0,255, 100,3000);
+            _Serial.println(v);
+        end
     end
 
     do
@@ -130,11 +158,11 @@ loop do
                     var int dt = (t1 - t0) as int;
                     t0 = t1;
 
-                    game.hits[hit] = dt as u16;
+                    game.hits[hit] = _map(dt, 100,3000, 0,255);
+
                     hit = hit + 1;
 
                     var int kmh = 3600 * DISTANCE / dt;
-
                     if nxt == 0 then
                         p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
                     else
@@ -197,4 +225,5 @@ loop do
     await 2s;
 
     call Out();
+    call Dump();
 end
