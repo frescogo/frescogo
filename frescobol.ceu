@@ -1,0 +1,200 @@
+#include "string.ceu"
+#include "out.ceu"
+#include "wclock.ceu"
+#include "int0.ceu"     // UNO=D2, MEGA=D21
+#include "int1.ceu"     // UNO=D2, MEGA=D21
+
+output high/low OUT_13;
+
+#define DISTANCE    8
+#define TIMEOUT     10000
+
+native/pre do
+    typedef struct {
+        char player1[25];
+        char player2[25];
+        u8   hits[1000];
+    } TGAME;
+end
+
+native/plain _TGAME;
+
+var _TGAME game = _;
+
+_Serial.begin(9600);
+
+#if 0
+code/await Name (var&[] byte name) -> none do
+    loop do
+        var[25] byte str = [];
+        await USART_Rx(&str, _);
+        name = name .. str;
+        if name[$name-1] == {'\n'} then
+            break;
+        end
+    end
+end
+#endif
+
+loop do
+
+    do
+        par/or do
+            do await FOREVER; end
+            var[25] byte name;
+            name = [];
+            //await Name(&name);
+            _strncpy(game.player1, &&name[0], $name-1);
+            name = [];
+            //await Name(&name);
+            _strncpy(game.player2, &&name[0], $name-1);
+        with
+            par/and do
+                await INT0;
+            with
+                await INT1;
+            end
+            _strcpy(game.player1, "Atleta 1");
+            _strcpy(game.player2, "Atleta 2");
+        end
+    end
+
+    _Serial.println(game.player1);
+    _Serial.println(game.player2);
+
+    var u32 time   = 0;
+    var int hit    = 0;
+    var int seqs   = 0;
+    var int p0     = 0;
+    var int p1     = 0;
+
+    code/call Out (none) -> none do
+        _Serial.print("> ");
+        _Serial.print(outer.time);
+        _Serial.print(" ");
+        _Serial.print(outer.seqs);
+        _Serial.print(" ");
+        _Serial.print(outer.hit);
+        _Serial.print(" ");
+        _Serial.print(outer.p0);
+        _Serial.print(" ");
+        _Serial.print(outer.p1);
+        _Serial.println();
+    end
+
+    do
+        loop do
+            seqs = seqs + 1;
+            call Out();
+
+            await 1s;
+            _tone(8, 5000, 500);
+            await 1s;
+
+            var int nxt = do
+                par do
+                    await INT0;
+                    escape 1;
+                with
+                    await INT1;
+                    escape 0;
+                end
+            end;
+
+            var u32 t0 = _millis();
+            game.hits[hit] = 0;
+            hit = hit + 1;
+
+            if nxt != (hit%2) then
+                game.hits[hit] = 0;
+                hit = hit + 1;
+            end
+
+            _tone(8, 500, 30);
+            await 80ms;
+
+            loop do
+                par/or do
+                    await 3s;
+                    await 2s;
+                    break;
+                with
+                    if nxt == 0 then
+                        await INT0;
+                    else
+                        await INT1;
+                    end
+                    nxt = 1 - nxt;
+
+                    var u32 t1 = _millis();
+                    var int dt = (t1 - t0) as int;
+                    t0 = t1;
+
+                    game.hits[hit] = dt as u16;
+                    hit = hit + 1;
+
+                    var int kmh = 3600 * DISTANCE / dt;
+
+                    if nxt == 0 then
+                        p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
+                    else
+                        p1 = p1 + (kmh*kmh);
+                    end
+
+                    _Serial.print("> ");
+                    _Serial.print(dt);
+                    _Serial.print(" ");
+                    _Serial.print(kmh);
+                    _Serial.print(" ");
+                    _Serial.print(p0);
+                    _Serial.print(" ");
+                    _Serial.print(p1);
+                    _Serial.println();
+
+                    if kmh < 50 then
+                        _tone(8, 500, 30);
+                        await 80ms;
+                    else/if kmh < 60 then
+                        _tone(8, 500, 30);
+                        await 80ms;
+                        _tone(8, 500, 30);
+                    else/if kmh < 70 then
+                        _tone(8, 2000, 30);
+                        await 80ms;
+                    else/if kmh < 80 then
+                        _tone(8, 2000, 30);
+                        await 80ms;
+                        _tone(8, 2000, 30);
+                    else/if kmh < 90 then
+                        _tone(8, 4000, 30);
+                        await 80ms;
+                    else
+                        _tone(8, 4000, 30);
+                        await 80ms;
+                        _tone(8, 4000, 30);
+                    end
+
+                    time = time + dt;
+                    if time >= TIMEOUT then
+                        escape;
+                    end
+                end
+            end
+
+            game.hits[hit] = 0;
+            hit = hit+1;
+
+            _tone(8, 300, 100);
+            await 150ms;
+            _tone(8, 200, 100);
+            await 150ms;
+            _tone(8, 100, 200);
+            await 200ms;
+        end
+    end
+
+    _tone(8, 200, 2000);
+    await 2s;
+
+    call Out();
+end
