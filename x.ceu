@@ -1,0 +1,140 @@
+#include "out.ceu"
+#include "int0.ceu"     // UNO=D2, MEGA=D21
+#include "int1.ceu"     // UNO=D2, MEGA=D21
+
+native/pre do
+    ##include <TVout.h>
+    ##include <fontALL.h>
+    TVout TV;
+end
+native/plain _TV;
+
+output high/low OUT_13;
+
+spawn do
+    loop do
+        await 1s;
+        emit OUT_13(on);
+        await 1s;
+        emit OUT_13(off);
+    end
+end
+
+input none RESTART;
+
+#define DISTANCE    8
+#define TIMEOUT     300000 //10000
+
+{
+    TV.begin(PAL,32,21);
+    TV.select_font(font6x8);
+}
+
+var u32 time = _;
+var int seqs = _;
+var u32 p0   = _;
+var u32 p1   = _;
+
+loop do
+    watching RESTART do
+        time = 0;
+        seqs = 0;
+        p0   = 0;
+        p1   = 0;
+
+        do
+            loop do
+                seqs = seqs + 1;
+                //call Out();
+
+                await 1s;
+                _TV.tone(5000, 500);
+                await 1s;
+
+                var int nxt = do
+                    par do
+                        await INT0;
+                        escape 1;
+                    with
+                        await INT1;
+                        escape 0;
+                    end
+                end;
+
+                var u32 t0 = _TV.millis();
+
+                _TV.tone(500, 30);
+                _TV.println(0);
+                await 80ms;
+
+                loop do
+                    par/or do
+                        await 3s;
+                        await 2s;
+                        break;
+                    with
+                        if nxt == 0 then
+                            await INT0;
+                        else
+                            await INT1;
+                        end
+                        nxt = 1 - nxt;
+
+                        var u32 t1 = _TV.millis();
+                        var int dt = (t1 - t0) as int;
+                        t0 = t1;
+
+                        var int kmh = 3600 * DISTANCE / dt;
+                        if nxt == 0 then
+                            p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
+                        else
+                            p1 = p1 + (kmh*kmh);
+                        end
+
+                        _TV.println(kmh);
+
+                        if kmh < 50 then
+                            _TV.tone(500, 30);
+                            await 80ms;
+                        else/if kmh < 60 then
+                            _TV.tone(500, 30);
+                            await 80ms;
+                            _TV.tone(500, 30);
+                        else/if kmh < 70 then
+                            _TV.tone(2000, 30);
+                            await 80ms;
+                        else/if kmh < 80 then
+                            _TV.tone(2000, 30);
+                            await 80ms;
+                            _TV.tone(2000, 30);
+                        else/if kmh < 90 then
+                            _TV.tone(4000, 30);
+                            await 80ms;
+                        else
+                            _TV.tone(4000, 30);
+                            await 80ms;
+                            _TV.tone(4000, 30);
+                        end
+
+                        time = time + dt;
+                        if time >= TIMEOUT then
+                            escape;
+                        end
+                    end
+                end
+
+                _TV.tone(300, 100);
+                await 150ms;
+                _TV.tone(200, 100);
+                await 150ms;
+                _TV.tone(100, 200);
+                await 200ms;
+            end
+        end
+
+        _TV.tone(200, 2000);
+        await 2s;
+
+        //call Out();
+    end
+end
