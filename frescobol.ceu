@@ -10,8 +10,18 @@ native/pre do
     ##include <fontALL.h>
     TVout TV;
     pollserial pserial;
+
+    char NAMEA[20] = "Atleta 1";
+    char NAMEB[20] = "Atleta 2";
+    char STR[32];
+
+    char* TITLE (char* title) {
+        sprintf(STR, "%15s: ", title);
+        return STR;
+    }
 end
-native/plain _TV, _pserial;
+native/plain  _TV, _pserial, _NAMEA, _NAMEB, _STR;
+native/nohold _TITLE;
 
 output high/low OUT_13;
 
@@ -21,58 +31,85 @@ input none RESTART;
 #define TIMEOUT     300000 //10000
 
 {
-    TV.begin(PAL,24,16);
-    TV.select_font(font6x8);
+    TV.begin(PAL,144,80);
+    //TV.select_font(font6x8);
     TV.set_hbi_hook(pserial.begin(9600));
 }
+#if 0
+{
+  TV.clear_screen();
+  //TV.println(0,0,"Multiple fonts:");
+  //TV.select_font(font4x6);
+  TV.println(0,0, "Abcdefghijklmnopqrstuvxz12345678901234567890aBcdefghijklmnopqrstuvxz12345678901234567890abCdefghijklmnopqrstuvxz12345678901234567890abcDefghijklmnopqrstuvxz12345678901234567890ABCDEFGHIJKL");
+  //TV.select_font(font6x8);
+  //TV.println("6x8 font FONT");
+  //TV.select_font(font8x8);
+  //TV.println("8x8 font FONT");
+  //TV.select_font(font6x8);
+}
+do await FOREVER; end
+#endif
 
-var[600] u8 hits;
-var[20] byte name0 = [] .. "Atleta 1";
-var[20] byte name1 = [] .. "Atleta 2";
+var[100] u8 hits;
 
-var u32 time = _;
-var int seqs = _;
-var u32 p0   = _;
-var u32 p1   = _;
+var u32 time  = _;
+var int falls = _;
+var u32 p0    = _;
+var u32 p1    = _;
 
-code/call Out (none) -> none do
+code/call Score (none) -> none do
     var u32 total = _min( _min(outer.p0,outer.p1)*1.2, _max(outer.p0,outer.p1) );
-    var int pct   = 100 - _min(100, (outer.seqs-1)*3);
+    var int pct   = 100 - _min(100, (outer.falls)*3);
     total = total * pct/100;
-    _pserial.print(">>> ");
-    _pserial.print(outer.time);
-    _pserial.print(" ");
-    _pserial.print(outer.seqs);
-    _pserial.print(" ");
-    _pserial.print($outer.hits);
-    _pserial.print(" ");
-    _pserial.print(outer.p0);
-    _pserial.print(" ");
-    _pserial.print(outer.p1);
-    _pserial.print(" => ");
-    _pserial.print(total);
-    _pserial.println();
-end
 
-code/call Dump (none) -> none do
-    {{
-        char str[20];
-        sprintf(str, "%15s",@(&&outer.name0[0]));
-        pserial.print(str);
+    _pserial.println();
+    _pserial.println("--------------------------------");
+    {
+        sprintf(STR, "%15s", NAMEA);
+        pserial.print(STR);
         pserial.print(" / ");
-        sprintf(str, "%s",@(&&outer.name1[0]));
-        pserial.print(str);
+        sprintf(STR, "%s", NAMEB);
+        pserial.print(STR);
         pserial.println();
-    }}
+    }
+    _pserial.println("--------------------------------");
+    _pserial.println();
+
+    _pserial.print(_TITLE("TOTAL"));
+    _pserial.println(total);
+
+    _pserial.print(_TITLE("Quedas"));
+    _pserial.println(outer.falls);
+
+    _pserial.print(_TITLE("Tempo"));
+    _pserial.print(outer.time);
+    _pserial.println(" ms");
+
+    _pserial.print(_TITLE("Golpes"));
+    _pserial.println($outer.hits);
+
+    _pserial.print(_TITLE(_NAMEA));
+    _pserial.println(outer.p0);
+
+    _pserial.print(_TITLE(_NAMEB));
+    _pserial.println(outer.p1);
+    _pserial.println();
 
     var int i = -1;
+    var int bola = 0;
     loop do
         i = i + 1;
         if i == $outer.hits then
             break;
         end
         if outer.hits[i] == 0 then
-            _pserial.println("--------------------------------");
+            bola = bola + 1;
+            _pserial.print("-- Bola ");
+            {{
+                sprintf(STR, "%2d", @bola);
+                pserial.print(STR);
+            }}
+            _pserial.println(" ---------------------");
             if outer.hits[i+1] == 0 then
                 i = i + 1;
             end
@@ -86,11 +123,11 @@ code/call Dump (none) -> none do
 
         var int v = _map(outer.hits[i], 0,255, 0,2000);
         {{
-            char str[5];
-            sprintf(str, "%4d", @v);
-            pserial.println(str);
+            sprintf(STR, "%4d", @v);
+            pserial.println(STR);
         }}
     end
+    _pserial.println();
 end
 
 spawn do
@@ -104,60 +141,75 @@ spawn do
             await async do end;
         end
 
-        var[32] byte str;
-        loop do
-            if _pserial.available() as bool then
-                str = str .. [_pserial.read()];
-            else
-                break;
-            end
-        end
-        str = str .. [{'\0'}];
+        {{
+            int i = 0;
+            while (pserial.available()) {
+                STR[i++] = pserial.read();
+            }
+            while (STR[i-1]=='\n' || STR[i-1]=='\r') {
+                i--;
+            }
+            STR[i++] = '\0';
+        }}
 
-        if _strncmp(&&str[0], "restart", 7) == 0 then
+        if {strncmp(STR, "reinicio", 8) == 0} as bool then
             await async do
                 emit RESTART;
             end
-        else/if _strncmp(&&str[0], "out", 3) == 0 then
-            call Out();
-        else/if _strncmp(&&str[0], "dump", 4) == 0 then
-            call Dump();
-        else/if _strncmp(&&str[0], "name1", 5) == 0 then
-            name0 = [] .. (&&str[6] as _char&&);
-        else/if _strncmp(&&str[0], "name2", 5) == 0 then
-            name1 = [] .. (&&str[6] as _char&&);
+        else/if {strncmp(STR, "placar", 6) == 0} as bool then
+            call Score();
+        else/if {strncmp(STR, "nome-1", 6) == 0} as bool then
+            if {strlen(&STR[7]) < 15} as bool then
+                {strcpy(NAMEA, &STR[7]);}
+            end
+        else/if {strncmp(STR, "nome-2", 6) == 0} as bool then
+            if {strlen(&STR[7]) < 15} as bool then
+                {strcpy(NAMEB, &STR[7]);}
+            end
         end
     end
 end
 
 loop do
     watching RESTART do
-        _pserial.println("= START =");
-        hits = [];
-        time = 0;
-        seqs = 0;
-        p0   = 0;
-        p1   = 0;
+        _pserial.println("= INICIO =");
+        hits  = [];
+        time  = 0;
+        falls = 0;
+        p0    = 0;
+        p1    = 0;
 
-        code/call Hit (var int kmh) -> none do
+        code/call Hit (var _char_ptr name, var int kmh) -> none do
+#if 0
+{
+  TV.clear_screen();
+  TV.println(0,0,"Multiple fonts:");
+  TV.select_font(font4x6);
+  TV.println("4x6 font FONT ate onde eu vou");
+  TV.select_font(font6x8);
+  TV.println("6x8 font FONT");
+  TV.select_font(font8x8);
+  TV.println("8x8 font FONT");
+  TV.select_font(font6x8);
+}
+             _TV.print("Atleta 1");
+            _TV.print("  ");
+            _TV.print("Atleta 2\n");
+            _TV.println();
             _TV.println(kmh);
+#endif
 
             _pserial.print("> ");
+            _pserial.print(name);
+            _pserial.print(": ");
             _pserial.print(kmh);
-            _pserial.print(" ");
-            _pserial.print(outer.p0);
-            _pserial.print(" ");
-            _pserial.print(outer.p1);
             _pserial.println();
         end
 
         do
             loop do
-                seqs = seqs + 1;
-                call Out();
-
                 await 2s;
-                _TV.tone(5000, 500);
+                _TV.tone(3000, 500);
                 await 1s;
 
                 var int nxt = do
@@ -180,12 +232,13 @@ loop do
                 _TV.tone(500, 30);
                 await 80ms;
 
-                call Hit(0);
+                call Hit("saque", 0);
 
                 loop do
                     par/or do
                         await 3s;
                         await 2s;
+                        falls = falls + 1;
                         break;
                     with
                         if nxt == 0 then
@@ -204,8 +257,10 @@ loop do
                         var int kmh = 3600 * DISTANCE / dt;
                         if nxt == 0 then
                             p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
+                            call Hit(_NAMEA, kmh);
                         else
                             p1 = p1 + (kmh*kmh);
+                            call Hit(_NAMEB, kmh);
                         end
 
                         if kmh < 50 then
@@ -231,14 +286,14 @@ loop do
                             _TV.tone(4000, 30);
                         end
 
-                        call Hit(kmh);
-
                         time = time + dt;
                         if time >= TIMEOUT then
                             escape;
                         end
                     end
                 end
+
+                call Score();
 
                 _TV.tone(300, 100);
                 await 150ms;
@@ -252,7 +307,25 @@ loop do
         _TV.tone(200, 2000);
         await 2s;
 
-        call Out();
-        call Dump();
+        call Score();
+        _pserial.println("= FIM =");
+
+        loop do
+            par/or do
+                par/or do
+                    await INT0;
+                with
+                    await INT1;
+                end
+                await 500ms;
+            with
+                par/and do
+                    await INT0;
+                with
+                    await INT1;
+                end
+                break;
+            end
+        end
     end
 end
