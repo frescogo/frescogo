@@ -1,8 +1,17 @@
 #include "string.ceu"
 #include "out.ceu"
-#include "wclock.ceu"
+//#include "wclock.ceu"
 #include "int0.ceu"     // UNO=D2, MEGA=D21
 #include "int1.ceu"     // UNO=D2, MEGA=D21
+
+native/pre do
+    ##include <TVout.h>
+    ##include <pollserial.h>
+    ##include <fontALL.h>
+    TVout TV;
+    pollserial pserial;
+end
+native/plain _TV, _pserial;
 
 output high/low OUT_13;
 
@@ -11,7 +20,11 @@ input none RESTART;
 #define DISTANCE    8
 #define TIMEOUT     300000 //10000
 
-_Serial.begin(9600);
+{
+    TV.begin(PAL,24,16);
+    TV.select_font(font6x8);
+    TV.set_hbi_hook(pserial.begin(9600));
+}
 
 var[600] u8 hits;
 var[20] byte name0 = [] .. "Atleta 1";
@@ -26,30 +39,30 @@ code/call Out (none) -> none do
     var u32 total = _min( _min(outer.p0,outer.p1)*1.2, _max(outer.p0,outer.p1) );
     var int pct   = 100 - _min(100, (outer.seqs-1)*3);
     total = total * pct/100;
-    _Serial.print(">>> ");
-    _Serial.print(outer.time);
-    _Serial.print(" ");
-    _Serial.print(outer.seqs);
-    _Serial.print(" ");
-    _Serial.print($outer.hits);
-    _Serial.print(" ");
-    _Serial.print(outer.p0);
-    _Serial.print(" ");
-    _Serial.print(outer.p1);
-    _Serial.print(" => ");
-    _Serial.print(total);
-    _Serial.println();
+    _pserial.print(">>> ");
+    _pserial.print(outer.time);
+    _pserial.print(" ");
+    _pserial.print(outer.seqs);
+    _pserial.print(" ");
+    _pserial.print($outer.hits);
+    _pserial.print(" ");
+    _pserial.print(outer.p0);
+    _pserial.print(" ");
+    _pserial.print(outer.p1);
+    _pserial.print(" => ");
+    _pserial.print(total);
+    _pserial.println();
 end
 
 code/call Dump (none) -> none do
     {{
         char str[20];
         sprintf(str, "%15s",@(&&outer.name0[0]));
-        Serial.print(str);
-        Serial.print(" / ");
+        pserial.print(str);
+        pserial.print(" / ");
         sprintf(str, "%s",@(&&outer.name1[0]));
-        Serial.print(str);
-        Serial.println();
+        pserial.print(str);
+        pserial.println();
     }}
 
     var int i = -1;
@@ -59,23 +72,23 @@ code/call Dump (none) -> none do
             break;
         end
         if outer.hits[i] == 0 then
-            _Serial.println("--------------------------------");
+            _pserial.println("--------------------------------");
             if outer.hits[i+1] == 0 then
                 i = i + 1;
             end
         end
 
         if i % 2 == 0 then
-            _Serial.print("           ");
+            _pserial.print("           ");
         else
-            _Serial.print("                 ");
+            _pserial.print("                 ");
         end
 
         var int v = _map(outer.hits[i], 0,255, 0,2000);
         {{
             char str[5];
             sprintf(str, "%4d", @v);
-            Serial.println(str);
+            pserial.println(str);
         }}
     end
 end
@@ -84,7 +97,7 @@ spawn do
     loop do
         loop do
             await 1s;
-            if _Serial.available() as bool then
+            if _pserial.available() as bool then
                 await 1s;
                 break;
             end
@@ -93,8 +106,8 @@ spawn do
 
         var[32] byte str;
         loop do
-            if _Serial.available() as bool then
-                str = str .. [_Serial.read()];
+            if _pserial.available() as bool then
+                str = str .. [_pserial.read()];
             else
                 break;
             end
@@ -119,7 +132,7 @@ end
 
 loop do
     watching RESTART do
-        _Serial.println("= START =");
+        _pserial.println("= START =");
         hits = [];
         time = 0;
         seqs = 0;
@@ -132,7 +145,7 @@ loop do
                 call Out();
 
                 await 1s;
-                _tone(8, 5000, 500);
+                _TV.tone(5000, 500);
                 await 1s;
 
                 var int nxt = do
@@ -152,18 +165,19 @@ loop do
                     hits = hits .. [0];
                 end
 
-                _tone(8, 500, 30);
+                _TV.tone(500, 30);
+                _TV.println(0);
                 await 80ms;
 
-                _Serial.print("> ");
-                _Serial.print(0);
-                _Serial.print(" ");
-                _Serial.print(0);
-                _Serial.print(" ");
-                _Serial.print(p0);
-                _Serial.print(" ");
-                _Serial.print(p1);
-                _Serial.println();
+                _pserial.print("> ");
+                _pserial.print(0);
+                _pserial.print(" ");
+                _pserial.print(0);
+                _pserial.print(" ");
+                _pserial.print(p0);
+                _pserial.print(" ");
+                _pserial.print(p1);
+                _pserial.println();
 
                 loop do
                     par/or do
@@ -191,38 +205,40 @@ loop do
                             p1 = p1 + (kmh*kmh);
                         end
 
+                        _TV.println(kmh);
+
                         if kmh < 50 then
-                            _tone(8, 500, 30);
+                            _TV.tone(500, 30);
                             await 80ms;
                         else/if kmh < 60 then
-                            _tone(8, 500, 30);
+                            _TV.tone(500, 30);
                             await 80ms;
-                            _tone(8, 500, 30);
+                            _TV.tone(500, 30);
                         else/if kmh < 70 then
-                            _tone(8, 2000, 30);
+                            _TV.tone(2000, 30);
                             await 80ms;
                         else/if kmh < 80 then
-                            _tone(8, 2000, 30);
+                            _TV.tone(2000, 30);
                             await 80ms;
-                            _tone(8, 2000, 30);
+                            _TV.tone(2000, 30);
                         else/if kmh < 90 then
-                            _tone(8, 4000, 30);
+                            _TV.tone(4000, 30);
                             await 80ms;
                         else
-                            _tone(8, 4000, 30);
+                            _TV.tone(4000, 30);
                             await 80ms;
-                            _tone(8, 4000, 30);
+                            _TV.tone(4000, 30);
                         end
 
-                        _Serial.print("> ");
-                        _Serial.print(dt);
-                        _Serial.print(" ");
-                        _Serial.print(kmh);
-                        _Serial.print(" ");
-                        _Serial.print(p0);
-                        _Serial.print(" ");
-                        _Serial.print(p1);
-                        _Serial.println();
+                        _pserial.print("> ");
+                        _pserial.print(dt);
+                        _pserial.print(" ");
+                        _pserial.print(kmh);
+                        _pserial.print(" ");
+                        _pserial.print(p0);
+                        _pserial.print(" ");
+                        _pserial.print(p1);
+                        _pserial.println();
 
                         time = time + dt;
                         if time >= TIMEOUT then
@@ -231,16 +247,16 @@ loop do
                     end
                 end
 
-                _tone(8, 300, 100);
+                _TV.tone(300, 100);
                 await 150ms;
-                _tone(8, 200, 100);
+                _TV.tone(200, 100);
                 await 150ms;
-                _tone(8, 100, 200);
+                _TV.tone(100, 200);
                 await 200ms;
             end
         end
 
-        _tone(8, 200, 2000);
+        _TV.tone(200, 2000);
         await 2s;
 
         call Out();
