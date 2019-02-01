@@ -50,7 +50,7 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var[100] u8 hits;
+var[600] u8 hits;
 
 var u32 time  = _;
 var int falls = _;
@@ -158,15 +158,16 @@ spawn do
             end
         else/if {strncmp(STR, "placar", 6) == 0} as bool then
             call Score();
-        else/if {strncmp(STR, "nome-1", 6) == 0} as bool then
-            if {strlen(&STR[7]) < 15} as bool then
-                {strcpy(NAMEA, &STR[7]);}
+        else/if {strncmp(STR, "esquerda ", 9) == 0} as bool then
+            if {strlen(&STR[8]) < 15} as bool then
+                {strcpy(NAMEA, &STR[8]);}
             end
-        else/if {strncmp(STR, "nome-2", 6) == 0} as bool then
-            if {strlen(&STR[7]) < 15} as bool then
-                {strcpy(NAMEB, &STR[7]);}
+        else/if {strncmp(STR, "direita ", 8) == 0} as bool then
+            if {strlen(&STR[8]) < 15} as bool then
+                {strcpy(NAMEB, &STR[8]);}
             end
         end
+        call Score();
     end
 end
 
@@ -255,13 +256,6 @@ loop do
                         hits = hits .. [ _map(dt, 100,2000, 0,255) ];
 
                         var int kmh = 3600 * DISTANCE / dt;
-                        if nxt == 0 then
-                            p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
-                            call Hit(_NAMEA, kmh);
-                        else
-                            p1 = p1 + (kmh*kmh);
-                            call Hit(_NAMEB, kmh);
-                        end
 
                         if kmh < 50 then
                             _TV.tone(500, 30);
@@ -286,6 +280,14 @@ loop do
                             _TV.tone(4000, 30);
                         end
 
+                        if nxt == 0 then
+                            p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
+                            call Hit(_NAMEA, kmh);
+                        else
+                            p1 = p1 + (kmh*kmh);
+                            call Hit(_NAMEB, kmh);
+                        end
+
                         time = time + dt;
                         if time >= TIMEOUT then
                             escape;
@@ -293,14 +295,14 @@ loop do
                     end
                 end
 
-                call Score();
-
                 _TV.tone(300, 100);
                 await 150ms;
                 _TV.tone(200, 100);
                 await 150ms;
                 _TV.tone(100, 200);
                 await 200ms;
+
+                call Score();
             end
         end
 
