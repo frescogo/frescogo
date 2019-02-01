@@ -15,20 +15,21 @@ native/pre do
     char NAMEB[20] = "Atleta 2";
     char STR[32];
 
+    u32 TIMEOUT  = 300000;
+    int DISTANCE = 800;
+
     char* TITLE (char* title) {
         sprintf(STR, "%15s: ", title);
         return STR;
     }
 end
+native _TIMEOUT, _DISTANCE;
 native/plain  _TV, _pserial, _NAMEA, _NAMEB, _STR;
 native/nohold _TITLE;
 
 output high/low OUT_13;
 
 input none RESTART;
-
-#define DISTANCE    8
-#define TIMEOUT     300000 //10000
 
 {
     TV.begin(PAL,144,80);
@@ -50,7 +51,7 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var[600] u8 hits;
+var[100] u8 hits;
 
 var u32 time  = _;
 var int falls = _;
@@ -72,18 +73,25 @@ code/call Score (none) -> none do
         pserial.print(STR);
         pserial.println();
     }
+
+    _pserial.print("         (");
+    _pserial.print(_DISTANCE);
+    _pserial.print("cm / ");
+    _pserial.print(_TIMEOUT/1000);
+    _pserial.println("s)");
+
     _pserial.println("--------------------------------");
     _pserial.println();
 
     _pserial.print(_TITLE("TOTAL"));
     _pserial.println(total);
 
-    _pserial.print(_TITLE("Quedas"));
-    _pserial.println(outer.falls);
-
     _pserial.print(_TITLE("Tempo"));
     _pserial.print(outer.time);
-    _pserial.println(" ms");
+    _pserial.println("ms");
+
+    _pserial.print(_TITLE("Quedas"));
+    _pserial.println(outer.falls);
 
     _pserial.print(_TITLE("Golpes"));
     _pserial.println($outer.hits);
@@ -158,9 +166,19 @@ spawn do
             end
         else/if {strncmp(STR, "placar", 6) == 0} as bool then
             call Score();
+        else/if {strncmp(STR, "tempo ", 6) == 0} as bool then
+            {{
+                String str = &STR[6];
+                TIMEOUT = str.toInt() * 1000;
+            }}
+        else/if {strncmp(STR, "distancia ", 10) == 0} as bool then
+            {{
+                String str = &STR[10];
+                DISTANCE = str.toInt();
+            }}
         else/if {strncmp(STR, "esquerda ", 9) == 0} as bool then
-            if {strlen(&STR[8]) < 15} as bool then
-                {strcpy(NAMEA, &STR[8]);}
+            if {strlen(&STR[9]) < 15} as bool then
+                {strcpy(NAMEA, &STR[9]);}
             end
         else/if {strncmp(STR, "direita ", 8) == 0} as bool then
             if {strlen(&STR[8]) < 15} as bool then
@@ -255,7 +273,7 @@ loop do
 
                         hits = hits .. [ _map(dt, 100,2000, 0,255) ];
 
-                        var int kmh = 3600 * DISTANCE / dt;
+                        var int kmh = ((36 as s32) * _DISTANCE / dt) as int;
 
                         if kmh < 50 then
                             _TV.tone(500, 30);
@@ -289,7 +307,7 @@ loop do
                         end
 
                         time = time + dt;
-                        if time >= TIMEOUT then
+                        if time >= _TIMEOUT then
                             escape;
                         end
                     end
