@@ -139,12 +139,24 @@ loop do
         p0   = 0;
         p1   = 0;
 
+        code/call Hit (var int kmh) -> none do
+            _TV.println(kmh);
+
+            _pserial.print("> ");
+            _pserial.print(kmh);
+            _pserial.print(" ");
+            _pserial.print(outer.p0);
+            _pserial.print(" ");
+            _pserial.print(outer.p1);
+            _pserial.println();
+        end
+
         do
             loop do
                 seqs = seqs + 1;
                 call Out();
 
-                await 1s;
+                await 2s;
                 _TV.tone(5000, 500);
                 await 1s;
 
@@ -166,18 +178,9 @@ loop do
                 end
 
                 _TV.tone(500, 30);
-                _TV.println(0);
                 await 80ms;
 
-                _pserial.print("> ");
-                _pserial.print(0);
-                _pserial.print(" ");
-                _pserial.print(0);
-                _pserial.print(" ");
-                _pserial.print(p0);
-                _pserial.print(" ");
-                _pserial.print(p1);
-                _pserial.println();
+                call Hit(0);
 
                 loop do
                     par/or do
@@ -205,8 +208,6 @@ loop do
                             p1 = p1 + (kmh*kmh);
                         end
 
-                        _TV.println(kmh);
-
                         if kmh < 50 then
                             _TV.tone(500, 30);
                             await 80ms;
@@ -230,15 +231,7 @@ loop do
                             _TV.tone(4000, 30);
                         end
 
-                        _pserial.print("> ");
-                        _pserial.print(dt);
-                        _pserial.print(" ");
-                        _pserial.print(kmh);
-                        _pserial.print(" ");
-                        _pserial.print(p0);
-                        _pserial.print(" ");
-                        _pserial.print(p1);
-                        _pserial.println();
+                        call Hit(kmh);
 
                         time = time + dt;
                         if time >= TIMEOUT then
