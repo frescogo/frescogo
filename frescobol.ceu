@@ -85,7 +85,13 @@ code/call Score (none) -> none do
 
         sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
         pserial.print(STR);
-        pserial.println(@total/100);
+        pserial.print(@total/100);
+        if (@outer.time > 5000) {
+            pserial.print(F(" ("));
+            pserial.print(@(total*10/outer.time));
+            pserial.print(F(")"));
+        }
+        pserial.println();
 
         sprintf_P(STR, PSTR("%15S: "), F("Tempo"));
         pserial.print(STR);
