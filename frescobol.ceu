@@ -140,7 +140,7 @@ code/call Score (none) -> none do
         if v == BALL_SERVICE then
             _pserial.println("****");
         else
-            var int x = _map(v, BALL_MIN,255, 0,2000);
+            var int x = _map(v, BALL_MIN,255, 100,2000);
             {{
                 sprintf(STR, "%4d", @x);
                 pserial.println(STR);
@@ -288,7 +288,7 @@ loop do
                         var int x = _max(_min(dt,2000), 100);
                         hits = hits .. [ _map(x, 100,2000, BALL_MIN,255) ];
 
-                        var int kmh = ((36 as s32) * _DISTANCE / dt) as int;
+                        var int kmh = ((36 as s32) * _DISTANCE / x) as int;
 
                         if kmh < 50 then
                             _TV.tone(500, 30);
