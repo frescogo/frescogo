@@ -11,7 +11,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[100];
+    s16  HITS[450];
 
     char NAMEA[20] = "Atleta 1";
     char NAMEB[20] = "Atleta 2";
@@ -23,6 +23,7 @@ native/pre do
 end
 native _TIMEOUT, _DISTANCE, _HITS;
 native/plain  _TV, _pserial, _NAMEA, _NAMEB, _STR;
+native/nohold _Hit;
 
 #define BALL_NONE    0
 #define BALL_SERVICE 1
@@ -166,7 +167,8 @@ code/call Score (none) -> none do
     _pserial.println();
 end
 
-code/call Hit (var _char_ptr name, var u32 kmh, var bool is_back) -> none do
+native/pre do
+    void Hit (char* name, u32 kmh, bool is_back) {
 #if 0
 {
   TV.clear_screen();
@@ -186,14 +188,15 @@ code/call Hit (var _char_ptr name, var u32 kmh, var bool is_back) -> none do
             _TV.println(kmh);
 #endif
 
-    _pserial.print(_F("> "));
-    _pserial.print(name);
-    _pserial.print(_F(": "));
-    _pserial.print(kmh);
-    if is_back then
-        _pserial.print(_F(" !"));
-    end
-    _pserial.println();
+        pserial.print(F("> "));
+        pserial.print(name);
+        pserial.print(F(": "));
+        pserial.print(kmh);
+        if (is_back) {
+            pserial.print(F(" !"));
+        }
+        pserial.println();
+    }
 end
 
 spawn do
@@ -341,10 +344,10 @@ loop do
 
                     if nxt == 0 then
                         p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
-                        call Hit(_NAMEB, kmh, was_back);
+                        _Hit(_NAMEB, kmh, was_back);
                     else
                         p0 = p0 + (kmh*kmh);
-                        call Hit(_NAMEA, kmh, was_back);
+                        _Hit(_NAMEA, kmh, was_back);
                     end
 
                     await 150ms;
