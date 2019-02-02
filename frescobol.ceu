@@ -285,8 +285,8 @@ loop do
                         var int dt = (t1 - t0) as int;
                         t0 = t1;
 
-                        dt = _max(_min(dt,2000), 100);
-                        hits = hits .. [ _map(dt, 100,2000, BALL_MIN,255) ];
+                        var int x = _max(_min(dt,2000), 100);
+                        hits = hits .. [ _map(x, 100,2000, BALL_MIN,255) ];
 
                         var int kmh = ((36 as s32) * _DISTANCE / dt) as int;
 
