@@ -55,7 +55,7 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var[600] u8 hits;
+var[100] u8 hits;
 
 var u32 time  = _;
 var int falls = _;
@@ -211,6 +211,8 @@ loop do
         p1    = 0;
         nones = 0;
 
+        var bool is_back = false;
+
         code/call Hit (var _char_ptr name, var u32 kmh) -> none do
 #if 0
 {
@@ -279,7 +281,6 @@ loop do
                         else
                             await INT1;
                         end
-                        nxt = 1 - nxt;
 
                         var u32 t1 = _millis();
                         var int dt = (t1 - t0) as int;
@@ -290,37 +291,44 @@ loop do
 
                         var u32 kmh = 36 * _DISTANCE / x;
 
-                        if kmh < 50 then
-                            _TV.tone(500, 30);
-                            await 80ms;
+                        if kmh < 40 then
+                            _TV.tone( 500, 30);
+                            await 50ms;
+                        else/if kmh < 50 then
+                            _TV.tone(1500, 30);
+                            await 50ms;
                         else/if kmh < 60 then
-                            _TV.tone(500, 30);
-                            await 80ms;
-                            _TV.tone(500, 30);
+                            _TV.tone(2500, 30);
+                            await 50ms;
                         else/if kmh < 70 then
-                            _TV.tone(2000, 30);
-                            await 80ms;
-                        else/if kmh < 80 then
-                            _TV.tone(2000, 30);
-                            await 80ms;
-                            _TV.tone(2000, 30);
-                        else/if kmh < 90 then
-                            _TV.tone(4000, 30);
-                            await 80ms;
+                            _TV.tone(3500, 30);
+                            await 50ms;
                         else
-                            _TV.tone(4000, 30);
-                            await 80ms;
-                            _TV.tone(4000, 30);
+                            _TV.tone(4500, 30);
+                            await 50ms;
                         end
 
+                        var bool was_back = is_back;
+
                         if nxt == 0 then
-                            p0 = p0 + (kmh*kmh);    // p0 scores when p1 hits
+                            p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
                             call Hit(_NAMEA, kmh);
                         else
-                            p1 = p1 + (kmh*kmh);
+                            p0 = p0 + (kmh*kmh);
                             call Hit(_NAMEB, kmh);
                         end
 
+                        await 100ms;
+                        if nxt == 0 then
+                            is_back = (call INT0_Get() == low);
+                        else
+                            is_back = (call INT1_Get() == low);
+                        end
+                        if is_back then
+                            _TV.tone(200, 30);
+                        end
+
+                        nxt  = 1 - nxt;
                         time = time + dt;
                         if time >= _TIMEOUT then
                             escape;
