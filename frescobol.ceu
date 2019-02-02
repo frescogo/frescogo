@@ -211,7 +211,7 @@ loop do
         p1    = 0;
         nones = 0;
 
-        code/call Hit (var _char_ptr name, var int kmh) -> none do
+        code/call Hit (var _char_ptr name, var u32 kmh) -> none do
 #if 0
 {
   TV.clear_screen();
@@ -288,7 +288,7 @@ loop do
                         var int x = _max(_min(dt,2000), 100);
                         hits = hits .. [ _map(x, 100,2000, BALL_MIN,255) ];
 
-                        var int kmh = ((36 as s32) * _DISTANCE / x) as int;
+                        var u32 kmh = 36 * _DISTANCE / x;
 
                         if kmh < 50 then
                             _TV.tone(500, 30);
