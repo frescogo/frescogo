@@ -27,6 +27,10 @@ native _TIMEOUT, _DISTANCE;
 native/plain  _TV, _pserial, _NAMEA, _NAMEB, _STR;
 native/nohold _TITLE;
 
+#define BALL_NONE    0
+#define BALL_SERVICE 1
+#define BALL_MIN     2
+
 output high/low OUT_13;
 
 input none RESTART;
@@ -57,6 +61,7 @@ var u32 time  = _;
 var int falls = _;
 var u32 p0    = _;
 var u32 p1    = _;
+var int nones = _;
 
 code/call Score (none) -> none do
     var u32 total = _min( _min(outer.p0,outer.p1)*1.2, _max(outer.p0,outer.p1) );
@@ -84,7 +89,7 @@ code/call Score (none) -> none do
     _pserial.println();
 
     _pserial.print(_TITLE("TOTAL"));
-    _pserial.println(total);
+    _pserial.println(total/100);
 
     _pserial.print(_TITLE("Tempo"));
     _pserial.print(outer.time);
@@ -94,13 +99,13 @@ code/call Score (none) -> none do
     _pserial.println(outer.falls);
 
     _pserial.print(_TITLE("Golpes"));
-    _pserial.println($outer.hits);
+    _pserial.println($outer.hits - outer.nones);
 
     _pserial.print(_TITLE(_NAMEA));
-    _pserial.println(outer.p0);
+    _pserial.println(outer.p0/100);
 
     _pserial.print(_TITLE(_NAMEB));
-    _pserial.println(outer.p1);
+    _pserial.println(outer.p1/100);
     _pserial.println();
 
     var int i = -1;
@@ -110,7 +115,9 @@ code/call Score (none) -> none do
         if i == $outer.hits then
             break;
         end
-        if outer.hits[i] == 0 then
+        var u8 v = outer.hits[i];
+
+        if v == BALL_SERVICE then
             bola = bola + 1;
             _pserial.print("-- Bola ");
             {{
@@ -118,9 +125,10 @@ code/call Score (none) -> none do
                 pserial.print(STR);
             }}
             _pserial.println(" ---------------------");
-            if $outer.hits>i+1 and outer.hits[i+1]==0 then
-                i = i + 1;
-            end
+        end
+
+        if v == BALL_NONE then
+            continue;
         end
 
         if i % 2 == 0 then
@@ -129,11 +137,15 @@ code/call Score (none) -> none do
             _pserial.print("                 ");
         end
 
-        var int v = _map(outer.hits[i], 0,255, 0,2000);
-        {{
-            sprintf(STR, "%4d", @v);
-            pserial.println(STR);
-        }}
+        if v == BALL_SERVICE then
+            _pserial.println("****");
+        else
+            var int x = _map(v, BALL_MIN,255, 0,2000);
+            {{
+                sprintf(STR, "%4d", @x);
+                pserial.println(STR);
+            }}
+        end
     end
     _pserial.println();
 end
@@ -197,6 +209,7 @@ loop do
         falls = 0;
         p0    = 0;
         p1    = 0;
+        nones = 0;
 
         code/call Hit (var _char_ptr name, var int kmh) -> none do
 #if 0
@@ -242,11 +255,12 @@ loop do
                 end;
 
                 var u32 t0 = _millis();
-                hits = hits .. [0];
 
-                if nxt != ($hits%2) then
-                    hits = hits .. [0];
+                if nxt == ($hits%2) then
+                    nones = nones + 1;
+                    hits  = hits .. [BALL_NONE];
                 end
+                hits = hits .. [BALL_SERVICE];
 
                 _TV.tone(500, 30);
                 await 80ms;
@@ -271,7 +285,7 @@ loop do
                         var int dt = (t1 - t0) as int;
                         t0 = t1;
 
-                        hits = hits .. [ _map(dt, 100,2000, 0,255) ];
+                        hits = hits .. [ _map(dt, 100,2000, BALL_MIN,255) ];
 
                         var int kmh = ((36 as s32) * _DISTANCE / dt) as int;
 
