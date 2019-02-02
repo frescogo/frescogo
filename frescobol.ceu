@@ -11,7 +11,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[50];
+    s16  HITS[450];
 
     char NAMEA[20] = "Atleta 1";
     char NAMEB[20] = "Atleta 2";
@@ -182,27 +182,27 @@ spawn do
             STR[i++] = '\0';
         }}
 
-        if {strncmp_P(STR, (const char*)F("reinicio"), 8) == 0} as bool then
+        if {strncmp_P(STR, PSTR("reinicio"), 8) == 0} as bool then
             await async do
                 emit RESTART;
             end
-        else/if {strncmp_P(STR, (const char*)F("placar"), 6) == 0} as bool then
+        else/if {strncmp_P(STR, PSTR("placar"), 6) == 0} as bool then
             //call Score();     (call below)
-        else/if {strncmp_P(STR, (const char*)F("tempo "), 6) == 0} as bool then
+        else/if {strncmp_P(STR, PSTR("tempo "), 6) == 0} as bool then
             {{
                 String str = &STR[6];
                 TIMEOUT = str.toInt() * 1000;
             }}
-        else/if {strncmp_P(STR, (const char*)F("distancia "), 10) == 0} as bool then
+        else/if {strncmp_P(STR, PSTR("distancia "), 10) == 0} as bool then
             {{
                 String str = &STR[10];
                 DISTANCE = str.toInt();
             }}
-        else/if {strncmp_P(STR, (const char*)F("esquerda "), 9) == 0} as bool then
+        else/if {strncmp_P(STR, PSTR("esquerda "), 9) == 0} as bool then
             if {strlen(&STR[9]) < 15} as bool then
                 {strcpy(NAMEA, &STR[9]);}
             end
-        else/if {strncmp_P(STR, (const char*)F("direita "), 8) == 0} as bool then
+        else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
             if {strlen(&STR[8]) < 15} as bool then
                 {strcpy(NAMEB, &STR[8]);}
             end
@@ -301,7 +301,8 @@ loop do
                         var int dt = (t1 - t0) as int;
                         t0 = t1;
 
-                        var u32 kmh = 36 * _DISTANCE / dt;
+                        var u32 kmh = (36 as u32) * _DISTANCE / dt;
+                                        // prevents overflow
 
                         if kmh < 40 then
                             _TV.tone( 500, 30);
