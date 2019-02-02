@@ -55,7 +55,7 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var[100] u8 hits;
+var[600] u8 hits;
 
 var u32 time  = _;
 var int falls = _;
@@ -81,7 +81,7 @@ code/call Score (none) -> none do
 
     _pserial.print("         (");
     _pserial.print(_DISTANCE);
-    _pserial.print("cm / ");
+    _pserial.print("cm - ");
     _pserial.print(_TIMEOUT/1000);
     _pserial.println("s)");
 
@@ -285,6 +285,7 @@ loop do
                         var int dt = (t1 - t0) as int;
                         t0 = t1;
 
+                        dt = _max(_min(dt,2000), 100);
                         hits = hits .. [ _map(dt, 100,2000, BALL_MIN,255) ];
 
                         var int kmh = ((36 as s32) * _DISTANCE / dt) as int;
