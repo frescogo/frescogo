@@ -11,19 +11,22 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
+    u8  HITS[100];
+
     char NAMEA[20] = "Atleta 1";
     char NAMEB[20] = "Atleta 2";
-    char STR[32];
 
-    u32 TIMEOUT  = 300000;
-    int DISTANCE = 800;
+    u32  TIMEOUT  = 300000;
+    int  DISTANCE = 800;
+
+    char STR[32];
 
     char* TITLE (char* title) {
         sprintf(STR, "%15s: ", title);
         return STR;
     }
 end
-native _TIMEOUT, _DISTANCE;
+native _TIMEOUT, _DISTANCE, _HITS;
 native/plain  _TV, _pserial, _NAMEA, _NAMEB, _STR;
 native/nohold _TITLE;
 
@@ -55,13 +58,12 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var[100] u8 hits;
-
+var int hit   = _;
+var int nones = _;
 var u32 time  = _;
 var int falls = _;
 var u32 p0    = _;
 var u32 p1    = _;
-var int nones = _;
 
 code/call Score (none) -> none do
     var u32 total = _min( _min(outer.p0,outer.p1)*1.2, _max(outer.p0,outer.p1) );
@@ -99,7 +101,7 @@ code/call Score (none) -> none do
     _pserial.println(outer.falls);
 
     _pserial.print(_TITLE("Golpes"));
-    _pserial.println($outer.hits - outer.nones);
+    _pserial.println(outer.hit - outer.nones);
 
     _pserial.print(_TITLE(_NAMEA));
     _pserial.println(outer.p0/100);
@@ -112,10 +114,10 @@ code/call Score (none) -> none do
     var int bola = 0;
     loop do
         i = i + 1;
-        if i == $outer.hits then
+        if i == outer.hit then
             break;
         end
-        var u8 v = outer.hits[i];
+        var u8 v = _HITS[i];
 
         if v == BALL_SERVICE then
             bola = bola + 1;
@@ -204,12 +206,12 @@ end
 loop do
     watching RESTART do
         _pserial.println("= INICIO =");
-        hits  = [];
+        hit   = 0;
+        nones = 0;
         time  = 0;
         falls = 0;
         p0    = 0;
         p1    = 0;
-        nones = 0;
 
         var bool is_back = false;
 
@@ -258,11 +260,13 @@ loop do
 
                 var u32 t0 = _millis();
 
-                if nxt == ($hits%2) then
+                if nxt == (hit%2) then
+                    _HITS[hit] = BALL_NONE;
+                    hit   = hit   + 1;
                     nones = nones + 1;
-                    hits  = hits .. [BALL_NONE];
                 end
-                hits = hits .. [BALL_SERVICE];
+                _HITS[hit] = BALL_SERVICE;
+                hit = hit + 1;
 
                 _TV.tone(500, 30);
                 await 80ms;
@@ -287,8 +291,6 @@ loop do
                         t0 = t1;
 
                         var int x = _max(_min(dt,2000), 100);
-                        hits = hits .. [ _map(x, 100,2000, BALL_MIN,255) ];
-
                         var u32 kmh = 36 * _DISTANCE / x;
 
                         if kmh < 40 then
@@ -318,7 +320,7 @@ loop do
                             call Hit(_NAMEB, kmh);
                         end
 
-                        await 100ms;
+                        await 150ms;
                         if nxt == 0 then
                             is_back = (call INT0_Get() == low);
                         else
@@ -328,7 +330,9 @@ loop do
                             _TV.tone(200, 30);
                         end
 
-                        nxt  = 1 - nxt;
+                        _HITS[hit] = {map(@x, 100,2000, BALL_MIN,255)};
+                        hit = hit + 1;
+                        nxt = 1 - nxt;
                         time = time + dt;
                         if time >= _TIMEOUT then
                             escape;
