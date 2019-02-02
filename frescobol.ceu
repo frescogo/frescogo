@@ -11,7 +11,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[450];
+    s16  HITS[100];
 
     char NAMEA[20] = "Atleta 1";
     char NAMEB[20] = "Atleta 2";
@@ -166,6 +166,36 @@ code/call Score (none) -> none do
     _pserial.println();
 end
 
+code/call Hit (var _char_ptr name, var u32 kmh, var bool is_back) -> none do
+#if 0
+{
+  TV.clear_screen();
+  TV.println(0,0,"Multiple fonts:");
+  TV.select_font(font4x6);
+  TV.println("4x6 font FONT ate onde eu vou");
+  TV.select_font(font6x8);
+  TV.println("6x8 font FONT");
+  TV.select_font(font8x8);
+  TV.println("8x8 font FONT");
+  TV.select_font(font6x8);
+}
+             _TV.print("Atleta 1");
+            _TV.print("  ");
+            _TV.print("Atleta 2\n");
+            _TV.println();
+            _TV.println(kmh);
+#endif
+
+    _pserial.print(_F("> "));
+    _pserial.print(name);
+    _pserial.print(_F(": "));
+    _pserial.print(kmh);
+    if is_back then
+        _pserial.print(_F(" !"));
+    end
+    _pserial.println();
+end
+
 spawn do
     loop do
         loop do
@@ -227,36 +257,6 @@ loop do
         p0    = 0;
         p1    = 0;
 
-        code/call Hit (var _char_ptr name, var u32 kmh, var bool is_back) -> none do
-#if 0
-{
-  TV.clear_screen();
-  TV.println(0,0,"Multiple fonts:");
-  TV.select_font(font4x6);
-  TV.println("4x6 font FONT ate onde eu vou");
-  TV.select_font(font6x8);
-  TV.println("6x8 font FONT");
-  TV.select_font(font8x8);
-  TV.println("8x8 font FONT");
-  TV.select_font(font6x8);
-}
-             _TV.print("Atleta 1");
-            _TV.print("  ");
-            _TV.print("Atleta 2\n");
-            _TV.println();
-            _TV.println(kmh);
-#endif
-
-            _pserial.print(_F("> "));
-            _pserial.print(name);
-            _pserial.print(_F(": "));
-            _pserial.print(kmh);
-            if is_back then
-                _pserial.print(_F(" !"));
-            end
-            _pserial.println();
-        end
-
         do
             loop do
                 await 2s;
@@ -291,73 +291,82 @@ loop do
                 _pserial.println(_F("> saque"));
 
                 loop do
-                    par/or do
-                        await 3s;
-                        await 2s;
-                        falls = falls + 1;
-                        break;
-                    with
-                        if nxt == 0 then
-                            await INT0;
-                        else
-                            await INT1;
-                        end
+                    // both are unpresseed?
+                    var bool both = (call INT0_Get() == high) and
+                                    (call INT1_Get() == high);
 
-                        var u32 t1 = _millis();
-                        var int dt = (t1 - t0) as int;
-                        t0 = t1;
+                    if nxt == 0 then
+                        await INT0;
+                    else
+                        await INT1;
+                    end
 
-                        var u32 kmh = (36 as u32) * _DISTANCE / dt;
-                                        // prevents overflow
+                    var u32 t1 = _millis();
+                    var int dt = (t1 - t0) as int;
+                    t0 = t1;
 
-                        if kmh < 40 then
-                            _TV.tone( 500, 30);
-                            await 50ms;
-                        else/if kmh < 50 then
-                            _TV.tone(1500, 30);
-                            await 50ms;
-                        else/if kmh < 60 then
-                            _TV.tone(2500, 30);
-                            await 50ms;
-                        else/if kmh < 70 then
-                            _TV.tone(3500, 30);
-                            await 50ms;
-                        else
-                            _TV.tone(4500, 30);
-                            await 50ms;
+                    // if both were unpressed and now both are pressed,
+                    // and its long since the previous hit, then this is a fall
+                    if dt > 1000 then
+                        await 100ms;
+                        if both and (call INT0_Get() == low) and
+                                    (call INT1_Get() == low)
+                        then
+                            falls = falls + 1;
+                            break;
                         end
+                    end
 
-                        var bool was_back = is_back;
+                    var u32 kmh = (36 as u32) * _DISTANCE / dt;
+                                    // prevents overflow
 
-                        if nxt == 0 then
-                            p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
-                            call Hit(_NAMEA, kmh, was_back);
-                        else
-                            p0 = p0 + (kmh*kmh);
-                            call Hit(_NAMEB, kmh, was_back);
-                        end
+                    if kmh < 40 then
+                        _TV.tone( 500, 30);
+                        await 50ms;
+                    else/if kmh < 50 then
+                        _TV.tone(1500, 30);
+                        await 50ms;
+                    else/if kmh < 60 then
+                        _TV.tone(2500, 30);
+                        await 50ms;
+                    else/if kmh < 70 then
+                        _TV.tone(3500, 30);
+                        await 50ms;
+                    else
+                        _TV.tone(4500, 30);
+                        await 50ms;
+                    end
 
-                        await 150ms;
-                        if nxt == 0 then
-                            is_back = (call INT0_Get() == low);
-                        else
-                            is_back = (call INT1_Get() == low);
-                        end
-                        if is_back then
-                            _TV.tone(200, 30);
-                        end
+                    var bool was_back = is_back;
 
-                        if was_back then
-                            _HITS[hit] = -dt;
-                        else
-                            _HITS[hit] = dt;
-                        end
-                        hit = hit + 1;
-                        nxt = 1 - nxt;
-                        time = time + dt;
-                        if time >= _TIMEOUT then
-                            escape;
-                        end
+                    if nxt == 0 then
+                        p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
+                        call Hit(_NAMEB, kmh, was_back);
+                    else
+                        p0 = p0 + (kmh*kmh);
+                        call Hit(_NAMEA, kmh, was_back);
+                    end
+
+                    await 150ms;
+                    if nxt == 0 then
+                        is_back = (call INT0_Get() == low);
+                    else
+                        is_back = (call INT1_Get() == low);
+                    end
+                    if is_back then
+                        _TV.tone(200, 30);
+                    end
+
+                    if was_back then
+                        _HITS[hit] = -dt;
+                    else
+                        _HITS[hit] = dt;
+                    end
+                    hit = hit + 1;
+                    nxt = 1 - nxt;
+                    time = time + dt;
+                    if time >= _TIMEOUT then
+                        escape;
                     end
                 end
 
