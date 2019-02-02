@@ -11,7 +11,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    u8  HITS[100];
+    s16  HITS[50];
 
     char NAMEA[20] = "Atleta 1";
     char NAMEB[20] = "Atleta 2";
@@ -117,7 +117,7 @@ code/call Score (none) -> none do
         if i == outer.hit then
             break;
         end
-        var u8 v = _HITS[i];
+        var s16 v = _HITS[i];
 
         if v == BALL_SERVICE then
             bola = bola + 1;
@@ -134,7 +134,12 @@ code/call Score (none) -> none do
         end
 
         if i % 2 == 0 then
-            _pserial.print("           ");
+            _pserial.print("         ");
+            if v < 0 then
+                _pserial.print("! ");
+            else
+                _pserial.print("  ");
+            end
         else
             _pserial.print("                 ");
         end
@@ -142,11 +147,14 @@ code/call Score (none) -> none do
         if v == BALL_SERVICE then
             _pserial.println("****");
         else
-            var int x = _map(v, BALL_MIN,255, 100,2000);
             {{
-                sprintf(STR, "%4d", @x);
-                pserial.println(STR);
+                sprintf(STR, "%4d", (@v)<0 ? -@v : @v);
+                pserial.print(STR);
             }}
+            if i%2==1 and v<0 then
+                _pserial.print(" !");
+            end
+            _pserial.println();
         end
     end
     _pserial.println();
@@ -213,9 +221,7 @@ loop do
         p0    = 0;
         p1    = 0;
 
-        var bool is_back = false;
-
-        code/call Hit (var _char_ptr name, var u32 kmh) -> none do
+        code/call Hit (var _char_ptr name, var u32 kmh, var bool is_back) -> none do
 #if 0
 {
   TV.clear_screen();
@@ -239,6 +245,9 @@ loop do
             _pserial.print(name);
             _pserial.print(": ");
             _pserial.print(kmh);
+            if is_back then
+                _pserial.print(" !");
+            end
             _pserial.println();
         end
 
@@ -271,7 +280,9 @@ loop do
                 _TV.tone(500, 30);
                 await 80ms;
 
-                call Hit("saque", 0);
+                var bool is_back = false;
+
+                call Hit("saque", 0, false);
 
                 loop do
                     par/or do
@@ -290,8 +301,7 @@ loop do
                         var int dt = (t1 - t0) as int;
                         t0 = t1;
 
-                        var int x = _max(_min(dt,2000), 100);
-                        var u32 kmh = 36 * _DISTANCE / x;
+                        var u32 kmh = 36 * _DISTANCE / dt;
 
                         if kmh < 40 then
                             _TV.tone( 500, 30);
@@ -314,10 +324,10 @@ loop do
 
                         if nxt == 0 then
                             p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
-                            call Hit(_NAMEA, kmh);
+                            call Hit(_NAMEA, kmh, was_back);
                         else
                             p0 = p0 + (kmh*kmh);
-                            call Hit(_NAMEB, kmh);
+                            call Hit(_NAMEB, kmh, was_back);
                         end
 
                         await 150ms;
@@ -330,7 +340,11 @@ loop do
                             _TV.tone(200, 30);
                         end
 
-                        _HITS[hit] = {map(@x, 100,2000, BALL_MIN,255)};
+                        if was_back then
+                            _HITS[hit] = -dt;
+                        else
+                            _HITS[hit] = dt;
+                        end
                         hit = hit + 1;
                         nxt = 1 - nxt;
                         time = time + dt;
