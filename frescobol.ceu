@@ -118,7 +118,7 @@ code/call Score (none) -> none do
                 pserial.print(STR);
             }}
             _pserial.println(" ---------------------");
-            if outer.hits[i+1] == 0 then
+            if $outer.hits>i+1 and outer.hits[i+1]==0 then
                 i = i + 1;
             end
         end
@@ -165,7 +165,7 @@ spawn do
                 emit RESTART;
             end
         else/if {strncmp(STR, "placar", 6) == 0} as bool then
-            call Score();
+            //call Score();     (call below)
         else/if {strncmp(STR, "tempo ", 6) == 0} as bool then
             {{
                 String str = &STR[6];
