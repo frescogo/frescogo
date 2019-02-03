@@ -58,9 +58,14 @@ native/pre do
             }
 
             if (v!=BALL_NONE && v!=BALL_SERVICE) {
-                u32 kmh = ((u32) 36) * DISTANCE / v;
-                          // prevents overflow
-                GAME.ps[1-(i%2)] += kmh * kmh;
+                s16 nxt = HITS[i+1];
+                if (i==HIT-1 || nxt==BALL_NONE || nxt==BALL_SERVICE) {
+                    // ignore last hit
+                } else {
+                    u32 kmh = ((u32) 36) * DISTANCE / v;
+                              // prevents overflow
+                    GAME.ps[1-(i%2)] += kmh * kmh;
+                }
 
                 GAME.time += v;
             }
