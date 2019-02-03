@@ -287,6 +287,12 @@ spawn do
             if {strlen(&STR[8]) < 15} as bool then
                 {strcpy(NAMES[1], &STR[8]);}
             end
+        else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
+            if _HIT > 0 then
+                _HIT = _HIT - 1;
+            end
+        else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
+            _HIT = _HIT + 1;
         end
         call Score();
     end
