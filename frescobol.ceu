@@ -33,20 +33,28 @@ native/pre do
     typedef struct {
         u16 hits;
         u8  falls;
+        u32 time;
     } Game;
     Game GAME;
 
     void ALL (void) {
         GAME.hits  = 0;
         GAME.falls = 0;
+        GAME.time  = 0;
 
         for (int i=0 ; i<hit ; i++) {
-            if (HITS[i] != BALL_NONE) {
+            s16 v = HITS[i];
+
+            if (v != BALL_NONE) {
                 GAME.hits++;
             }
 
-            if (HITS[i] == BALL_SERVICE) {
+            if (v == BALL_SERVICE) {
                 GAME.falls++;
+            }
+
+            if (v!=BALL_NONE && v!=BALL_SERVICE) {
+                GAME.time += (v >= 0 ? v : -v);
             }
         }
     }
@@ -81,16 +89,15 @@ do await FOREVER; end
 #endif
 
 var int hit   = _;
-var u32 time  = _;
 var u32 p0    = _;
 var u32 p1    = _;
 
 code/call Score (none) -> none do
     var u32 total = _Get_Total(outer.p0, outer.p1, _GAME.falls) / 100;
     var u32 avg   = (outer.p0 + outer.p1) / 2;
-    var u32 pace  = _Get_Total(avg, avg, _GAME.falls+1) * 10 / outer.time;
     {{
         ALL();
+        u32 pace = Get_Total(@avg, @avg, GAME.falls) * 10 / GAME.time;
 
         pserial.println();
         pserial.println(F("--------------------------------"));
@@ -113,16 +120,16 @@ code/call Score (none) -> none do
         sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
         pserial.print(STR);
         pserial.print(@total);
-        if (@outer.time > 5000) {
+        if (GAME.time > 5000) {
             pserial.print(F(" ("));
-            pserial.print(@pace);
+            pserial.print(pace);
             pserial.print(F(")"));
         }
         pserial.println();
 
         sprintf_P(STR, PSTR("%15S: "), F("Tempo"));
         pserial.print(STR);
-        pserial.print(@outer.time);
+        pserial.print(GAME.time);
         pserial.println(F("ms"));
 
         sprintf_P(STR, PSTR("%15S: "), F("Quedas"));
@@ -281,7 +288,6 @@ loop do
         _pserial.println(_F("= INICIO ="));
         hit   = 0;
         _hit  = 0;
-        time  = 0;
         p0    = 0;
         p1    = 0;
 
@@ -393,8 +399,9 @@ loop do
                     hit = hit + 1;
                     _hit = _hit + 1;
                     nxt = 1 - nxt;
-                    time = time + dt;
-                    if time >= _TIMEOUT then
+
+                    {ALL();}
+                    if _GAME.time >= _TIMEOUT then
                         escape;
                     end
                 end
