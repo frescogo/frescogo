@@ -298,12 +298,13 @@ code/await Serial (none) -> NEVER do
                     escape false;
                 end
                 loop do
+                    _HIT = _HIT - 1;
                     if _HIT == 0 then
                         break;
-                    end
-                    _HIT = _HIT - 1;
-                    if _HITS[_HIT] == BALL_SERVICE then
-                        _HIT = _HIT - 1;
+                    else/if _HITS[_HIT] == BALL_SERVICE then
+                        if _HITS[_HIT-1] == BALL_NONE then
+                            _HIT = _HIT - 1;
+                        end
                         break;
                     end
                 end
@@ -320,12 +321,18 @@ code/await Serial (none) -> NEVER do
             else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
                 if _HIT > 0 then
                     _HIT = _HIT - 1;
+                    if _HITS[_HIT] == BALL_NONE then
+                        _HIT = _HIT - 1;
+                    end
                 else
                     escape false;
                 end
             else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
                 if _HITS[_HIT] != BALL_MARK then
                     _HIT = _HIT + 1;
+                    if _HITS[_HIT] == BALL_SERVICE then
+                        _HIT = _HIT + 1;    // skip BALL_NONE
+                    end
                 else
                     escape false;
                 end
