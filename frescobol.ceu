@@ -293,6 +293,9 @@ code/await Serial (none) -> NEVER do
                 _pserial.println(_F("invalid command"));
             end
         else/if {strncmp_P(STR, PSTR("-sequencia"), 10) == 0} as bool then
+            if _HIT == 0 then
+                _pserial.println(_F("invalid command"));
+            end
             loop do
                 if _HIT == 0 then
                     break;
@@ -300,6 +303,16 @@ code/await Serial (none) -> NEVER do
                 _HIT = _HIT - 1;
                 if _HITS[_HIT] == BALL_SERVICE then
                     _HIT = _HIT - 1;
+                    break;
+                end
+            end
+        else/if {strncmp_P(STR, PSTR("+sequencia"), 10) == 0} as bool then
+            if _HITS[_HIT] == BALL_MARK then
+                _pserial.println(_F("invalid command"));
+            end
+            loop do
+                _HIT = _HIT + 1;
+                if _HITS[_HIT]==BALL_MARK or _HITS[_HIT]==BALL_SERVICE then
                     break;
                 end
             end
