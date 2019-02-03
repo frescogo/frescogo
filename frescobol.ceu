@@ -11,7 +11,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[300];
+    s16  HITS[600];
 
     char NAMEA[20] = "Atleta 1";
     char NAMEB[20] = "Atleta 2";
@@ -213,7 +213,7 @@ spawn do
                 await 1s;
                 break;
             end
-            await async do end;
+            //await async do end;
         end
 
         {{
