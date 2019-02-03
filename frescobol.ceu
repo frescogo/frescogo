@@ -269,7 +269,7 @@ code/await Serial (none) -> NEVER do
                 emit RESTART;
             end
         else/if {strncmp_P(STR, PSTR("placar"), 6) == 0} as bool then
-            //call Score();     (call below)
+            call Score();
         else/if {strncmp_P(STR, PSTR("tempo "), 6) == 0} as bool then
             {{
                 String str = &STR[6];
@@ -283,10 +283,14 @@ code/await Serial (none) -> NEVER do
         else/if {strncmp_P(STR, PSTR("esquerda "), 9) == 0} as bool then
             if {strlen(&STR[9]) < 15} as bool then
                 {strcpy(NAMES[0], &STR[9]);}
+            else
+                _pserial.println(_F("invalid command"));
             end
         else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
             if {strlen(&STR[8]) < 15} as bool then
                 {strcpy(NAMES[1], &STR[8]);}
+            else
+                _pserial.println(_F("invalid command"));
             end
         else/if {strncmp_P(STR, PSTR("-sequencia"), 10) == 0} as bool then
             loop do
@@ -302,13 +306,18 @@ code/await Serial (none) -> NEVER do
         else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
             if _HIT > 0 then
                 _HIT = _HIT - 1;
+            else
+                _pserial.println(_F("invalid command"));
             end
         else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
             if _HITS[_HIT] != BALL_MARK then
                 _HIT = _HIT + 1;
+            else
+                _pserial.println(_F("invalid command"));
             end
+        else
+            _pserial.println(_F("invalid command"));
         end
-        call Score();
     end
 end
 
