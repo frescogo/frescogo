@@ -4,8 +4,9 @@
 #include "int0.ceu"     // UNO=D2, MEGA=D21
 #include "int1.ceu"     // UNO=D2, MEGA=D21
 
-#define BALL_NONE    0
-#define BALL_SERVICE 1
+#define BALL_MARK    0
+#define BALL_NONE    1
+#define BALL_SERVICE 2
 
 native/pre do
     ##include <TVout.h>
@@ -14,7 +15,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[600];
+    s16  HITS[601];     // +1: last BALL_MARK
     int  HIT = 0;
 
     char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
@@ -303,7 +304,9 @@ code/await Serial (none) -> NEVER do
                 _HIT = _HIT - 1;
             end
         else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
-            _HIT = _HIT + 1;
+            if _HITS[_HIT] != BALL_MARK then
+                _HIT = _HIT + 1;
+            end
         end
         call Score();
     end
@@ -312,7 +315,7 @@ end
 loop do
     watching RESTART do
         _pserial.println(_F("= INICIO ="));
-        _HIT  = 0;
+        _HIT = 0;
 
         do
             loop do
@@ -335,7 +338,7 @@ loop do
 
                 if nxt == (_HIT%2) then
                     _HITS[_HIT] = BALL_NONE;
-                    _HIT = _HIT  + 1;
+                    _HIT = _HIT + 1;
                 end
                 _HITS[_HIT] = BALL_SERVICE;
                 _HIT = _HIT + 1;
