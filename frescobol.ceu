@@ -170,12 +170,12 @@ code/call Score (none) -> none do
 
         if v == BALL_SERVICE then
             bola = bola + 1;
-            _pserial.print(_F("-- Bola "));
+            _pserial.print(_F("-- Sequencia "));
             {{
                 sprintf_P(STR, PSTR("%2d"), @bola);
                 pserial.print(STR);
             }}
-            _pserial.println(_F(" ---------------------"));
+            _pserial.println(_F(" ----------------"));
         end
 
         if v == BALL_NONE then
@@ -286,6 +286,17 @@ spawn do
         else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
             if {strlen(&STR[8]) < 15} as bool then
                 {strcpy(NAMES[1], &STR[8]);}
+            end
+        else/if {strncmp_P(STR, PSTR("-sequencia"), 10) == 0} as bool then
+            loop do
+                if _HIT == 0 then
+                    break;
+                end
+                _HIT = _HIT - 1;
+                if _HITS[_HIT] == BALL_SERVICE then
+                    _HIT = _HIT - 1;
+                    break;
+                end
             end
         else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
             if _HIT > 0 then
