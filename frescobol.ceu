@@ -34,6 +34,7 @@ native/pre do
         u16 hits;
         u8  falls;
         u32 time;
+        u32 ps[2];
     } Game;
     Game GAME;
 
@@ -41,9 +42,12 @@ native/pre do
         GAME.hits  = 0;
         GAME.falls = 0;
         GAME.time  = 0;
+        GAME.ps[0] = 0;
+        GAME.ps[1] = 0;
 
         for (int i=0 ; i<HIT ; i++) {
             s16 v = HITS[i];
+            v = (v >= 0 ? v : -v);
 
             if (v != BALL_NONE) {
                 GAME.hits++;
@@ -54,7 +58,11 @@ native/pre do
             }
 
             if (v!=BALL_NONE && v!=BALL_SERVICE) {
-                GAME.time += (v >= 0 ? v : -v);
+                u32 kmh = ((u32) 36) * DISTANCE / v;
+                          // prevents overflow
+                GAME.ps[1-(i%2)] += kmh * kmh;
+
+                GAME.time += v;
             }
         }
     }
@@ -88,15 +96,12 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var u32 p0    = _;
-var u32 p1    = _;
-
 code/call Score (none) -> none do
-    var u32 total = _Get_Total(outer.p0, outer.p1, _GAME.falls) / 100;
-    var u32 avg   = (outer.p0 + outer.p1) / 2;
     {{
         ALL();
-        u32 pace = Get_Total(@avg, @avg, GAME.falls) * 10 / GAME.time;
+        u32 total = Get_Total(GAME.ps[0], GAME.ps[1], GAME.falls) / 100;
+        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
+        u32 pace  = Get_Total(avg, avg, GAME.falls) * 10 / GAME.time;
 
         pserial.println();
         pserial.println(F("--------------------------------"));
@@ -118,7 +123,7 @@ code/call Score (none) -> none do
 
         sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
         pserial.print(STR);
-        pserial.print(@total);
+        pserial.print(total);
         if (GAME.time > 5000) {
             pserial.print(F(" ("));
             pserial.print(pace);
@@ -141,11 +146,11 @@ code/call Score (none) -> none do
 
         sprintf_P(STR, PSTR("%15s: "), NAMES[0]);
         pserial.print(STR);
-        pserial.println(@outer.p0/100);
+        pserial.println(GAME.ps[0]/100);
 
         sprintf_P(STR, PSTR("%15s: "), NAMES[1]);
         pserial.print(STR);
-        pserial.println(@outer.p1/100);
+        pserial.println(GAME.ps[1]/100);
         pserial.println();
     }}
 
@@ -286,8 +291,6 @@ loop do
     watching RESTART do
         _pserial.println(_F("= INICIO ="));
         _HIT  = 0;
-        p0    = 0;
-        p1    = 0;
 
         do
             loop do
@@ -371,11 +374,6 @@ loop do
                     var bool was_back = is_back;
 
                     _Hit(_NAMES[1-nxt], kmh, was_back);
-                    if nxt == 0 then
-                        p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
-                    else
-                        p0 = p0 + (kmh*kmh);
-                    end
 
                     await 150ms;
                     if nxt == 0 then
