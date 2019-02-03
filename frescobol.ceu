@@ -264,70 +264,79 @@ code/await Serial (none) -> NEVER do
             STR[i++] = '\0';
         }}
 
-        if {strncmp_P(STR, PSTR("reinicio"), 8) == 0} as bool then
-            await async do
-                emit RESTART;
-            end
-        else/if {strncmp_P(STR, PSTR("placar"), 6) == 0} as bool then
-            call Score();
-        else/if {strncmp_P(STR, PSTR("tempo "), 6) == 0} as bool then
-            {{
-                String str = &STR[6];
-                TIMEOUT = str.toInt() * 1000;
-            }}
-        else/if {strncmp_P(STR, PSTR("distancia "), 10) == 0} as bool then
-            {{
-                String str = &STR[10];
-                DISTANCE = str.toInt();
-            }}
-        else/if {strncmp_P(STR, PSTR("esquerda "), 9) == 0} as bool then
-            if {strlen(&STR[9]) < 15} as bool then
-                {strcpy(NAMES[0], &STR[9]);}
-            else
-                _pserial.println(_F("invalid command"));
-            end
-        else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
-            if {strlen(&STR[8]) < 15} as bool then
-                {strcpy(NAMES[1], &STR[8]);}
-            else
-                _pserial.println(_F("invalid command"));
-            end
-        else/if {strncmp_P(STR, PSTR("-sequencia"), 10) == 0} as bool then
-            if _HIT == 0 then
-                _pserial.println(_F("invalid command"));
-            end
-            loop do
+        var bool ok = do
+            if {strncmp_P(STR, PSTR("reinicio"), 8) == 0} as bool then
+                await async do
+                    emit RESTART;
+                end
+            else/if {strncmp_P(STR, PSTR("placar"), 6) == 0} as bool then
+                call Score();
+            else/if {strncmp_P(STR, PSTR("tempo "), 6) == 0} as bool then
+                {{
+                    String str = &STR[6];
+                    TIMEOUT = str.toInt() * 1000;
+                }}
+            else/if {strncmp_P(STR, PSTR("distancia "), 10) == 0} as bool then
+                {{
+                    String str = &STR[10];
+                    DISTANCE = str.toInt();
+                }}
+            else/if {strncmp_P(STR, PSTR("esquerda "), 9) == 0} as bool then
+                if {strlen(&STR[9]) < 15} as bool then
+                    {strcpy(NAMES[0], &STR[9]);}
+                else
+                    escape false;
+                end
+            else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
+                if {strlen(&STR[8]) < 15} as bool then
+                    {strcpy(NAMES[1], &STR[8]);}
+                else
+                    escape false;
+                end
+            else/if {strncmp_P(STR, PSTR("-sequencia"), 10) == 0} as bool then
                 if _HIT == 0 then
-                    break;
+                    escape false;
                 end
-                _HIT = _HIT - 1;
-                if _HITS[_HIT] == BALL_SERVICE then
+                loop do
+                    if _HIT == 0 then
+                        break;
+                    end
                     _HIT = _HIT - 1;
-                    break;
+                    if _HITS[_HIT] == BALL_SERVICE then
+                        _HIT = _HIT - 1;
+                        break;
+                    end
                 end
-            end
-        else/if {strncmp_P(STR, PSTR("+sequencia"), 10) == 0} as bool then
-            if _HITS[_HIT] == BALL_MARK then
-                _pserial.println(_F("invalid command"));
-            end
-            loop do
-                _HIT = _HIT + 1;
-                if _HITS[_HIT]==BALL_MARK or _HITS[_HIT]==BALL_SERVICE then
-                    break;
+            else/if {strncmp_P(STR, PSTR("+sequencia"), 10) == 0} as bool then
+                if _HITS[_HIT] == BALL_MARK then
+                    escape false;
                 end
-            end
-        else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
-            if _HIT > 0 then
-                _HIT = _HIT - 1;
+                loop do
+                    _HIT = _HIT + 1;
+                    if _HITS[_HIT]==BALL_MARK or _HITS[_HIT]==BALL_SERVICE then
+                        break;
+                    end
+                end
+            else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
+                if _HIT > 0 then
+                    _HIT = _HIT - 1;
+                else
+                    escape false;
+                end
+            else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
+                if _HITS[_HIT] != BALL_MARK then
+                    _HIT = _HIT + 1;
+                else
+                    escape false;
+                end
             else
-                _pserial.println(_F("invalid command"));
+                escape false;
             end
-        else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
-            if _HITS[_HIT] != BALL_MARK then
-                _HIT = _HIT + 1;
-            else
-                _pserial.println(_F("invalid command"));
-            end
+            escape true;
+        end;
+
+        if ok then
+            _pserial.println(_F("ok"));
         else
             _pserial.println(_F("invalid command"));
         end
