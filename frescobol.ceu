@@ -15,7 +15,7 @@ native/pre do
     pollserial pserial;
 
     s16  HITS[600];
-    int  hit = 0;
+    int  HIT = 0;
 
     char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
 
@@ -42,7 +42,7 @@ native/pre do
         GAME.falls = 0;
         GAME.time  = 0;
 
-        for (int i=0 ; i<hit ; i++) {
+        for (int i=0 ; i<HIT ; i++) {
             s16 v = HITS[i];
 
             if (v != BALL_NONE) {
@@ -59,7 +59,7 @@ native/pre do
         }
     }
 end
-native _TIMEOUT, _DISTANCE, _HITS, _hit, _GAME;
+native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME;
 native/plain  _TV, _pserial, _NAMES, _STR;
 native/nohold _Hit;
 native/pure   _Get_Total;
@@ -88,7 +88,6 @@ input none RESTART;
 do await FOREVER; end
 #endif
 
-var int hit   = _;
 var u32 p0    = _;
 var u32 p1    = _;
 
@@ -154,7 +153,7 @@ code/call Score (none) -> none do
     var int bola = 0;
     loop do
         i = i + 1;
-        if i == outer.hit then
+        if i == _HIT then
             break;
         end
         var s16 v = _HITS[i];
@@ -286,8 +285,7 @@ end
 loop do
     watching RESTART do
         _pserial.println(_F("= INICIO ="));
-        hit   = 0;
-        _hit  = 0;
+        _HIT  = 0;
         p0    = 0;
         p1    = 0;
 
@@ -309,14 +307,12 @@ loop do
 
                 var u32 t0 = _millis();
 
-                if nxt == (hit%2) then
-                    _HITS[hit] = BALL_NONE;
-                    hit   = hit   + 1;
-                    _hit  = _hit  + 1;
+                if nxt == (_HIT%2) then
+                    _HITS[_HIT] = BALL_NONE;
+                    _HIT = _HIT  + 1;
                 end
-                _HITS[hit] = BALL_SERVICE;
-                hit  = hit + 1;
-                _hit = _hit + 1;
+                _HITS[_HIT] = BALL_SERVICE;
+                _HIT = _HIT + 1;
 
                 _TV.tone(500, 30);
                 await 80ms;
@@ -392,12 +388,11 @@ loop do
                     end
 
                     if was_back then
-                        _HITS[hit] = -dt;
+                        _HITS[_HIT] = -dt;
                     else
-                        _HITS[hit] = dt;
+                        _HITS[_HIT] = dt;
                     end
-                    hit = hit + 1;
-                    _hit = _hit + 1;
+                    _HIT = _HIT + 1;
                     nxt = 1 - nxt;
 
                     {ALL();}
