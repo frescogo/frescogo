@@ -13,8 +13,7 @@ native/pre do
 
     s16  HITS[600];
 
-    char NAMEA[20] = "Atleta 1";
-    char NAMEB[20] = "Atleta 2";
+    char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
 
     u32  TIMEOUT  = 150000;
     int  DISTANCE = 800;
@@ -28,7 +27,7 @@ native/pre do
     }
 end
 native _TIMEOUT, _DISTANCE, _HITS;
-native/plain  _TV, _pserial, _NAMEA, _NAMEB, _STR;
+native/plain  _TV, _pserial, _NAMES, _STR;
 native/nohold _Hit;
 native/pure   _Get_Total;
 
@@ -74,10 +73,10 @@ code/call Score (none) -> none do
     {{
         pserial.println();
         pserial.println(F("--------------------------------"));
-        sprintf_P(STR, PSTR("%15s"), NAMEA);
+        sprintf_P(STR, PSTR("%15s"), NAMES[0]);
         pserial.print(STR);
         pserial.print(F(" / "));
-        sprintf_P(STR, PSTR("%s"), NAMEB);
+        sprintf_P(STR, PSTR("%s"), NAMES[1]);
         pserial.print(STR);
         pserial.println();
 
@@ -113,11 +112,11 @@ code/call Score (none) -> none do
         pserial.print(STR);
         pserial.println(@(outer.hit - outer.nones));
 
-        sprintf_P(STR, PSTR("%15s: "), NAMEA);
+        sprintf_P(STR, PSTR("%15s: "), NAMES[0]);
         pserial.print(STR);
         pserial.println(@outer.p0/100);
 
-        sprintf_P(STR, PSTR("%15s: "), NAMEB);
+        sprintf_P(STR, PSTR("%15s: "), NAMES[1]);
         pserial.print(STR);
         pserial.println(@outer.p1/100);
         pserial.println();
@@ -245,11 +244,11 @@ spawn do
             }}
         else/if {strncmp_P(STR, PSTR("esquerda "), 9) == 0} as bool then
             if {strlen(&STR[9]) < 15} as bool then
-                {strcpy(NAMEA, &STR[9]);}
+                {strcpy(NAMES[0], &STR[9]);}
             end
         else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
             if {strlen(&STR[8]) < 15} as bool then
-                {strcpy(NAMEB, &STR[8]);}
+                {strcpy(NAMES[1], &STR[8]);}
             end
         end
         call Score();
@@ -314,6 +313,7 @@ loop do
                     var int dt = (t1 - t0) as int;
                     t0 = t1;
 
+    // FALL
                     // if both were unpressed and now both are pressed,
                     // and its long since the previous hit, then this is a fall
                     if dt > 1000 then
@@ -348,12 +348,11 @@ loop do
 
                     var bool was_back = is_back;
 
+                    _Hit(_NAMES[1-nxt], kmh, was_back);
                     if nxt == 0 then
                         p1 = p1 + (kmh*kmh);    // p0 scores when p1 hits
-                        _Hit(_NAMEB, kmh, was_back);
                     else
                         p0 = p0 + (kmh*kmh);
-                        _Hit(_NAMEA, kmh, was_back);
                     end
 
                     await 150ms;
