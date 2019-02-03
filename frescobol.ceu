@@ -241,7 +241,7 @@ native/pre do
     }
 end
 
-spawn do
+code/await Serial (none) -> NEVER do
     loop do
         loop do
             await 1s;
@@ -321,6 +321,7 @@ loop do
                 await 1s;
 
                 var int nxt = do
+                    spawn Serial();
                     par do
                         await INT0;
                         escape 1;
