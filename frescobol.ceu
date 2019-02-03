@@ -334,6 +334,7 @@ loop do
                 var bool is_back = false;
 
                 _pserial.println(_F("> saque"));
+                await 150ms;
 
                 loop do
                     // both are unpresseed?
