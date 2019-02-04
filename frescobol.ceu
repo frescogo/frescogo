@@ -126,13 +126,17 @@ native/pre do
         }
     }
 
-    void Screen (const char* str, int kmh, int falls) {
+    void Screen (const char* str, int kmh, int p, int falls) {
         TV.clear_screen();
         //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
         // KMH
         if (str == NULL) {
-            sprintf(STR, "%d", kmh);
+            if (p == 0) {
+                sprintf(STR, "--> %d    ", kmh);
+            } else {
+                sprintf(STR, "    %d <--", kmh);
+            }
             str = STR;
         }
         TV.select_font(font8x8);
@@ -462,7 +466,7 @@ code/await Serial (none) -> NEVER do
             _pserial.println(_F("err"));
         end
         _ALL();
-        _Screen("---", 0, 0);
+        _Screen("---", 0, 0, 0);
     end
 end
 
@@ -471,7 +475,7 @@ loop do
         _pserial.println(_F("= INICIO ="));
         _HIT = 0;
         _ALL();
-        _Screen("INICIO", 0, 0);
+        _Screen("INICIO", 0, 0, 0);
 
         do
             loop do
@@ -479,7 +483,7 @@ loop do
                 _TV.tone(3000, 500);
                 await 1s;
 
-                _Screen("GO!", 0, 0);
+                _Screen("GO!", 0, 0, 0);
 
     // SERVICE
                 var int got = do
@@ -507,7 +511,7 @@ loop do
                 var bool is_back = false;
 
                 _pserial.println(_F("> saque"));
-                _Screen("---", 0, 0);
+                _Screen("---", 0, 0, 0);
                 await HIT_AWAIT ms;
 
                 var int nxt = 1 - got;
@@ -587,7 +591,7 @@ loop do
                     nxt = 1 - got;
 
                     _ALL();
-                    _Screen(null, kmh, -1);
+                    _Screen(null, kmh, 1-got, -1);
                     if _GAME.time >= _TIMEOUT then
                         escape;
                     end
@@ -618,7 +622,7 @@ loop do
                 await 200ms;
 
                 _ALL();
-                _Screen("QUEDA", 0, 0);
+                _Screen("QUEDA", 0, 0, 0);
                 _pserial.println(_F("QUEDA"));
                 //call Dump();
             end
@@ -628,7 +632,7 @@ loop do
         await 2s;
 
         _ALL();
-        _Screen("FIM", 0, 0);
+        _Screen("FIM", 0, 0, 0);
         //call Dump();
         _pserial.println(_F("= FIM ="));
 
