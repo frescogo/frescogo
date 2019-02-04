@@ -110,41 +110,70 @@ native/pre do
         }
     }
 
+    int Bests (u8* bests, int* min_, int* max_) {
+        *min_ = bests[BESTS-1];
+        *max_ = bests[0];
+        for (int i=0; i<BESTS; i++) {
+            if (bests[i] == 0) {
+                return i;
+            }
+        }
+        return BESTS;
+    }
+
     void Screen (const char* str, int kmh, int falls) {
         TV.clear_screen();
         //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
         // ESQ
-        TV.print(0,    0, NAMES[0]);
-        TV.print(0, 1*FY, GAME.ps[0]/100);
-        int n0=0; for(; n0<BESTS; n0++) { if (GAME.bests[0][n0] == 0) break; }
-        sprintf(STR, "B: %2d (%3d/%3d)", n0, GAME.bests[0][0], GAME.bests[0][BESTS-1]);
-        TV.print(0, 3*FY, STR);
+        TV.print(0, 0, NAMES[0]);
+        {
+            int n, min_, max_;
+            n = Bests(GAME.bests[0][1], &min_, &max_);
+            sprintf(STR, "F: %2d (%3d/%3d)", n, min_, max_);
+            TV.print(0, 1*FY, STR);
+        }
+        {
+            int n, min_, max_;
+            n = Bests(GAME.bests[0][0], &min_, &max_);
+            sprintf(STR, "B: %2d (%3d/%3d)", n, min_, max_);
+            TV.print(0, 2*FY, STR);
+        }
+        TV.print(0, 3*FY, GAME.ps[0]/100);
 
         // DIR
         TV.print(DX-FX*strlen(NAMES[1])-1, DY-1*FY, NAMES[1]);
+        {
+            int n, min_, max_;
+            n = Bests(GAME.bests[1][1], &min_, &max_);
+            sprintf(STR, "F: %2d (%3d/%3d)", n, min_, max_);
+            TV.print(DX-FX*strlen(STR)-1, DY-2*FY, STR);
+        }
+        {
+            int n, min_, max_;
+            n = Bests(GAME.bests[1][0], &min_, &max_);
+            sprintf(STR, "B: %2d (%3d/%3d)", n, min_, max_);
+            TV.print(DX-FX*strlen(STR)-1, DY-3*FY, STR);
+        }
         sprintf(STR, "%ld", GAME.ps[1]/100);
-        TV.print(DX-FX*strlen(STR)-1,      DY-2*FY, STR);
-        int n1=0; for(; n1<BESTS; n1++) { if (GAME.bests[1][n1] == 0) break; }
-        sprintf(STR, "B: %2d (%3d/%3d)", n1, GAME.bests[1][0], GAME.bests[1][BESTS-1]);
-        TV.print(DX-FX*strlen(STR)-1,      DY-3*FY, STR);
+        TV.print(DX-FX*strlen(STR)-1, DY-4*FY, STR);
 
         // KMH
         if (str == NULL) {
             sprintf(STR, "%d", kmh);
             str = STR;
         }
-        TV.print(DX/2-FX*strlen(str)/2, DY/2-FY/2, kmh);
+        TV.print(DX/2-FX*strlen(str)/2, DY/2-FY/2, str);
 
         // TIME/FALLS/PACE
-        sprintf(STR, "Tempo:  %3d", (TIMEOUT-GAME.time)/1000);
+        sprintf(STR, "Tempo:  %3ds", (TIMEOUT-GAME.time)/1000);
         TV.print(DX-FX*strlen(STR)-1,    0, STR);
-        sprintf(STR, "Quedas: %3d", GAME.falls+falls);
+        sprintf(STR, "Quedas:  %3d", GAME.falls+falls);
         TV.print(DX-FX*strlen(STR)-1,   FY, STR);
         if (GAME.time > 5000) {
             u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
             u32 pace  = avg * 10 / GAME.time;
-            sprintf(STR, "Ritmo:  %3d", pace);
+            sprintf(STR, "Ritmo:   %3d", pace);
         } else {
             sprintf(STR, "Ritmo:  ---");
         }
