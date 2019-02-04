@@ -216,7 +216,6 @@ native/pre do
         } else {
             TV.tone(4500, 30);
         }
-        TV.delay(50);
     }
 end
 
@@ -507,7 +506,7 @@ loop do
                 _pserial.println(_F("> saque"));
                 _Screen("---", 0, 0);
                 await 50ms;                 // V1
-                await 150ms;                // V2
+                await 100ms;                // V2
 
                 loop do
                     // both are unpresseed?
@@ -539,8 +538,10 @@ loop do
     // FALL
                     // if both were unpressed and now both are pressed,
                     // and its long since the previous hit, then this is a fall
+                    var int towait = 100;   // V2
                     if dt > 1000 then
-                        await 100ms;
+                        await (towait)ms;
+                        towait = 0;
                         if both and (call INT0_Get() == low) and
                                     (call INT1_Get() == low)
                         then
@@ -550,21 +551,13 @@ loop do
 
                     var u32 kmh = (36 as u32) * _DISTANCE / dt;
                                     // prevents overflow
-
-    // SOUND
-                    par/or do
-                        await 100ms;
-                        _ceu_arduino_assert(0, 1);
-                    with
-                        _Sound(kmh);
-                        await async do end;
-                    end
+                    _Sound(kmh);
 
                     var bool was_back = is_back;
 
                     _Hit(_NAMES[1-nxt], kmh, was_back);
 
-                    await 150ms;            // V2
+                    await (towait)ms;
                     if nxt == 0 then
                         is_back = (call INT0_Get() == low);
                     else
