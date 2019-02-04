@@ -4,6 +4,11 @@
 #include "int0.ceu"     // UNO=D2, MEGA=D21
 #include "int1.ceu"     // UNO=D2, MEGA=D21
 
+#define DX  184
+#define DY   64
+#define FX    6
+#define FY    8
+
 #define BALL_MARK    0
 #define BALL_NONE    1
 #define BALL_SERVICE 2
@@ -15,7 +20,7 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[601];     // +1: last BALL_MARK
+    s16  HITS[1000];
     int  HIT = 0;
 
     char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
@@ -72,8 +77,20 @@ native/pre do
             }
         }
     }
+
+    void Screen (int kmh) {
+        TV.clear_screen();
+        TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
+
+        TV.print(0, 0, NAMES[0]);
+        TV.print(DX-FX*strlen(NAMES[1])-1, DY-FY, NAMES[1]);
+
+        sprintf(STR, "%d", NAMES[0]);
+        TV.print(DX-FX*strlen(STR)-1, DY/2-FY/2, kmh);
+    }
 end
-native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME;
+
+native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME, _Screen, _ALL;
 native/plain  _TV, _pserial, _NAMES, _STR;
 native/nohold _Hit;
 native/pure   _Get_Total;
@@ -83,24 +100,10 @@ output high/low OUT_13;
 input none RESTART;
 
 {
-    TV.begin(PAL,144,80);
-    //TV.select_font(font6x8);
+    TV.begin(PAL,DX,DY);
+    TV.select_font(font6x8);
     TV.set_hbi_hook(pserial.begin(9600));
 }
-#if 0
-{
-  TV.clear_screen();
-  //TV.println(0,0,"Multiple fonts:");
-  //TV.select_font(font4x6);
-  TV.println(0,0, "Abcdefghijklmnopqrstuvxz12345678901234567890aBcdefghijklmnopqrstuvxz12345678901234567890abCdefghijklmnopqrstuvxz12345678901234567890abcDefghijklmnopqrstuvxz12345678901234567890ABCDEFGHIJKL");
-  //TV.select_font(font6x8);
-  //TV.println("6x8 font FONT");
-  //TV.select_font(font8x8);
-  //TV.println("8x8 font FONT");
-  //TV.select_font(font6x8);
-}
-do await FOREVER; end
-#endif
 
 code/call Score (none) -> none do
     {{
@@ -354,6 +357,8 @@ loop do
     watching RESTART do
         _pserial.println(_F("= INICIO ="));
         _HIT = 0;
+        _ALL();
+        _Screen(0);
 
         do
             loop do
@@ -372,7 +377,7 @@ loop do
                     end
                 end;
 
-                var u32 t0 = _millis();
+                var u32 t0 = _TV.millis();
 
                 if nxt == (_HIT%2) then
                     _HITS[_HIT] = BALL_NONE;
@@ -400,7 +405,7 @@ loop do
                         await INT1;
                     end
 
-                    var u32 t1 = _millis();
+                    var u32 t1 = _TV.millis();
                     var int dt = (t1 - t0) as int;
                     t0 = t1;
 
@@ -458,7 +463,8 @@ loop do
                     _HIT = _HIT + 1;
                     nxt = 1 - nxt;
 
-                    {ALL();}
+                    _ALL();
+                    _Screen(kmh);
                     if _GAME.time >= _TIMEOUT then
                         escape;
                     end
