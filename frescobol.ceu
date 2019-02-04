@@ -125,9 +125,8 @@ input none RESTART;
     TV.set_hbi_hook(pserial.begin(9600));
 }
 
-code/call Score (none) -> none do
+code/call Dump (none) -> none do
     {{
-        ALL();
         u32 total = Get_Total(GAME.ps[0], GAME.ps[1], GAME.falls) / 100;
         u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
         u32 pace  = Get_Total(avg, avg, GAME.falls) * 10 / GAME.time;
@@ -293,7 +292,7 @@ code/await Serial (none) -> NEVER do
                     emit RESTART;
                 end
             else/if {strncmp_P(STR, PSTR("placar"), 6) == 0} as bool then
-                call Score();
+                call Dump();
             else/if {strncmp_P(STR, PSTR("tempo "), 6) == 0} as bool then
                 {{
                     String str = &STR[6];
@@ -370,6 +369,7 @@ code/await Serial (none) -> NEVER do
         else
             _pserial.println(_F("invalid command"));
         end
+        _ALL();
         _Screen(0, 0);
     end
 end
@@ -498,15 +498,18 @@ loop do
                 _TV.tone(100, 200);
                 await 200ms;
 
+                _ALL();
                 _Screen(0, 0);
-                call Score();
+                call Dump();
             end
         end
 
         _TV.tone(200, 2000);
         await 2s;
 
-        call Score();
+        _ALL();
+        _Screen(0, 0);
+        call Dump();
         _pserial.println(_F("= FIM ="));
 
         loop do
