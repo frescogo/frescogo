@@ -463,6 +463,8 @@ loop do
                 _TV.tone(3000, 500);
                 await 1s;
 
+                _Screen("GO!", 0, 0);
+
     // SERVICE
                 var int nxt = do
                     spawn Serial();
