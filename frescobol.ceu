@@ -112,10 +112,10 @@ native/pre do
                 else
                 {
                     // ps
-                    GAME.ps[1-(i&1)] += pt;
+                    GAME.ps[1-(i%2)] += pt;
 
                     // bests
-                    s8* vec = GAME.bests[ 1-(i&2) ][ v.kmh>0 ];
+                    s8* vec = GAME.bests[ 1-(i%2) ][ v.kmh>0 ];
                     for (int j=0; j<BESTS; j++) {
                         if (kmh > vec[j]) {
                             for (int k=BESTS-1; k>j; k--) {
