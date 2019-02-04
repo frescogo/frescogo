@@ -483,6 +483,7 @@ loop do
                 _TV.tone(3000, 500);
                 await 1s;
 
+                _ALL();
                 _Screen("GO!", 0, 0, 0);
 
     // SERVICE
@@ -516,8 +517,6 @@ loop do
 
                 var int nxt = 1 - got;
                 loop do
-                    var int awaited = 0;
-
                     // both are unpresseed?
                     var bool both = (call INT0_Get() == high) and
                                     (call INT1_Get() == high);
@@ -548,7 +547,6 @@ loop do
                             break;
                         end
                     end
-                    awaited = awaited + 50;
 
                     t0 = t1;
 
@@ -557,7 +555,6 @@ loop do
                     // and its long since the previous hit, then this is a fall
                     if dt > 1000 then
                         await 100ms;
-                        awaited = awaited + 100;
                         if both and (call INT0_Get() == low) and
                                     (call INT1_Get() == low)
                         then
@@ -598,10 +595,10 @@ loop do
                         escape;
                     end
 
-                    if HIT_AWAIT > awaited then
-                        await (HIT_AWAIT-awaited)ms;
-                    else
-                        _ceu_arduino_assert(awaited == HIT_AWAIT, 2);
+                    // sleep inside hit to reach HIT_AWAIT and check BACK below
+                    var u32 dt_ = _TV.millis() - t1;
+                    if HIT_AWAIT > dt_ then
+                        await (HIT_AWAIT-dt_)ms;
                     end
 
                     do
@@ -631,12 +628,13 @@ loop do
         end
 
         _TV.tone(200, 2000);
-        await 2s;
 
         _ALL();
         _Screen("FIM", 0, 0, 0);
         //call Dump();
         _pserial.println(_F("= FIM ="));
+
+        await 5s;
 
         loop do
             par/or do
