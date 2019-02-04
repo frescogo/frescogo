@@ -504,7 +504,7 @@ loop do
 
                 _TV.tone(500, 30);
 
-                var bool was_back = false;
+                var bool is_back = false;
 
                 _pserial.println(_F("> saque"));
                 _Screen("---", 0, 0);
@@ -571,12 +571,12 @@ loop do
                                     // prevents overflow
                     _Sound(kmh);
 
-                    _Hit(_NAMES[1-got], kmh, was_back);
+                    _Hit(_NAMES[1-got], kmh, is_back);
                     if nxt != got then
                         _Hit(_NAMES[got], kmh, false);
                     end
 
-                    if was_back then
+                    if is_back then
                         _HITS[_HIT] = -dt;
                     else
                         _HITS[_HIT] = dt;
@@ -601,7 +601,6 @@ loop do
                     end
 
                     do
-                        var bool is_back;
                         if got == 0 then
                             is_back = (call INT0_Get() == low);
                         else
@@ -610,7 +609,6 @@ loop do
                         if is_back then
                             _TV.tone(200, 30);
                         end
-                        was_back = is_back;
                     end
                 end
 
