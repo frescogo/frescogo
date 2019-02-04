@@ -482,20 +482,20 @@ loop do
                 _Screen("GO!", 0, 0);
 
     // SERVICE
-                var int nxt = do
+                var int got = do
                     spawn Serial();
                     par do
                         await INT0;
-                        escape 1;
+                        escape 0;
                     with
                         await INT1;
-                        escape 0;
+                        escape 1;
                     end
                 end;
 
                 var u32 t0 = _TV.millis();
 
-                if nxt == (_HIT%2) then
+                if got != (_HIT%2) then
                     _HITS[_HIT] = BALL_NONE;
                     _HIT = _HIT + 1;
                 end
@@ -510,6 +510,7 @@ loop do
                 _Screen("---", 0, 0);
                 await HIT_AWAIT ms;
 
+                var int nxt = 1 - got;
                 loop do
                     var int awaited = 0;
 
@@ -521,17 +522,14 @@ loop do
                     // debounce
                     var u32 t1 = _;
                     var int dt = _;
-                    var int got;
                     loop do
-                        got = do
-                            par do
-                                await INT0;
-                                escape 0;
-                            with
-                                await INT1;
-                                escape 1;
-                            end
-                        end;
+                        par/or do
+                            await INT0;
+                            got = 0;
+                        with
+                            await INT1;
+                            got = 1;
+                        end
 
                         t1 = _TV.millis();
                         dt = (t1 - t0) as int;
