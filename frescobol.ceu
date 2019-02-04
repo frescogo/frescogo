@@ -535,18 +535,18 @@ loop do
 
                         t1 = _TV.millis();
                         dt = (t1 - t0) as int;
-                        if got!=nxt and dt<200 then
+                        if got!=nxt and dt<400 then
                             continue;
                         end
 
                         await 50ms;
-                        awaited = awaited + 50;
                         if (got == 0) and (call INT0_Get() == low) then
                             break;
                         else/if (got == 1) and (call INT1_Get() == low) then
                             break;
                         end
                     end
+                    awaited = awaited + 50;
 
                     t0 = t1;
 
