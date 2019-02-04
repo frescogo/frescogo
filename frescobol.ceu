@@ -17,7 +17,9 @@
 
 #define BESTS 10
 
-#define HIT_AWAIT 100     // desired await between two hits
+#define HIT_AWAIT 100       // desired await between two hits
+
+#define KMH_MAX 125         // to fit in s8
 
 native/pre do
     ##include <TVout.h>
@@ -26,26 +28,30 @@ native/pre do
     TVout TV;
     pollserial pserial;
 
-    s16  HITS[1000];
+    typedef struct {
+        u8 dt;                      // cs (ms*10)
+        s8 kmh;                     // +/-kmh (max 125km/h)
+    } Hit;
+    Hit  HITS[1000];
     int  HIT = 0;
 
     char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
 
-    u32  TIMEOUT  = 300000;
+    u32  TIMEOUT  = 300 * ((u32)1000);
     int  DISTANCE = 800;
 
     char STR[32];
 
     typedef struct {
-        u8  bests[2][2][BESTS];
-        u32 ps[2];
-        u32 time;
+        s8  bests[2][2][BESTS];     // kmh (max 125kmh/h)
+        u32 ps[2];                  // sum(kmh*kmh)
+        u32 time;                   // ms (total time)
         u16 hits;
         u8  falls;
     } Game;
     Game GAME;
 
-    int Bests (u8* bests, int* min_, int* max_) {
+    int Bests (s8* bests, int* min_, int* max_) {
         *min_ = bests[BESTS-1];
         *max_ = bests[0];
         for (int i=0; i<BESTS; i++) {
@@ -60,7 +66,7 @@ native/pre do
         for (int i=0; i<2; i++) {
             for (int j=0; j<2; j++) {
                 for (int k=0; k<BESTS; k++) {
-                    u32 v = GAME.bests[i][j][k];
+                    s8 v = GAME.bests[i][j][k];
                     GAME.ps[i] += v*v*4;
                 }
             }
@@ -82,34 +88,34 @@ native/pre do
         GAME.hits  = 0;
         GAME.falls = 0;
 
-        memset(GAME.bests, 0, 2*2*BESTS*sizeof(u8));
+        memset(GAME.bests, 0, 2*2*BESTS*sizeof(s8));
 
         for (int i=0 ; i<HIT ; i++) {
-            s16 v = HITS[i];
-            v = (v >= 0 ? v : -v);
+        //for (int i=0 ; i<600 ; i++) {
+            Hit v = HITS[i];
+            u16 kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
+            u16 pt  = kmh*kmh;
 
-            if (v != BALL_NONE) {
+            if (v.dt != BALL_NONE) {
                 GAME.hits++;
             }
 
-            if (v == BALL_SERVICE) {
+            if (v.dt == BALL_SERVICE) {
                 GAME.falls++;
             }
 
-            if (v!=BALL_NONE && v!=BALL_SERVICE) {
-                s16 nxt = HITS[i+1];
-                if (i==HIT-1 || nxt==BALL_NONE || nxt==BALL_SERVICE) {
+            if (v.dt!=BALL_NONE && v.dt!=BALL_SERVICE) {
+                Hit nxt = HITS[i+1];
+                if (i==HIT-1 || nxt.dt==BALL_NONE || nxt.dt==BALL_SERVICE) {
                     // ignore last hit
                 }
                 else
                 {
                     // ps
-                    u32 kmh = ((u32) 36) * DISTANCE / v;
-                              // prevents overflow
-                    GAME.ps[1-(i%2)] += kmh * kmh;
+                    GAME.ps[1-(i&1)] += pt;
 
                     // bests
-                    u8* vec = GAME.bests[ 1-(i%2) ][ HITS[i]>0 ];
+                    s8* vec = GAME.bests[ 1-(i&2) ][ v.kmh>0 ];
                     for (int j=0; j<BESTS; j++) {
                         if (kmh > vec[j]) {
                             for (int k=BESTS-1; k>j; k--) {
@@ -121,7 +127,7 @@ native/pre do
                     }
                 }
 
-                GAME.time += v;
+                GAME.time += v.dt*10;
             }
         }
     }
@@ -136,9 +142,9 @@ native/pre do
         if (str == NULL) {
             char c = (is_back ? '*' : ' ');
             if (p == 0) {
-                sprintf(STR, "--> %c %d %c   ", c, kmh, c);
+                sprintf(STR, "--> %c %d %c    ", c, kmh, c);
             } else {
-                sprintf(STR, "   %c %d %c <--", c, kmh, c);
+                sprintf(STR, "    %c %d %c <--", c, kmh, c);
             }
             str = STR;
         }
@@ -148,7 +154,8 @@ native/pre do
         TV.select_font(font4x6);
 
         // TIME/FALLS/PACE
-        sprintf(STR, "Tempo:  %3ds", (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000);
+        int time = (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000;
+        sprintf(STR, "Tempo:  %3ds", time);
         TV.print(DX-FX*strlen(STR)-1,    0, STR);
         sprintf(STR, "Quedas:  %3d", falls);
         TV.print(DX-FX*strlen(STR)-1,   FY, STR);
@@ -175,13 +182,13 @@ native/pre do
         {
             int n, min_, max_;
             n = Bests(GAME.bests[0][1], &min_, &max_);
-            sprintf(STR, "F: %2d (%3d/%3d)", n, min_, max_);
+            sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
             TV.print(0, 1*FY, STR);
         }
         {
             int n, min_, max_;
             n = Bests(GAME.bests[0][0], &min_, &max_);
-            sprintf(STR, "B: %2d (%3d/%3d)", n, min_, max_);
+            sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
             TV.print(0, 2*FY, STR);
         }
         TV.print(0, 3*FY, GAME.ps[0]/100);
@@ -191,20 +198,20 @@ native/pre do
         {
             int n, min_, max_;
             n = Bests(GAME.bests[1][1], &min_, &max_);
-            sprintf(STR, "F: %2d (%3d/%3d)", n, min_, max_);
+            sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
             TV.print(DX-FX*strlen(STR)-1, DY-2*FY, STR);
         }
         {
             int n, min_, max_;
             n = Bests(GAME.bests[1][0], &min_, &max_);
-            sprintf(STR, "B: %2d (%3d/%3d)", n, min_, max_);
+            sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
             TV.print(DX-FX*strlen(STR)-1, DY-3*FY, STR);
         }
         sprintf(STR, "%ld", GAME.ps[1]/100);
         TV.print(DX-FX*strlen(STR)-1, DY-4*FY, STR);
     }
 
-    void Hit (char* name, u32 kmh, bool is_back) {
+    void Dump_Hit (char* name, u32 kmh, bool is_back) {
         pserial.print(F("> "));
         pserial.print(name);
         pserial.print(F(": "));
@@ -231,8 +238,8 @@ native/pre do
 end
 
 native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME, _Screen, _ALL, _Sound;
-native/plain  _TV, _pserial, _NAMES, _STR;
-native/nohold _Hit;
+native/plain  _TV, _pserial, _NAMES, _STR, _Hit;
+native/nohold _Dump_Hit;
 native/pure   _Get_Total;
 
 output high/low OUT_13;
@@ -247,8 +254,8 @@ input none RESTART;
 
 code/call Dump (none) -> none do
     {{
-        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-        u32 pace  = avg * 10 / GAME.time;
+        u32 avg  = (GAME.ps[0] + GAME.ps[1]) / 2;
+        u32 pace = avg * 10 / GAME.time;
 
         // BEFORE GET_TOTAL: pace
 
@@ -320,9 +327,9 @@ code/call Dump (none) -> none do
         if i == _HIT then
             break;
         end
-        var s16 v = _HITS[i];
+        var _Hit v = _HITS[i];
 
-        if v == BALL_SERVICE then
+        if v.dt == BALL_SERVICE then
             bola = bola + 1;
             _pserial.print(_F("-- Sequencia "));
             {{
@@ -332,13 +339,13 @@ code/call Dump (none) -> none do
             _pserial.println(_F(" ----------------"));
         end
 
-        if v == BALL_NONE then
+        if v.dt == BALL_NONE then
             continue;
         end
 
         if i % 2 == 0 then
             _pserial.print(_F("         "));
-            if v < 0 then
+            if v.kmh < 0 then
                 _pserial.print(_F("! "));
             else
                 _pserial.print(_F("  "));
@@ -347,14 +354,14 @@ code/call Dump (none) -> none do
             _pserial.print(_F("                 "));
         end
 
-        if v == BALL_SERVICE then
+        if v.dt == BALL_SERVICE then
             _pserial.println(_F("****"));
         else
             {{
-                sprintf_P(STR, PSTR("%4d"), (@v)<0 ? -@v : @v);
+                sprintf_P(STR, PSTR("%4d"), @v.dt);
                 pserial.print(STR);
             }}
-            if i%2==1 and v<0 then
+            if i%2==1 and v.kmh<0 then
                 _pserial.print(_F(" !"));
             end
             _pserial.println();
@@ -422,36 +429,36 @@ code/await Serial (none) -> NEVER do
                     _HIT = _HIT - 1;
                     if _HIT == 0 then
                         break;
-                    else/if _HITS[_HIT] == BALL_SERVICE then
-                        if _HITS[_HIT-1] == BALL_NONE then
+                    else/if _HITS[_HIT].dt == BALL_SERVICE then
+                        if _HITS[_HIT-1].dt == BALL_NONE then
                             _HIT = _HIT - 1;
                         end
                         break;
                     end
                 end
             else/if {strncmp_P(STR, PSTR("+seq"), 4) == 0} as bool then
-                if _HITS[_HIT] == BALL_MARK then
+                if _HITS[_HIT].dt == BALL_MARK then
                     escape false;
                 end
                 loop do
                     _HIT = _HIT + 1;
-                    if _HITS[_HIT]==BALL_MARK or _HITS[_HIT]==BALL_SERVICE then
+                    if _HITS[_HIT].dt==BALL_MARK or _HITS[_HIT].dt==BALL_SERVICE then
                         break;
                     end
                 end
             else/if {strncmp_P(STR, PSTR("-1"), 2) == 0} as bool then
                 if _HIT > 0 then
                     _HIT = _HIT - 1;
-                    if _HITS[_HIT] == BALL_NONE then
+                    if _HITS[_HIT].dt == BALL_NONE then
                         _HIT = _HIT - 1;
                     end
                 else
                     escape false;
                 end
             else/if {strncmp_P(STR, PSTR("+1"), 2) == 0} as bool then
-                if _HITS[_HIT] != BALL_MARK then
+                if _HITS[_HIT].dt != BALL_MARK then
                     _HIT = _HIT + 1;
-                    if _HITS[_HIT] == BALL_SERVICE then
+                    if _HITS[_HIT].dt == BALL_SERVICE then
                         _HIT = _HIT + 1;    // skip BALL_NONE
                     end
                 else
@@ -504,10 +511,10 @@ loop do
                 var u32 t0 = _TV.millis();
 
                 if got != (_HIT%2) then
-                    _HITS[_HIT] = BALL_NONE;
+                    _HITS[_HIT].dt = BALL_NONE;
                     _HIT = _HIT + 1;
                 end
-                _HITS[_HIT] = BALL_SERVICE;
+                _HITS[_HIT].dt = BALL_SERVICE;
                 _HIT = _HIT + 1;
 
                 _TV.tone(500, 30);
@@ -550,6 +557,7 @@ loop do
                             break;
                         end
                     end
+                    _ceu_arduino_assert(dt>50, 2);
 
                     t0 = t1;
 
@@ -569,30 +577,37 @@ loop do
                         dt = dt / 2;
                     end
 
-                    var u32 kmh = (36 as u32) * _DISTANCE / dt;
+                    var u32 kmh_ = (36 as u32) * _DISTANCE / dt;
                                     // prevents overflow
+                    var s16 kmh = _min(kmh_, KMH_MAX);
                     _Sound(kmh);
 
                     if nxt != got then
-                        _Hit(_NAMES[got],   kmh, is_back);
-                        _Hit(_NAMES[1-got], kmh, false);
+                        _Dump_Hit(_NAMES[got],   kmh, is_back);
+                        _Dump_Hit(_NAMES[1-got], kmh, false);
                     else
-                        _Hit(_NAMES[1-got], kmh, is_back);
+                        _Dump_Hit(_NAMES[1-got], kmh, is_back);
                     end
 
+                    _HITS[_HIT].dt = {min(@dt/10, 255)};
                     if is_back then
-                        _HITS[_HIT] = -dt;
+                        _HITS[_HIT].kmh = -kmh;
                     else
-                        _HITS[_HIT] = dt;
+                        _HITS[_HIT].kmh = kmh;
                     end
                     _HIT = _HIT + 1;
                     if nxt != got then
-                        _HITS[_HIT] = dt;
+                        _HITS[_HIT].dt  = {min(@dt/10, 255)};
+                        _HITS[_HIT].kmh = kmh;
                         _HIT = _HIT + 1;
                     end
                     nxt = 1 - got;
 
+//var u32 x1 = _TV.millis();
                     _ALL();
+//var u32 x2 = _TV.millis();
+//_pserial.print("> ");
+//_pserial.println(x2-x1);
                     _Screen(null, 1-got, kmh, is_back);
                     if _GAME.time >= _TIMEOUT then
                         escape;
