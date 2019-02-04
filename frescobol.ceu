@@ -573,10 +573,10 @@ loop do
                                     // prevents overflow
                     _Sound(kmh);
 
-                    _Hit(_NAMES[1-got], kmh, is_back);
                     if nxt != got then
-                        _Hit(_NAMES[got], kmh, false);
+                        _Hit(_NAMES[got], kmh, is_back);
                     end
+                    _Hit(_NAMES[1-got], kmh, false);
 
                     if is_back then
                         _HITS[_HIT] = -dt;
