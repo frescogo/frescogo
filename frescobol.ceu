@@ -1,8 +1,10 @@
 #include "string.ceu"
+
 #include "out.ceu"
 //#include "wclock.ceu"
 #include "int0.ceu"     // UNO=D2, MEGA=D21
 #include "int1.ceu"     // UNO=D2, MEGA=D21
+{ EICRA = 0b1010; }     // FALLING for both INT0/INT1
 
 #define DX  184
 #define DY   64
@@ -14,6 +16,8 @@
 #define BALL_SERVICE 2
 
 #define BESTS 10
+
+#define HIT_AWAIT 150     // desired await between two hits
 
 native/pre do
     ##include <TVout.h>
@@ -137,7 +141,7 @@ native/pre do
         TV.select_font(font4x6);
 
         // TIME/FALLS/PACE
-        sprintf(STR, "Tempo:  %3ds", (TIMEOUT-GAME.time)/1000);
+        sprintf(STR, "Tempo:  %3ds", (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000);
         TV.print(DX-FX*strlen(STR)-1,    0, STR);
         sprintf(STR, "Quedas:  %3d", GAME.falls+falls);
         TV.print(DX-FX*strlen(STR)-1,   FY, STR);
@@ -499,16 +503,16 @@ loop do
                 _HIT = _HIT + 1;
 
                 _TV.tone(500, 30);
-                await 50ms;
 
-                var bool is_back = false;
+                var bool was_back = false;
 
                 _pserial.println(_F("> saque"));
                 _Screen("---", 0, 0);
-                await 50ms;                 // V1
-                await 100ms;                // V2
+                await HIT_AWAIT ms;
 
                 loop do
+                    var int awaited = 0;
+
                     // both are unpresseed?
                     var bool both = (call INT0_Get() == high) and
                                     (call INT1_Get() == high);
@@ -516,32 +520,42 @@ loop do
     // HIT
                     // debounce
                     var u32 t1 = _;
+                    var int dt = _;
+                    var int got;
                     loop do
-                        if nxt == 0 then
-                            await INT0;
-                        else
-                            await INT1;
-                        end
+                        got = do
+                            par do
+                                await INT0;
+                                escape 0;
+                            with
+                                await INT1;
+                                escape 1;
+                            end
+                        end;
+
                         t1 = _TV.millis();
-                        await 50ms;         // V1
-                        if (nxt == 0) and (call INT0_Get() == low) then
+                        dt = (t1 - t0) as int;
+                        if got!=nxt and dt<200 then
+                            continue;
+                        end
+
+                        await 50ms;
+                        awaited = awaited + 50;
+                        if (got == 0) and (call INT0_Get() == low) then
                             break;
-                        else/if (nxt == 1) and (call INT1_Get() == low) then
+                        else/if (got == 1) and (call INT1_Get() == low) then
                             break;
                         end
                     end
 
-                    //var u32 t1 = _TV.millis();
-                    var int dt = (t1 - t0) as int;
                     t0 = t1;
 
     // FALL
                     // if both were unpressed and now both are pressed,
                     // and its long since the previous hit, then this is a fall
-                    var int towait = 100;   // V2
                     if dt > 1000 then
-                        await (towait)ms;
-                        towait = 0;
+                        await 100ms;
+                        awaited = awaited + 100;
                         if both and (call INT0_Get() == low) and
                                     (call INT1_Get() == low)
                         then
@@ -549,22 +563,17 @@ loop do
                         end
                     end
 
+                    if nxt != got then
+                        dt = dt / 2;
+                    end
+
                     var u32 kmh = (36 as u32) * _DISTANCE / dt;
                                     // prevents overflow
                     _Sound(kmh);
 
-                    var bool was_back = is_back;
-
-                    _Hit(_NAMES[1-nxt], kmh, was_back);
-
-                    await (towait)ms;
-                    if nxt == 0 then
-                        is_back = (call INT0_Get() == low);
-                    else
-                        is_back = (call INT1_Get() == low);
-                    end
-                    if is_back then
-                        _TV.tone(200, 30);
+                    _Hit(_NAMES[1-got], kmh, was_back);
+                    if nxt != got then
+                        _Hit(_NAMES[got], kmh, false);
                     end
 
                     if was_back then
@@ -573,12 +582,35 @@ loop do
                         _HITS[_HIT] = dt;
                     end
                     _HIT = _HIT + 1;
-                    nxt = 1 - nxt;
+                    if nxt != got then
+                        _HITS[_HIT] = dt;
+                        _HIT = _HIT + 1;
+                    end
+                    nxt = 1 - got;
 
                     _ALL();
                     _Screen(null, kmh, -1);
                     if _GAME.time >= _TIMEOUT then
                         escape;
+                    end
+
+                    if HIT_AWAIT > awaited then
+                        await (HIT_AWAIT-awaited)ms;
+                    else
+                        _ceu_arduino_assert(awaited == HIT_AWAIT, 2);
+                    end
+
+                    do
+                        var bool is_back;
+                        if got == 0 then
+                            is_back = (call INT0_Get() == low);
+                        else
+                            is_back = (call INT1_Get() == low);
+                        end
+                        if is_back then
+                            _TV.tone(200, 30);
+                        end
+                        was_back = is_back;
                     end
                 end
 
