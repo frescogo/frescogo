@@ -574,9 +574,11 @@ loop do
                     _Sound(kmh);
 
                     if nxt != got then
-                        _Hit(_NAMES[got], kmh, is_back);
+                        _Hit(_NAMES[got],   kmh, is_back);
+                        _Hit(_NAMES[1-got], kmh, false);
+                    else
+                        _Hit(_NAMES[1-got], kmh, is_back);
                     end
-                    _Hit(_NAMES[1-got], kmh, false);
 
                     if is_back then
                         _HITS[_HIT] = -dt;
