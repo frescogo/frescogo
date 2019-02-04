@@ -38,19 +38,19 @@ native/pre do
     }
 
     typedef struct {
+        u32 ps[2];
+        u32 time;
         u16 hits;
         u8  falls;
-        u32 time;
-        u32 ps[2];
     } Game;
     Game GAME;
 
     void ALL (void) {
-        GAME.hits  = 0;
-        GAME.falls = 0;
-        GAME.time  = 0;
         GAME.ps[0] = 0;
         GAME.ps[1] = 0;
+        GAME.time  = 0;
+        GAME.hits  = 0;
+        GAME.falls = 0;
 
         for (int i=0 ; i<HIT ; i++) {
             s16 v = HITS[i];
@@ -98,11 +98,15 @@ native/pre do
             TV.print(DX/2-FX*strlen(STR)/2, DY/2-FY/2, kmh);
         }
 
-        // TIME/FALLS
+        // TIME/FALLS/PACE
         sprintf(STR, "Tempo:  %3d", (TIMEOUT-GAME.time)/1000);
-        TV.print(DX-FX*strlen(STR)-1,  0, STR);
+        TV.print(DX-FX*strlen(STR)-1,    0, STR);
         sprintf(STR, "Quedas: %3d", GAME.falls+falls);
-        TV.print(DX-FX*strlen(STR)-1, FY, STR);
+        TV.print(DX-FX*strlen(STR)-1,   FY, STR);
+        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
+        u32 pace  = avg * 10 / GAME.time;
+        sprintf(STR, "Ritmo:  %3d", pace);
+        TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
 
         // TOTAL
         TV.print(0, DY-2*FY, "TOTAL");
@@ -130,7 +134,7 @@ code/call Dump (none) -> none do
     {{
         u32 total = Get_Total(GAME.ps[0], GAME.ps[1], GAME.falls) / 100;
         u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-        u32 pace  = Get_Total(avg, avg, GAME.falls) * 10 / GAME.time;
+        u32 pace  = avg * 10 / GAME.time;
 
         pserial.println();
         pserial.println(F("--------------------------------"));
