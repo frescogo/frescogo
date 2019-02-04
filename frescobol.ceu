@@ -113,9 +113,35 @@ native/pre do
         sprintf(STR, "%5d", Get_Total(GAME.ps[0], GAME.ps[1], GAME.falls+falls) / 100);
         TV.print(0, DY-1*FY, STR);
     }
+
+    void Hit (char* name, u32 kmh, bool is_back) {
+        pserial.print(F("> "));
+        pserial.print(name);
+        pserial.print(F(": "));
+        pserial.print(kmh);
+        if (is_back) {
+            pserial.print(F(" !"));
+        }
+        pserial.println();
+    }
+
+    void Sound (u32 kmh) {
+        if (kmh < 40) {
+            TV.tone( 500, 30);
+        } else if (kmh < 50) {
+            TV.tone(1500, 30);
+        } else if (kmh < 60) {
+            TV.tone(2500, 30);
+        } else if (kmh < 70) {
+            TV.tone(3500, 30);
+        } else {
+            TV.tone(4500, 30);
+        }
+        TV.delay(50);
+    }
 end
 
-native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME, _Screen, _ALL;
+native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME, _Screen, _ALL, _Sound;
 native/plain  _TV, _pserial, _NAMES, _STR;
 native/nohold _Hit;
 native/pure   _Get_Total;
@@ -235,38 +261,6 @@ code/call Dump (none) -> none do
         end
     end
     _pserial.println();
-end
-
-native/pre do
-    void Hit (char* name, u32 kmh, bool is_back) {
-#if 0
-{
-  TV.clear_screen();
-  TV.println(0,0,"Multiple fonts:");
-  TV.select_font(font4x6);
-  TV.println("4x6 font FONT ate onde eu vou");
-  TV.select_font(font6x8);
-  TV.println("6x8 font FONT");
-  TV.select_font(font8x8);
-  TV.println("8x8 font FONT");
-  TV.select_font(font6x8);
-}
-             _TV.print("Atleta 1");
-            _TV.print("  ");
-            _TV.print("Atleta 2\n");
-            _TV.println();
-            _TV.println(kmh);
-#endif
-
-        pserial.print(F("> "));
-        pserial.print(name);
-        pserial.print(F(": "));
-        pserial.print(kmh);
-        if (is_back) {
-            pserial.print(F(" !"));
-        }
-        pserial.println();
-    }
 end
 
 code/await Serial (none) -> NEVER do
@@ -450,21 +444,12 @@ loop do
                     var u32 kmh = (36 as u32) * _DISTANCE / dt;
                                     // prevents overflow
 
-                    if kmh < 40 then
-                        _TV.tone( 500, 30);
+                    par/or do
                         await 50ms;
-                    else/if kmh < 50 then
-                        _TV.tone(1500, 30);
-                        await 50ms;
-                    else/if kmh < 60 then
-                        _TV.tone(2500, 30);
-                        await 50ms;
-                    else/if kmh < 70 then
-                        _TV.tone(3500, 30);
-                        await 50ms;
-                    else
-                        _TV.tone(4500, 30);
-                        await 50ms;
+                        _ceu_assert(0, "max 50ms per sound");
+                    with
+                        _Sound(kmh);
+                        await async do end;
                     end
 
                     var bool was_back = is_back;
