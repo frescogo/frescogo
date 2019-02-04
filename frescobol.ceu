@@ -92,8 +92,10 @@ native/pre do
         TV.print(DX-FX*strlen(STR)-1,      DY-2*FY, STR);
 
         // KMH
-        sprintf(STR, "%d", kmh);
-        TV.print(DX/2-FX*strlen(STR)/2, DY/2-FY/2, kmh);
+        if (kmh != 0) {
+            sprintf(STR, "%d", kmh);
+            TV.print(DX/2-FX*strlen(STR)/2, DY/2-FY/2, kmh);
+        }
 
         // TIME/FALLS
         sprintf(STR, "Tempo:  %3d", (TIMEOUT-GAME.time)/1000);
@@ -368,6 +370,7 @@ code/await Serial (none) -> NEVER do
         else
             _pserial.println(_F("invalid command"));
         end
+        _Screen(0, 0);
     end
 end
 
@@ -495,6 +498,7 @@ loop do
                 _TV.tone(100, 200);
                 await 200ms;
 
+                _Screen(0, 0);
                 call Score();
             end
         end
