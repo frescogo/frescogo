@@ -13,6 +13,8 @@
 #define BALL_NONE    1
 #define BALL_SERVICE 2
 
+#define BESTS 10
+
 native/pre do
     ##include <TVout.h>
     ##include <pollserial.h>
@@ -38,6 +40,7 @@ native/pre do
     }
 
     typedef struct {
+        u8  bests[2][2][BESTS];
         u32 ps[2];
         u32 time;
         u16 hits;
@@ -51,6 +54,8 @@ native/pre do
         GAME.time  = 0;
         GAME.hits  = 0;
         GAME.falls = 0;
+
+        memset(GAME.bests, 0, 2*2*BESTS*sizeof(u8));
 
         for (int i=0 ; i<HIT ; i++) {
             s16 v = HITS[i];
@@ -68,10 +73,24 @@ native/pre do
                 s16 nxt = HITS[i+1];
                 if (i==HIT-1 || nxt==BALL_NONE || nxt==BALL_SERVICE) {
                     // ignore last hit
-                } else {
+                }
+                else
+                {
+                    // ps
                     u32 kmh = ((u32) 36) * DISTANCE / v;
                               // prevents overflow
                     GAME.ps[1-(i%2)] += kmh * kmh;
+
+                    // bests
+                    u8* vec = GAME.bests[ 1-(i%2) ][ HITS[i]>0 ];
+                    for (int j=0; j<BESTS; j++) {
+                        if (v > vec[j]) {
+                            for (int k=BESTS-1; k>j; k--) {
+                                vec[k] = vec[k-1];
+                            }
+                            vec[j] = v;
+                        }
+                    }
                 }
 
                 GAME.time += v;
@@ -203,14 +222,20 @@ code/call Dump (none) -> none do
         pserial.print(STR);
         pserial.println(GAME.hits);
 
-        sprintf_P(STR, PSTR("%15s: "), NAMES[0]);
-        pserial.print(STR);
-        pserial.println(GAME.ps[0]/100);
-
-        sprintf_P(STR, PSTR("%15s: "), NAMES[1]);
-        pserial.print(STR);
-        pserial.println(GAME.ps[1]/100);
-        pserial.println();
+        for (int i=0; i<2; i++) {
+            sprintf_P(STR, PSTR("%15s: "), NAMES[i]);
+            pserial.print(STR);
+            pserial.print(GAME.ps[i]/100);
+            for (int j=0; j<2; j++) {
+                pserial.print(PSTR(" [ "));
+                for (int k=0; k<BESTS; k++) {
+                    pserial.print(GAME.bests[i][j][k]);
+                    pserial.print(" ");
+                }
+                pserial.println(PSTR("]"));
+            }
+            pserial.println();
+        }
     }}
 
     var int i = -1;
@@ -386,6 +411,7 @@ loop do
                 _TV.tone(3000, 500);
                 await 1s;
 
+    // SERVICE
                 var int nxt = do
                     spawn Serial();
                     par do
@@ -407,7 +433,7 @@ loop do
                 _HIT = _HIT + 1;
 
                 _TV.tone(500, 30);
-                await 80ms;
+                await 50ms;
 
                 var bool is_back = false;
 
@@ -419,6 +445,7 @@ loop do
                     var bool both = (call INT0_Get() == high) and
                                     (call INT1_Get() == high);
 
+    // HIT
                     if nxt == 0 then
                         await INT0;
                     else
@@ -444,6 +471,7 @@ loop do
                     var u32 kmh = (36 as u32) * _DISTANCE / dt;
                                     // prevents overflow
 
+    // SOUND
                     par/or do
                         await 50ms;
                         _ceu_assert(0, "max 50ms per sound");
