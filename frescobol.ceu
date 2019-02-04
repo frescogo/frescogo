@@ -303,24 +303,24 @@ code/await Serial (none) -> NEVER do
                     String str = &STR[6];
                     TIMEOUT = str.toInt() * 1000;
                 }}
-            else/if {strncmp_P(STR, PSTR("distancia "), 10) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("dist "), 5) == 0} as bool then
                 {{
-                    String str = &STR[10];
+                    String str = &STR[5];
                     DISTANCE = str.toInt();
                 }}
-            else/if {strncmp_P(STR, PSTR("esquerda "), 9) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("esq"), 3) == 0} as bool then
                 if {strlen(&STR[9]) < 15} as bool then
                     {strcpy(NAMES[0], &STR[9]);}
                 else
                     escape false;
                 end
-            else/if {strncmp_P(STR, PSTR("direita "), 8) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("dir"), 3) == 0} as bool then
                 if {strlen(&STR[8]) < 15} as bool then
                     {strcpy(NAMES[1], &STR[8]);}
                 else
                     escape false;
                 end
-            else/if {strncmp_P(STR, PSTR("-sequencia"), 10) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("-seq"), 4) == 0} as bool then
                 if _HIT == 0 then
                     escape false;
                 end
@@ -335,7 +335,7 @@ code/await Serial (none) -> NEVER do
                         break;
                     end
                 end
-            else/if {strncmp_P(STR, PSTR("+sequencia"), 10) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("+seq"), 4) == 0} as bool then
                 if _HITS[_HIT] == BALL_MARK then
                     escape false;
                 end
@@ -345,7 +345,7 @@ code/await Serial (none) -> NEVER do
                         break;
                     end
                 end
-            else/if {strncmp_P(STR, PSTR("-golpe"), 6) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("-1"), 2) == 0} as bool then
                 if _HIT > 0 then
                     _HIT = _HIT - 1;
                     if _HITS[_HIT] == BALL_NONE then
@@ -354,7 +354,7 @@ code/await Serial (none) -> NEVER do
                 else
                     escape false;
                 end
-            else/if {strncmp_P(STR, PSTR("+golpe"), 6) == 0} as bool then
+            else/if {strncmp_P(STR, PSTR("+1"), 2) == 0} as bool then
                 if _HITS[_HIT] != BALL_MARK then
                     _HIT = _HIT + 1;
                     if _HITS[_HIT] == BALL_SERVICE then
@@ -372,7 +372,7 @@ code/await Serial (none) -> NEVER do
         if ok then
             _pserial.println(_F("ok"));
         else
-            _pserial.println(_F("invalid command"));
+            _pserial.println(_F("err"));
         end
         _ALL();
         _Screen(0, 0);
