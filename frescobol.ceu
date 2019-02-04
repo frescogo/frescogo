@@ -17,7 +17,7 @@
 
 #define BESTS 10
 
-#define HIT_AWAIT 150     // desired await between two hits
+#define HIT_AWAIT 100     // desired await between two hits
 
 native/pre do
     ##include <TVout.h>
@@ -469,7 +469,7 @@ code/await Serial (none) -> NEVER do
             _pserial.println(_F("err"));
         end
         _ALL();
-        _Screen("---", 0, 0, 0);
+        _Screen("GO!", 0, 0, 0);
     end
 end
 
@@ -637,6 +637,7 @@ loop do
         //call Dump();
         _pserial.println(_F("= FIM ="));
 
+        spawn Serial();
         await 5s;
 
         loop do
