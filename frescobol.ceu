@@ -141,9 +141,13 @@ native/pre do
         TV.print(DX-FX*strlen(STR)-1,    0, STR);
         sprintf(STR, "Quedas: %3d", GAME.falls+falls);
         TV.print(DX-FX*strlen(STR)-1,   FY, STR);
-        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-        u32 pace  = avg * 10 / GAME.time;
-        sprintf(STR, "Ritmo:  %3d", pace);
+        if (GAME.time > 5000) {
+            u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
+            u32 pace  = avg * 10 / GAME.time;
+            sprintf(STR, "Ritmo:  %3d", pace);
+        } else {
+            sprintf(STR, "Ritmo:  ---");
+        }
         TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
 
         // TOTAL
@@ -347,14 +351,14 @@ code/await Serial (none) -> NEVER do
                     DISTANCE = str.toInt();
                 }}
             else/if {strncmp_P(STR, PSTR("esq"), 3) == 0} as bool then
-                if {strlen(&STR[9]) < 15} as bool then
-                    {strcpy(NAMES[0], &STR[9]);}
+                if {strlen(&STR[3]) < 15} as bool then
+                    {strcpy(NAMES[0], &STR[3]);}
                 else
                     escape false;
                 end
             else/if {strncmp_P(STR, PSTR("dir"), 3) == 0} as bool then
-                if {strlen(&STR[8]) < 15} as bool then
-                    {strcpy(NAMES[1], &STR[8]);}
+                if {strlen(&STR[3]) < 15} as bool then
+                    {strcpy(NAMES[1], &STR[3]);}
                 else
                     escape false;
                 end
