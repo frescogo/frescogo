@@ -82,11 +82,15 @@ native/pre do
         TV.clear_screen();
         TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
-        TV.print(0, 0, NAMES[0]);
-        TV.print(DX-FX*strlen(NAMES[1])-1, DY-FY, NAMES[1]);
+        TV.print(0,  0, NAMES[0]);
+        TV.print(0, FY, GAME.ps[0]/100);
 
-        sprintf(STR, "%d", NAMES[0]);
-        TV.print(DX-FX*strlen(STR)-1, DY/2-FY/2, kmh);
+        TV.print(DX-FX*strlen(NAMES[1])-1, DY-FY,   NAMES[1]);
+        sprintf(STR, "%ld", GAME.ps[1]/100);
+        TV.print(DX-FX*strlen(STR)-1,      DY-2*FY, STR);
+
+        sprintf(STR, "%d", kmh);
+        TV.print(DX/2-FX*strlen(STR)/2, DY/2-FY/2, kmh);
     }
 end
 
