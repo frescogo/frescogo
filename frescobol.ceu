@@ -98,7 +98,7 @@ native/pre do
         }
     }
 
-    void Screen (int kmh, int falls) {
+    void Screen (const char* str, int kmh, int falls) {
         TV.clear_screen();
         //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
@@ -112,10 +112,11 @@ native/pre do
         TV.print(DX-FX*strlen(STR)-1,      DY-2*FY, STR);
 
         // KMH
-        if (kmh != 0) {
+        if (str == NULL) {
             sprintf(STR, "%d", kmh);
-            TV.print(DX/2-FX*strlen(STR)/2, DY/2-FY/2, kmh);
+            str = STR;
         }
+        TV.print(DX/2-FX*strlen(str)/2, DY/2-FY/2, kmh);
 
         // TIME/FALLS/PACE
         sprintf(STR, "Tempo:  %3d", (TIMEOUT-GAME.time)/1000);
@@ -394,7 +395,7 @@ code/await Serial (none) -> NEVER do
             _pserial.println(_F("err"));
         end
         _ALL();
-        _Screen(0, 0);
+        _Screen("---", 0, 0);
     end
 end
 
@@ -403,7 +404,7 @@ loop do
         _pserial.println(_F("= INICIO ="));
         _HIT = 0;
         _ALL();
-        _Screen(0, 0);
+        _Screen("INICIO", 0, 0);
 
         do
             loop do
@@ -473,8 +474,8 @@ loop do
 
     // SOUND
                     par/or do
-                        await 50ms;
-                        _ceu_assert(0, "max 50ms per sound");
+                        await 75ms;
+                        _ceu_arduino_assert(0, 1);
                     with
                         _Sound(kmh);
                         await async do end;
@@ -503,7 +504,7 @@ loop do
                     nxt = 1 - nxt;
 
                     _ALL();
-                    _Screen(kmh, -1);
+                    _Screen(null, kmh, -1);
                     if _GAME.time >= _TIMEOUT then
                         escape;
                     end
@@ -517,7 +518,7 @@ loop do
                 await 200ms;
 
                 _ALL();
-                _Screen(0, 0);
+                _Screen("QUEDA", 0, 0);
                 //call Dump();
             end
         end
@@ -526,7 +527,7 @@ loop do
         await 2s;
 
         _ALL();
-        _Screen(0, 0);
+        _Screen("FIM", 0, 0);
         //call Dump();
         _pserial.println(_F("= FIM ="));
 
