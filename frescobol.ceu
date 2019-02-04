@@ -126,16 +126,19 @@ native/pre do
         }
     }
 
-    void Screen (const char* str, int kmh, int p, int falls) {
+    void Screen (const char* str, int p, int kmh, int is_back) {
         TV.clear_screen();
         //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
+        int falls = GAME.falls - (str==NULL ? 1 : 0);
+
         // KMH
         if (str == NULL) {
+            char c = (is_back ? '*' : ' ');
             if (p == 0) {
-                sprintf(STR, "--> %d    ", kmh);
+                sprintf(STR, "--> %c %d %c   ", c, kmh, c);
             } else {
-                sprintf(STR, "    %d <--", kmh);
+                sprintf(STR, "   %c %d %c <--", c, kmh, c);
             }
             str = STR;
         }
@@ -147,7 +150,7 @@ native/pre do
         // TIME/FALLS/PACE
         sprintf(STR, "Tempo:  %3ds", (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000);
         TV.print(DX-FX*strlen(STR)-1,    0, STR);
-        sprintf(STR, "Quedas:  %3d", GAME.falls+falls);
+        sprintf(STR, "Quedas:  %3d", falls);
         TV.print(DX-FX*strlen(STR)-1,   FY, STR);
         if (GAME.time > 5000) {
             u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
@@ -162,7 +165,7 @@ native/pre do
 
         // TOTAL
         TV.print(0, DY-2*FY, "TOTAL");
-        sprintf(STR, "%5d", Get_Total(GAME.falls+falls) / 100);
+        sprintf(STR, "%5d", Get_Total(falls) / 100);
         TV.print(0, DY-1*FY, STR);
 
         // AFTER GET_TOTAL: p0/p1
@@ -540,7 +543,7 @@ loop do
                             continue;
                         end
 
-                        await 50ms;
+                        _TV.delay(50);
                         if (got == 0) and (call INT0_Get() == low) then
                             break;
                         else/if (got == 1) and (call INT1_Get() == low) then
@@ -554,7 +557,7 @@ loop do
                     // if both were unpressed and now both are pressed,
                     // and its long since the previous hit, then this is a fall
                     if dt > 1000 then
-                        await 100ms;
+                        _TV.delay(100);
                         if both and (call INT0_Get() == low) and
                                     (call INT1_Get() == low)
                         then
@@ -590,7 +593,7 @@ loop do
                     nxt = 1 - got;
 
                     _ALL();
-                    _Screen(null, kmh, 1-got, -1);
+                    _Screen(null, 1-got, kmh, is_back);
                     if _GAME.time >= _TIMEOUT then
                         escape;
                     end
@@ -598,7 +601,7 @@ loop do
                     // sleep inside hit to reach HIT_AWAIT and check BACK below
                     var u32 dt_ = _TV.millis() - t1;
                     if HIT_AWAIT > dt_ then
-                        await (HIT_AWAIT-dt_)ms;
+                        _TV.delay(HIT_AWAIT-dt_);
                     end
 
                     do
