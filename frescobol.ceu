@@ -25,7 +25,7 @@ native/pre do
 
     char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
 
-    u32  TIMEOUT  = 150000;
+    u32  TIMEOUT  = 300000;
     int  DISTANCE = 800;
 
     char STR[32];
@@ -500,7 +500,7 @@ loop do
 
                 _ALL();
                 _Screen(0, 0);
-                call Dump();
+                //call Dump();
             end
         end
 
@@ -509,7 +509,7 @@ loop do
 
         _ALL();
         _Screen(0, 0);
-        call Dump();
+        //call Dump();
         _pserial.println(_F("= FIM ="));
 
         loop do
