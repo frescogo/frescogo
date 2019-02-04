@@ -6,8 +6,8 @@
 
 #define DX  184
 #define DY   64
-#define FX    6
-#define FY    8
+#define FX    4
+#define FY    6
 
 #define BALL_MARK    0
 #define BALL_NONE    1
@@ -163,7 +163,10 @@ native/pre do
             sprintf(STR, "%d", kmh);
             str = STR;
         }
-        TV.print(DX/2-FX*strlen(str)/2, DY/2-FY/2, str);
+        TV.select_font(font8x8);
+        #define K 8
+        TV.print(DX/2-K*strlen(str)/2, DY/2-K/2, str);
+        TV.select_font(font4x6);
 
         // TIME/FALLS/PACE
         sprintf(STR, "Tempo:  %3ds", (TIMEOUT-GAME.time)/1000);
@@ -223,7 +226,7 @@ input none RESTART;
 
 {
     TV.begin(PAL,DX,DY);
-    TV.select_font(font6x8);
+    TV.select_font(font4x6);
     TV.set_hbi_hook(pserial.begin(9600));
 }
 
