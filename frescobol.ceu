@@ -32,13 +32,6 @@ native/pre do
 
     char STR[32];
 
-    u32 Get_Total (u32 p0, u32 p1, int falls) {
-        u32 avg   = (p0 + p1) / 2;
-        u32 total = min(avg, min(p0,p1)*1.1);
-        int pct   = 100 - min(100, (falls)*3);
-        return total * pct/100;
-    }
-
     typedef struct {
         u8  bests[2][2][BESTS];
         u32 ps[2];
@@ -47,6 +40,23 @@ native/pre do
         u8  falls;
     } Game;
     Game GAME;
+
+    u32 Get_Total (u32 p0, u32 p1, int falls) {
+        u32 avg   = (p0 + p1) / 2;
+        u32 total = min(avg, min(p0,p1)*1.1);
+
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<2; j++) {
+                for (int k=0; k<BESTS; k++) {
+                    u32 v = GAME.bests[i][j][k];
+                    total += v*v*4;
+                }
+            }
+        }
+
+        int pct   = 100 - min(100, (falls)*3);
+        return total * pct/100;
+    }
 
     void ALL (void) {
         GAME.ps[0] = 0;
@@ -475,7 +485,7 @@ loop do
 
     // SOUND
                     par/or do
-                        await 75ms;
+                        await 100ms;
                         _ceu_arduino_assert(0, 1);
                     with
                         _Sound(kmh);
