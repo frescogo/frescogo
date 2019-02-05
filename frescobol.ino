@@ -20,9 +20,8 @@ typedef unsigned long u32;
 
 #define BESTS 10
 
-#define HIT_AWAIT 100       // desired await between two hits
-
-#define KMH_MAX 125         // to fit in s8
+#define HIT_MIN 235       // minimum time between two hits (125kmh)
+#define KMH_MAX 125       // to fit in s8
 
 TVout TV;
 pollserial pserial;
@@ -42,6 +41,8 @@ int  DISTANCE = 800;
 bool IS_BACK;
 
 char STR[32];
+
+int MAP[2] = { PIN_ESQ, PIN_DIR };
 
 typedef struct {
     s8  bests[2][2][BESTS];     // kmh (max 125kmh/h)
@@ -140,32 +141,29 @@ void loop (void)
 
         pserial.println(F("> saque"));
         TV_All("---", 0, 0, 0);
-        TV.delay(HIT_AWAIT);
+        TV.delay(HIT_MIN);
 
         int nxt = 1 - got;
-        while (1) {
+        while (1)
+        {
+            // wait "got" pin to unpress
+            while (digitalRead(MAP[got]) == LOW)
+                ;
+
             // both are unpresseed?
-            bool both = digitalRead(PIN_ESQ) == HIGH &&
-                        digitalRead(PIN_DIR) == HIGH;
+            bool both = digitalRead(MAP[nxt]) == HIGH;
 
 // HIT
-            // debounce
             u32 t1;
             int dt;
             while (1) {
                 got = Await_Press(false);
-
                 t1 = TV.millis();
                 dt = (t1 - t0);
-                if (got!=nxt && dt<500) {
-                    continue;
-                }
-
-                TV.delay(50);
-                if (got==0 && digitalRead(PIN_ESQ)==LOW) {
+                if (got==nxt || dt>=2*HIT_MIN) {
                     break;
-                } else if (got==1 && digitalRead(PIN_DIR)==LOW) {
-                    break;
+                } else {
+                    // ball cannot go back and forth so fast
                 }
             }
             //ceu_arduino_assert(dt>50, 2);
@@ -176,7 +174,7 @@ void loop (void)
             // if both were unpressed and now both are pressed,
             // and its long since the previous hit, then this is a fall
             if (dt > 1000 ) {
-                TV.delay(100);
+                TV.delay(HIT_MIN/2);
                 if (both && digitalRead(PIN_ESQ)==LOW &&
                             digitalRead(PIN_DIR)==LOW)
                 {
@@ -214,20 +212,20 @@ void loop (void)
             }
             nxt = 1 - got;
 
-//var u32 x1 = _TV.millis();
+//u32 x1 = TV.millis();
             PT_All();
-//var u32 x2 = _TV.millis();
-//_pserial.print("> ");
-//_pserial.println(x2-x1);
+//u32 x2 = TV.millis();
+//pserial.print("> ");
+//pserial.println(x2-x1);
             TV_All(NULL, 1-got, kmh, IS_BACK);
             if (GAME.time >= TIMEOUT) {
                 goto END;
             }
 
-            // sleep inside hit to reach HIT_AWAIT and check BACK below
+            // sleep inside hit to reach HIT_MIN and check BACK below
             u32 dt_ = TV.millis() - t1;
-            if (HIT_AWAIT > dt_) {
-                TV.delay(HIT_AWAIT-dt_);
+            if (HIT_MIN > dt_) {
+                TV.delay(HIT_MIN-dt_);
             }
 
             if (got == 0) {

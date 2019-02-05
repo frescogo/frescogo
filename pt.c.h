@@ -74,8 +74,9 @@ void PT_All (void) {
                 }
             }
 
-            GAME.time += v.dt*10;
+            GAME.time += v.dt;
         }
     }
+    GAME.time *= 10;
 }
 
