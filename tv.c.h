@@ -38,7 +38,7 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
 
     // TOTAL
     TV.print(0, DY-2*FY, "TOTAL");
-    sprintf(STR, "%5d", Get_Total(falls) / 100);
+    sprintf(STR, "%5d", PT_Total(falls) / 100);
     TV.print(0, DY-1*FY, STR);
 
     // AFTER GET_TOTAL: p0/p1
@@ -47,13 +47,13 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     TV.print(0, 0, NAMES[0]);
     {
         int n, min_, max_;
-        n = Bests(GAME.bests[0][1], &min_, &max_);
+        n = PT_Bests(GAME.bests[0][1], &min_, &max_);
         sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
         TV.print(0, 1*FY, STR);
     }
     {
         int n, min_, max_;
-        n = Bests(GAME.bests[0][0], &min_, &max_);
+        n = PT_Bests(GAME.bests[0][0], &min_, &max_);
         sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
         TV.print(0, 2*FY, STR);
     }
@@ -63,13 +63,13 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     TV.print(DX-FX*strlen(NAMES[1])-1, DY-1*FY, NAMES[1]);
     {
         int n, min_, max_;
-        n = Bests(GAME.bests[1][1], &min_, &max_);
+        n = PT_Bests(GAME.bests[1][1], &min_, &max_);
         sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
         TV.print(DX-FX*strlen(STR)-1, DY-2*FY, STR);
     }
     {
         int n, min_, max_;
-        n = Bests(GAME.bests[1][0], &min_, &max_);
+        n = PT_Bests(GAME.bests[1][0], &min_, &max_);
         sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
         TV.print(DX-FX*strlen(STR)-1, DY-3*FY, STR);
     }

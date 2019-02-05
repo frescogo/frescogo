@@ -15,7 +15,7 @@ void Serial_All (void) {
 
     // BEFORE GET_TOTAL: pace
 
-    u32 total = Get_Total(GAME.falls) / 100;
+    u32 total = PT_Total(GAME.falls) / 100;
 
     // AFTER GET_TOTAL: p0/p1
 
@@ -219,7 +219,7 @@ OK:;
     } else {
         pserial.println(F("ok"));
     }
-    ALL();
+    PT_All();
     TV_All("CMD", 0, 0, 0);
 
     return 0;

@@ -52,92 +52,17 @@ typedef struct {
 } Game;
 Game GAME;
 
-int Bests (s8* bests, int* min_, int* max_) {
-    *min_ = bests[BESTS-1];
-    *max_ = bests[0];
-    for (int i=0; i<BESTS; i++) {
-        if (bests[i] == 0) {
-            return i;
-        }
-    }
-    return BESTS;
-}
-
-void Bests_Apply (void) {
-    for (int i=0; i<2; i++) {
-        for (int j=0; j<2; j++) {
-            for (int k=0; k<BESTS; k++) {
-                s8 v = GAME.bests[i][j][k];
-                GAME.ps[i] += v*v*4;
-            }
-        }
-    }
-}
-
-u32 Get_Total (int falls) {
-    Bests_Apply();
-    u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-    u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
-    int pct   = 100 - min(100, (falls)*3);
-    return total * pct/100;
-}
-
-void ALL (void) {
-    GAME.ps[0] = 0;
-    GAME.ps[1] = 0;
-    GAME.time  = 0;
-    GAME.hits  = 0;
-    GAME.falls = 0;
-
-    memset(GAME.bests, 0, 2*2*BESTS*sizeof(s8));
-
-    for (int i=0 ; i<HIT ; i++) {
-    //for (int i=0 ; i<600 ; i++) {
-        Hit v = HITS[i];
-        u16 kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
-        u16 pt  = kmh*kmh;
-
-        if (v.dt != BALL_NONE) {
-            GAME.hits++;
-        }
-
-        if (v.dt == BALL_SERVICE) {
-            GAME.falls++;
-        }
-
-        if (v.dt!=BALL_NONE && v.dt!=BALL_SERVICE) {
-            Hit nxt = HITS[i+1];
-            if (i==HIT-1 || nxt.dt==BALL_NONE || nxt.dt==BALL_SERVICE) {
-                // ignore last hit
-            }
-            else
-            {
-                // ps
-                GAME.ps[1-(i%2)] += pt;
-
-                // bests
-                s8* vec = GAME.bests[ 1-(i%2) ][ v.kmh>0 ];
-                for (int j=0; j<BESTS; j++) {
-                    if (kmh > vec[j]) {
-                        for (int k=BESTS-1; k>j; k--) {
-                            vec[k] = vec[k-1];
-                        }
-                        vec[j] = kmh;
-                        break;
-                    }
-                }
-            }
-
-            GAME.time += v.dt*10;
-        }
-    }
-}
+int  PT_Bests       (s8* bests, int* min_, int* max_);
+void PT_Bests_Apply (void);
+u32  PT_Total       (int falls);
+void PT_All         (void);
+#include "pt.c.h"
 
 void TV_All (const char* str, int p, int kmh, int is_back);
 #include "tv.c.h"
 
-void Serial_Hit (char* name, u32 kmh, bool is_back);
-void Serial_All (void);
+void Serial_Hit   (char* name, u32 kmh, bool is_back);
+void Serial_All   (void);
 int  Serial_Check (void);
 #include "serial.c.h"
 
@@ -155,7 +80,7 @@ void Sound (u32 kmh) {
     }
 }
 
-int AWAIT_PRESS (bool serial) {
+int Await_Press (bool serial) {
     while (1) {
         if (serial) {
             int ret = Serial_Check();
@@ -184,7 +109,7 @@ void loop (void)
 {
     pserial.println(F("= INICIO ="));
     HIT = 0;
-    ALL();
+    PT_All();
     TV_All("INICIO", 0, 0, 0);
 
     while (1)
@@ -193,11 +118,11 @@ void loop (void)
         TV.tone(3000, 500);
         TV.delay(1000);
 
-        ALL();
+        PT_All();
         TV_All("GO!", 0, 0, 0);
 
 // SERVICE
-        int got = AWAIT_PRESS(true);
+        int got = Await_Press(true);
         if (got == -1) {
             return;         // restart
         }
@@ -228,7 +153,7 @@ void loop (void)
             u32 t1;
             int dt;
             while (1) {
-                got = AWAIT_PRESS(false);
+                got = Await_Press(false);
 
                 t1 = TV.millis();
                 dt = (t1 - t0);
@@ -290,7 +215,7 @@ void loop (void)
             nxt = 1 - got;
 
 //var u32 x1 = _TV.millis();
-            ALL();
+            PT_All();
 //var u32 x2 = _TV.millis();
 //_pserial.print("> ");
 //_pserial.println(x2-x1);
@@ -322,7 +247,7 @@ void loop (void)
         TV.tone(100, 200);
         TV.delay(200);
 
-        ALL();
+        PT_All();
         TV_All("QUEDA", 0, 0, 0);
         pserial.println(F("QUEDA"));
         Serial_All();
@@ -330,14 +255,14 @@ void loop (void)
 
 END:
     TV.tone(200, 2000);
-    ALL();
+    PT_All();
     TV_All("FIM", 0, 0, 0);
     Serial_All();
     pserial.println(F("= FIM ="));
     TV.delay(5000);
 
     while (1) {
-        int got = AWAIT_PRESS(true);
+        int got = Await_Press(true);
         if (got == -1) {
             return;         // restart
         }
