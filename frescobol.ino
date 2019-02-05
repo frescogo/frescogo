@@ -6,6 +6,8 @@ typedef char  s8;
 typedef short s16;
 typedef unsigned long u32;
 
+//#define DEBUG
+
 #define PIN_ESQ 21
 #define PIN_DIR 20
 
@@ -191,12 +193,14 @@ void loop (void)
             s16 kmh = min(kmh_, KMH_MAX);
             Sound(kmh);
 
+#ifdef DEBUG
             if (nxt != got) {
                 Serial_Hit(NAMES[got],   kmh, IS_BACK);
                 Serial_Hit(NAMES[1-got], kmh, false);
             } else {
                 Serial_Hit(NAMES[1-got], kmh, IS_BACK);
             }
+#endif
 
             HITS[HIT].dt = min(dt/10, 255);
             if (IS_BACK) {
@@ -248,7 +252,9 @@ void loop (void)
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
         pserial.println(F("QUEDA"));
+#ifdef DEBUG
         Serial_All();
+#endif
     }
 
 END:
