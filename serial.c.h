@@ -138,34 +138,35 @@ int Serial_Check (void) {
         return 0;
     }
 
-    while (STR[i-1]=='\n' || STR[i-1]=='\r') {
+    while (CMD[i-1]=='\n' || CMD[i-1]=='\r') {
         i--;
     }
-    STR[i++] = '\0';
+    CMD[i++] = '\0';
 
-    if (strncmp_P(STR, PSTR("reinicio"), 8) == 0) {
+    if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
+        i = 0;
         return -1;
-    } else if (strncmp_P(STR, PSTR("placar"), 6) == 0) {
+    } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_All();
-    } else if (strncmp_P(STR, PSTR("tempo "), 6) == 0) {
-        String str = &STR[6];
+    } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
+        String str = &CMD[6];
         TIMEOUT = str.toInt() * 1000;
-    } else if (strncmp_P(STR, PSTR("dist "), 5) == 0) {
-        String str = &STR[5];
+    } else if (strncmp_P(CMD, PSTR("dist "), 5) == 0) {
+        String str = &CMD[5];
         DISTANCE = str.toInt();
-    } else if (strncmp_P(STR, PSTR("esq"), 3) == 0) {
-        if (strlen(&STR[3]) < 15) {
-            strcpy(NAMES[0], &STR[3]);
+    } else if (strncmp_P(CMD, PSTR("esq "), 4) == 0) {
+        if (strlen(&CMD[4]) < 15) {
+            strcpy(NAMES[0], &CMD[4]);
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(STR, PSTR("dir"), 3) == 0) {
-        if (strlen(&STR[3]) < 15) {
-            strcpy(NAMES[1], &STR[3]);
+    } else if (strncmp_P(CMD, PSTR("dir "), 4) == 0) {
+        if (strlen(&CMD[4]) < 15) {
+            strcpy(NAMES[1], &CMD[4]);
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(STR, PSTR("-seq"), 4) == 0) {
+    } else if (strncmp_P(CMD, PSTR("-seq"), 4) == 0) {
         if (HIT == 0) {
             goto ERR;
         }
@@ -180,7 +181,7 @@ int Serial_Check (void) {
                 break;
             }
         }
-    } else if (strncmp_P(STR, PSTR("+seq"), 4) == 0) {
+    } else if (strncmp_P(CMD, PSTR("+seq"), 4) == 0) {
         if (HITS[HIT].dt == BALL_MARK) {
             goto ERR;
         }
@@ -190,7 +191,7 @@ int Serial_Check (void) {
                 break;
             }
         }
-    } else if (strncmp_P(STR, PSTR("-1"), 2) == 0) {
+    } else if (strncmp_P(CMD, PSTR("-1"), 2) == 0) {
         if (HIT > 0) {
             HIT -= 1;
             if (HITS[HIT].dt == BALL_NONE) {
@@ -199,7 +200,7 @@ int Serial_Check (void) {
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(STR, PSTR("+1"), 2) == 0) {
+    } else if (strncmp_P(CMD, PSTR("+1"), 2) == 0) {
         if (HITS[HIT].dt != BALL_MARK) {
             HIT += 1;
             if (HITS[HIT].dt == BALL_SERVICE) {
@@ -221,6 +222,7 @@ OK:;
     }
     PT_All();
     TV_All("CMD", 0, 0, 0);
+    i = 0;
 
     return 0;
 }
