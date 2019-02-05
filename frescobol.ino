@@ -1,10 +1,13 @@
-#include "string.ceu"
+#include <TVout.h>
+#include <pollserial.h>
+#include <fontALL.h>
 
-#include "out.ceu"
-//#include "wclock.ceu"
-#include "int0.ceu"     // UNO=D2, MEGA=D21
-#include "int1.ceu"     // UNO=D2, MEGA=D21
-{ EICRA = 0b1010; }     // FALLING for both INT0/INT1
+typedef char  s8;
+typedef short s16;
+typedef unsigned long u32;
+
+#define PIN_ESQ 21
+#define PIN_DIR 20
 
 #define DX  184
 #define DY   64
@@ -21,239 +24,220 @@
 
 #define KMH_MAX 125         // to fit in s8
 
-native/pre do
-    ##include <TVout.h>
-    ##include <pollserial.h>
-    ##include <fontALL.h>
-    TVout TV;
-    pollserial pserial;
+TVout TV;
+pollserial pserial;
 
-    typedef struct {
-        u8 dt;                      // cs (ms*10)
-        s8 kmh;                     // +/-kmh (max 125km/h)
-    } Hit;
-    Hit  HITS[1000];
-    int  HIT = 0;
+typedef struct {
+    u8 dt;                      // cs (ms*10)
+    s8 kmh;                     // +/-kmh (max 125km/h)
+} Hit;
+Hit  HITS[1000];
+int  HIT = 0;
 
-    char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
+char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
 
-    u32  TIMEOUT  = 300 * ((u32)1000);
-    int  DISTANCE = 800;
+u32  TIMEOUT  = 300 * ((u32)1000);
+int  DISTANCE = 800;
 
-    bool IS_BACK;
+bool IS_BACK;
 
-    char STR[32];
+char STR[32];
 
-    typedef struct {
-        s8  bests[2][2][BESTS];     // kmh (max 125kmh/h)
-        u32 ps[2];                  // sum(kmh*kmh)
-        u32 time;                   // ms (total time)
-        u16 hits;
-        u8  falls;
-    } Game;
-    Game GAME;
+typedef struct {
+    s8  bests[2][2][BESTS];     // kmh (max 125kmh/h)
+    u32 ps[2];                  // sum(kmh*kmh)
+    u32 time;                   // ms (total time)
+    u16 hits;
+    u8  falls;
+} Game;
+Game GAME;
 
-    int Bests (s8* bests, int* min_, int* max_) {
-        *min_ = bests[BESTS-1];
-        *max_ = bests[0];
-        for (int i=0; i<BESTS; i++) {
-            if (bests[i] == 0) {
-                return i;
-            }
-        }
-        return BESTS;
-    }
-
-    void Bests_Apply (void) {
-        for (int i=0; i<2; i++) {
-            for (int j=0; j<2; j++) {
-                for (int k=0; k<BESTS; k++) {
-                    s8 v = GAME.bests[i][j][k];
-                    GAME.ps[i] += v*v*4;
-                }
-            }
+int Bests (s8* bests, int* min_, int* max_) {
+    *min_ = bests[BESTS-1];
+    *max_ = bests[0];
+    for (int i=0; i<BESTS; i++) {
+        if (bests[i] == 0) {
+            return i;
         }
     }
-
-    u32 Get_Total (int falls) {
-        Bests_Apply();
-        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-        u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
-        int pct   = 100 - min(100, (falls)*3);
-        return total * pct/100;
-    }
-
-    void ALL (void) {
-        GAME.ps[0] = 0;
-        GAME.ps[1] = 0;
-        GAME.time  = 0;
-        GAME.hits  = 0;
-        GAME.falls = 0;
-
-        memset(GAME.bests, 0, 2*2*BESTS*sizeof(s8));
-
-        for (int i=0 ; i<HIT ; i++) {
-        //for (int i=0 ; i<600 ; i++) {
-            Hit v = HITS[i];
-            u16 kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
-            u16 pt  = kmh*kmh;
-
-            if (v.dt != BALL_NONE) {
-                GAME.hits++;
-            }
-
-            if (v.dt == BALL_SERVICE) {
-                GAME.falls++;
-            }
-
-            if (v.dt!=BALL_NONE && v.dt!=BALL_SERVICE) {
-                Hit nxt = HITS[i+1];
-                if (i==HIT-1 || nxt.dt==BALL_NONE || nxt.dt==BALL_SERVICE) {
-                    // ignore last hit
-                }
-                else
-                {
-                    // ps
-                    GAME.ps[1-(i%2)] += pt;
-
-                    // bests
-                    s8* vec = GAME.bests[ 1-(i%2) ][ v.kmh>0 ];
-                    for (int j=0; j<BESTS; j++) {
-                        if (kmh > vec[j]) {
-                            for (int k=BESTS-1; k>j; k--) {
-                                vec[k] = vec[k-1];
-                            }
-                            vec[j] = kmh;
-                            break;
-                        }
-                    }
-                }
-
-                GAME.time += v.dt*10;
-            }
-        }
-    }
-
-    void Screen (const char* str, int p, int kmh, int is_back) {
-        TV.clear_screen();
-        //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
-
-        int falls = GAME.falls - (str==NULL ? 1 : 0);
-
-        // KMH
-        if (str == NULL) {
-            char c = (is_back ? '*' : ' ');
-            if (p == 0) {
-                sprintf(STR, "--> %c %d %c    ", c, kmh, c);
-            } else {
-                sprintf(STR, "    %c %d %c <--", c, kmh, c);
-            }
-            str = STR;
-        }
-        TV.select_font(font8x8);
-        #define K 8
-        TV.print(DX/2-K*strlen(str)/2, DY/2-K/2, str);
-        TV.select_font(font4x6);
-
-        // TIME/FALLS/PACE
-        int time = (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000;
-        sprintf(STR, "Tempo:  %3ds", time);
-        TV.print(DX-FX*strlen(STR)-1,    0, STR);
-        sprintf(STR, "Quedas:  %3d", falls);
-        TV.print(DX-FX*strlen(STR)-1,   FY, STR);
-        if (GAME.time > 5000) {
-            u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-            u32 pace  = avg * 10 / GAME.time;
-            sprintf(STR, "Ritmo:   %3d", pace);
-        } else {
-            sprintf(STR, "Ritmo:  ---");
-        }
-        TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
-
-        // BEFORE GET_TOTAL: pace
-
-        // TOTAL
-        TV.print(0, DY-2*FY, "TOTAL");
-        sprintf(STR, "%5d", Get_Total(falls) / 100);
-        TV.print(0, DY-1*FY, STR);
-
-        // AFTER GET_TOTAL: p0/p1
-
-        // ESQ
-        TV.print(0, 0, NAMES[0]);
-        {
-            int n, min_, max_;
-            n = Bests(GAME.bests[0][1], &min_, &max_);
-            sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
-            TV.print(0, 1*FY, STR);
-        }
-        {
-            int n, min_, max_;
-            n = Bests(GAME.bests[0][0], &min_, &max_);
-            sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
-            TV.print(0, 2*FY, STR);
-        }
-        TV.print(0, 3*FY, GAME.ps[0]/100);
-
-        // DIR
-        TV.print(DX-FX*strlen(NAMES[1])-1, DY-1*FY, NAMES[1]);
-        {
-            int n, min_, max_;
-            n = Bests(GAME.bests[1][1], &min_, &max_);
-            sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
-            TV.print(DX-FX*strlen(STR)-1, DY-2*FY, STR);
-        }
-        {
-            int n, min_, max_;
-            n = Bests(GAME.bests[1][0], &min_, &max_);
-            sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
-            TV.print(DX-FX*strlen(STR)-1, DY-3*FY, STR);
-        }
-        sprintf(STR, "%ld", GAME.ps[1]/100);
-        TV.print(DX-FX*strlen(STR)-1, DY-4*FY, STR);
-    }
-
-    void Dump_Hit (char* name, u32 kmh, bool is_back) {
-        pserial.print(F("> "));
-        pserial.print(name);
-        pserial.print(F(": "));
-        pserial.print(kmh);
-        if (is_back) {
-            pserial.print(F(" !"));
-        }
-        pserial.println();
-    }
-
-    void Sound (u32 kmh) {
-        if (kmh < 40) {
-            TV.tone( 500, 30);
-        } else if (kmh < 50) {
-            TV.tone(1500, 30);
-        } else if (kmh < 60) {
-            TV.tone(2500, 30);
-        } else if (kmh < 70) {
-            TV.tone(3500, 30);
-        } else {
-            TV.tone(4500, 30);
-        }
-    }
-end
-
-native _TIMEOUT, _DISTANCE, _HITS, _HIT, _GAME, _Screen, _ALL, _Sound, _IS_BACK;
-native/plain  _TV, _pserial, _NAMES, _STR, _Hit;
-native/nohold _Dump_Hit;
-native/pure   _Get_Total;
-
-output high/low OUT_13;
-
-input none RESTART;
-
-{
-    TV.begin(PAL,DX,DY);
-    TV.select_font(font4x6);
-    TV.set_hbi_hook(pserial.begin(9600));
+    return BESTS;
 }
 
+void Bests_Apply (void) {
+    for (int i=0; i<2; i++) {
+        for (int j=0; j<2; j++) {
+            for (int k=0; k<BESTS; k++) {
+                s8 v = GAME.bests[i][j][k];
+                GAME.ps[i] += v*v*4;
+            }
+        }
+    }
+}
+
+u32 Get_Total (int falls) {
+    Bests_Apply();
+    u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
+    u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
+    int pct   = 100 - min(100, (falls)*3);
+    return total * pct/100;
+}
+
+void ALL (void) {
+    GAME.ps[0] = 0;
+    GAME.ps[1] = 0;
+    GAME.time  = 0;
+    GAME.hits  = 0;
+    GAME.falls = 0;
+
+    memset(GAME.bests, 0, 2*2*BESTS*sizeof(s8));
+
+    for (int i=0 ; i<HIT ; i++) {
+    //for (int i=0 ; i<600 ; i++) {
+        Hit v = HITS[i];
+        u16 kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
+        u16 pt  = kmh*kmh;
+
+        if (v.dt != BALL_NONE) {
+            GAME.hits++;
+        }
+
+        if (v.dt == BALL_SERVICE) {
+            GAME.falls++;
+        }
+
+        if (v.dt!=BALL_NONE && v.dt!=BALL_SERVICE) {
+            Hit nxt = HITS[i+1];
+            if (i==HIT-1 || nxt.dt==BALL_NONE || nxt.dt==BALL_SERVICE) {
+                // ignore last hit
+            }
+            else
+            {
+                // ps
+                GAME.ps[1-(i%2)] += pt;
+
+                // bests
+                s8* vec = GAME.bests[ 1-(i%2) ][ v.kmh>0 ];
+                for (int j=0; j<BESTS; j++) {
+                    if (kmh > vec[j]) {
+                        for (int k=BESTS-1; k>j; k--) {
+                            vec[k] = vec[k-1];
+                        }
+                        vec[j] = kmh;
+                        break;
+                    }
+                }
+            }
+
+            GAME.time += v.dt*10;
+        }
+    }
+}
+
+void Screen (const char* str, int p, int kmh, int is_back) {
+    TV.clear_screen();
+    //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
+
+    int falls = GAME.falls - (str==NULL ? 1 : 0);
+
+    // KMH
+    if (str == NULL) {
+        char c = (is_back ? '*' : ' ');
+        if (p == 0) {
+            sprintf(STR, "--> %c %d %c    ", c, kmh, c);
+        } else {
+            sprintf(STR, "    %c %d %c <--", c, kmh, c);
+        }
+        str = STR;
+    }
+    TV.select_font(font8x8);
+    #define K 8
+    TV.print(DX/2-K*strlen(str)/2, DY/2-K/2, str);
+    TV.select_font(font4x6);
+
+    // TIME/FALLS/PACE
+    int time = (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000;
+    sprintf(STR, "Tempo:  %3ds", time);
+    TV.print(DX-FX*strlen(STR)-1,    0, STR);
+    sprintf(STR, "Quedas:  %3d", falls);
+    TV.print(DX-FX*strlen(STR)-1,   FY, STR);
+    if (GAME.time > 5000) {
+        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
+        u32 pace  = avg * 10 / GAME.time;
+        sprintf(STR, "Ritmo:   %3d", pace);
+    } else {
+        sprintf(STR, "Ritmo:  ---");
+    }
+    TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
+
+    // BEFORE GET_TOTAL: pace
+
+    // TOTAL
+    TV.print(0, DY-2*FY, "TOTAL");
+    sprintf(STR, "%5d", Get_Total(falls) / 100);
+    TV.print(0, DY-1*FY, STR);
+
+    // AFTER GET_TOTAL: p0/p1
+
+    // ESQ
+    TV.print(0, 0, NAMES[0]);
+    {
+        int n, min_, max_;
+        n = Bests(GAME.bests[0][1], &min_, &max_);
+        sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
+        TV.print(0, 1*FY, STR);
+    }
+    {
+        int n, min_, max_;
+        n = Bests(GAME.bests[0][0], &min_, &max_);
+        sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
+        TV.print(0, 2*FY, STR);
+    }
+    TV.print(0, 3*FY, GAME.ps[0]/100);
+
+    // DIR
+    TV.print(DX-FX*strlen(NAMES[1])-1, DY-1*FY, NAMES[1]);
+    {
+        int n, min_, max_;
+        n = Bests(GAME.bests[1][1], &min_, &max_);
+        sprintf(STR, "F: %2d (%3d/%3d)", n, max_, min_);
+        TV.print(DX-FX*strlen(STR)-1, DY-2*FY, STR);
+    }
+    {
+        int n, min_, max_;
+        n = Bests(GAME.bests[1][0], &min_, &max_);
+        sprintf(STR, "B: %2d (%3d/%3d)", n, max_, min_);
+        TV.print(DX-FX*strlen(STR)-1, DY-3*FY, STR);
+    }
+    sprintf(STR, "%ld", GAME.ps[1]/100);
+    TV.print(DX-FX*strlen(STR)-1, DY-4*FY, STR);
+}
+
+void Dump_Hit (char* name, u32 kmh, bool is_back) {
+    pserial.print(F("> "));
+    pserial.print(name);
+    pserial.print(F(": "));
+    pserial.print(kmh);
+    if (is_back) {
+        pserial.print(F(" !"));
+    }
+    pserial.println();
+}
+
+void Sound (u32 kmh) {
+    if (kmh < 40) {
+        TV.tone( 500, 30);
+    } else if (kmh < 50) {
+        TV.tone(1500, 30);
+    } else if (kmh < 60) {
+        TV.tone(2500, 30);
+    } else if (kmh < 70) {
+        TV.tone(3500, 30);
+    } else {
+        TV.tone(4500, 30);
+    }
+}
+
+#if 0
 code/call Dump (none) -> none do
     {{
         u32 avg  = (GAME.ps[0] + GAME.ps[1]) / 2;
@@ -481,15 +465,25 @@ code/await Serial (none) -> NEVER do
         _Screen("GO!", 0, 0, 0);
     end
 end
+#endif
 
+void setup (void) {
+    EICRA = 0b1010;     // FALLING for both INT0/INT1
+
+    TV.begin(PAL,DX,DY);
+    TV.select_font(font4x6);
+    TV.set_hbi_hook(pserial.begin(9600));
+
+#if 0
 loop do
     watching RESTART do
-        _pserial.println(_F("= INICIO ="));
-        _HIT = 0;
-        _ALL();
-        _Screen("INICIO", 0, 0, 0);
+#endif
 
-{
+        pserial.println(F("= INICIO ="));
+        HIT = 0;
+        ALL();
+        Screen("INICIO", 0, 0, 0);
+
             while (1)
             {
                 TV.delay(2000);
@@ -503,11 +497,11 @@ loop do
                 int got;
                     //spawn Serial();
                     while (1) {
-                        if (digitalRead(INT0_PIN) == LOW) {
+                        if (digitalRead(PIN_ESQ) == LOW) {
                             got = 0;
                             break;
                         }
-                        if (digitalRead(INT1_PIN) == LOW) {
+                        if (digitalRead(PIN_DIR) == LOW) {
                             got = 1;
                             break;
                         }
@@ -531,8 +525,8 @@ loop do
                 int nxt = 1 - got;
                 while (1) {
                     // both are unpresseed?
-                    bool both = digitalRead(INT0_PIN) == HIGH &&
-                                digitalRead(INT1_PIN) == HIGH;
+                    bool both = digitalRead(PIN_ESQ) == HIGH &&
+                                digitalRead(PIN_DIR) == HIGH;
 
     // HIT
                     // debounce
@@ -540,11 +534,11 @@ loop do
                     int dt;
                     while (1) {
                         while (1) {
-                            if (digitalRead(INT0_PIN) == LOW) {
+                            if (digitalRead(PIN_ESQ) == LOW) {
                                 got = 0;
                                 break;
                             }
-                            if (digitalRead(INT1_PIN) == LOW) {
+                            if (digitalRead(PIN_DIR) == LOW) {
                                 got = 1;
                                 break;
                             }
@@ -557,13 +551,13 @@ loop do
                         }
 
                         TV.delay(50);
-                        if (got==0 && digitalRead(INT0_PIN)==LOW) {
+                        if (got==0 && digitalRead(PIN_ESQ)==LOW) {
                             break;
-                        } else if (got==1 && digitalRead(INT1_PIN)==LOW) {
+                        } else if (got==1 && digitalRead(PIN_DIR)==LOW) {
                             break;
                         }
                     }
-                    ceu_arduino_assert(dt>50, 2);
+                    //ceu_arduino_assert(dt>50, 2);
 
                     t0 = t1;
 
@@ -572,8 +566,8 @@ loop do
                     // and its long since the previous hit, then this is a fall
                     if (dt > 1000 ) {
                         TV.delay(100);
-                        if (both && digitalRead(INT0_PIN)==LOW &&
-                                    digitalRead(INT1_PIN)==LOW)
+                        if (both && digitalRead(PIN_ESQ)==LOW &&
+                                    digitalRead(PIN_DIR)==LOW)
                         {
                             break;
                         }
@@ -589,10 +583,10 @@ loop do
                     Sound(kmh);
 
                     if (nxt != got) {
-                        Dump_Hit(NAMES[got],   kmh, IS_BACK);
-                        Dump_Hit(NAMES[1-got], kmh, false);
+                        //Dump_Hit(NAMES[got],   kmh, IS_BACK);
+                        //Dump_Hit(NAMES[1-got], kmh, false);
                     } else {
-                        Dump_Hit(NAMES[1-got], kmh, IS_BACK);
+                        //Dump_Hit(NAMES[1-got], kmh, IS_BACK);
                     }
 
                     HITS[HIT].dt = min(dt/10, 255);
@@ -626,9 +620,9 @@ loop do
                     }
 
                     if (got == 0) {
-                        IS_BACK = (digitalRead(INT0_PIN) == LOW);
+                        IS_BACK = (digitalRead(PIN_ESQ) == LOW);
                     } else {
-                        IS_BACK = (digitalRead(INT1_PIN) == LOW);
+                        IS_BACK = (digitalRead(PIN_DIR) == LOW);
                     }
                     if (IS_BACK) {
                         TV.tone(200, 30);
@@ -658,6 +652,7 @@ END:
         //spawn Serial();
         TV.delay(5000);
 }
+#if 0
 
         loop do
             par/or do
@@ -678,3 +673,6 @@ END:
         end
     end
 end
+#endif
+
+void loop (void) {}
