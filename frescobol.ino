@@ -83,11 +83,12 @@ void TV_All (const char* str, int p, int kmh, int is_back);
 #include "tv.c.h"
 
 void Serial_Hit   (char* name, u32 kmh, bool is_back);
-void Serial_All   (void);
+void Serial_Score (void);
+void Serial_Log   (void);
 int  Serial_Check (void);
 #include "serial.c.h"
 
-void Sound (u32 kmh) {
+void Sound (s8 kmh) {
     if (kmh < 40) {
         tone(PIN_TONE, 500, 30);
     } else if (kmh < 50) {
@@ -213,7 +214,7 @@ void loop (void)
 
             u32 kmh_ = ((u32)36) * DISTANCE / dt;
                        // prevents overflow
-            s16 kmh = min(kmh_, HIT_KMH_MAX);
+            s8 kmh = min(kmh_, HIT_KMH_MAX);
             Sound(kmh);
 
 #ifndef TV_ON
@@ -275,16 +276,14 @@ void loop (void)
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
         Serial.println(F("QUEDA"));
-#ifdef DEBUG
-        Serial_All();
-#endif
+        Serial_Score();
     }
 
 END:
     tone(PIN_TONE, 200, 2000);
     PT_All();
     TV_All("FIM", 0, 0, 0);
-    Serial_All();
+    Serial_Score();
     Serial.println(F("= FIM ="));
     delay(5000);
 

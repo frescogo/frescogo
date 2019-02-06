@@ -9,7 +9,7 @@ void Serial_Hit (char* name, u32 kmh, bool is_back) {
     Serial.println();
 }
 
-void Serial_All (void) {
+void Serial_Score (void) {
     u32 avg  = (GAME.ps[0] + GAME.ps[1]) / 2;
     u32 pace = avg * 10 / GAME.time;
 
@@ -59,7 +59,9 @@ void Serial_All (void) {
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
     Serial.print(STR);
     Serial.println(GAME.hits);
+}
 
+void Serial_Log (void) {
     for (int i=0; i<2; i++) {
         sprintf_P(STR, PSTR("%15s: "), NAMES[i]);
         Serial.print(STR);
@@ -146,7 +148,10 @@ COMPLETE:
     if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
         return -1;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
-        Serial_All();
+        Serial_Score();
+    } else if (strncmp_P(CMD, PSTR("relatorio"), 9) == 0) {
+        Serial_Score();
+        Serial_Log();
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
         String str = &CMD[6];
         TIMEOUT = str.toInt() * 1000;
