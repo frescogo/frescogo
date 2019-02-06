@@ -1,13 +1,21 @@
-#include <TVout.h>
-#include <pollserial.h>
-#include <fontALL.h>
-
 typedef char  s8;
 typedef short s16;
 typedef unsigned long u32;
 
 //#define DEBUG
 //#define TV_ON
+
+#ifdef TV_ON
+#include <TVout.h>
+#include <pollserial.h>
+#include <fontALL.h>
+#define Serial      pserial
+#define delay       TV.delay
+#define millis      TV.millis
+#define tone(x,y,z) TV.tone(y,z)
+#else
+#define PIN_TONE 11
+#endif
 
 #ifdef ARDUINO_AVR_NANO
 #define PIN_ESQ 2
@@ -32,14 +40,16 @@ typedef unsigned long u32;
 #define HIT_MIN 235       // minimum time between two hits (125kmh)
 #define KMH_MAX 125       // to fit in s8
 
+#ifdef TV_ON
 TVout TV;
 pollserial pserial;
+#endif
 
 typedef struct {
     u8 dt;                      // cs (ms*10)
     s8 kmh;                     // +/-kmh (max 125km/h)
 } Hit;
-Hit  HITS[800];
+Hit  HITS[750];
 int  HIT = 0;
 
 char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
@@ -78,15 +88,15 @@ int  Serial_Check (void);
 
 void Sound (u32 kmh) {
     if (kmh < 40) {
-        TV.tone( 500, 30);
+        tone( 500, 30);
     } else if (kmh < 50) {
-        TV.tone(1500, 30);
+        tone(PIN_TONE, 1500, 30);
     } else if (kmh < 60) {
-        TV.tone(2500, 30);
+        tone(PIN_TONE, 2500, 30);
     } else if (kmh < 70) {
-        TV.tone(3500, 30);
+        tone(PIN_TONE, 3500, 30);
     } else {
-        TV.tone(4500, 30);
+        tone(PIN_TONE, 4500, 30);
     }
 }
 
@@ -116,24 +126,24 @@ void setup (void) {
 #ifdef TV_ON
     TV.begin(PAL,DX,DY);
     TV.select_font(font4x6);
+    TV.set_hbi_hook(Serial.begin(9600));
 #else
-    TV.begin(PAL,0,0);
+    Serial.begin(9600);
 #endif
-    TV.set_hbi_hook(pserial.begin(9600));
 }
 
 void loop (void)
 {
-    pserial.println(F("= INICIO ="));
+    Serial.println(F("= INICIO ="));
     HIT = 0;
     PT_All();
     TV_All("INICIO", 0, 0, 0);
 
     while (1)
     {
-        TV.delay(2000);
-        TV.tone(3000, 500);
-        TV.delay(1000);
+        delay(2000);
+        tone(PIN_TONE, 3000, 500);
+        delay(1000);
 
         PT_All();
         TV_All("GO!", 0, 0, 0);
@@ -144,20 +154,20 @@ void loop (void)
             return;         // restart
         }
 
-        u32 t0 = TV.millis();
+        u32 t0 = millis();
 
         if (got != HIT%2) {
             HITS[HIT++].dt = BALL_NONE;
         }
         HITS[HIT++].dt = BALL_SERVICE;
 
-        TV.tone(500, 30);
+        tone(PIN_TONE, 500, 30);
 
         IS_BACK = false;
 
-        pserial.println(F("> saque"));
+        Serial.println(F("> saque"));
         TV_All("---", 0, 0, 0);
-        TV.delay(HIT_MIN);
+        delay(HIT_MIN);
 
         int nxt = 1 - got;
         while (1)
@@ -174,7 +184,7 @@ void loop (void)
             int dt;
             while (1) {
                 got = Await_Press(false);
-                t1 = TV.millis();
+                t1 = millis();
                 dt = (t1 - t0);
                 if (got==nxt || dt>=2*HIT_MIN) {
                     break;
@@ -190,7 +200,7 @@ void loop (void)
             // if both were unpressed and now both are pressed,
             // and its long since the previous hit, then this is a fall
             if (dt > 1000 ) {
-                TV.delay(HIT_MIN/2);
+                delay(HIT_MIN/2);
                 if (both && digitalRead(PIN_ESQ)==LOW &&
                             digitalRead(PIN_DIR)==LOW)
                 {
@@ -230,20 +240,20 @@ void loop (void)
             }
             nxt = 1 - got;
 
-//u32 x1 = TV.millis();
+//u32 x1 = millis();
             PT_All();
-//u32 x2 = TV.millis();
-//pserial.print("> ");
-//pserial.println(x2-x1);
+//u32 x2 = millis();
+//Serial.print("> ");
+//Serial.println(x2-x1);
             TV_All(NULL, 1-got, kmh, IS_BACK);
             if (GAME.time >= TIMEOUT) {
                 goto END;
             }
 
             // sleep inside hit to reach HIT_MIN and check BACK below
-            u32 dt_ = TV.millis() - t1;
+            u32 dt_ = millis() - t1;
             if (HIT_MIN > dt_) {
-                TV.delay(HIT_MIN-dt_);
+                delay(HIT_MIN-dt_);
             }
 
             if (got == 0) {
@@ -252,39 +262,39 @@ void loop (void)
                 IS_BACK = (digitalRead(PIN_DIR) == LOW);
             }
             if (IS_BACK) {
-                TV.tone(200, 30);
+                tone(PIN_TONE, 200, 30);
             }
         }
 
-        TV.tone(300, 100);
-        TV.delay(150);
-        TV.tone(200, 100);
-        TV.delay(150);
-        TV.tone(100, 200);
-        TV.delay(200);
+        tone(PIN_TONE, 300, 100);
+        delay(150);
+        tone(PIN_TONE, 200, 100);
+        delay(150);
+        tone(PIN_TONE, 100, 200);
+        delay(200);
 
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
-        pserial.println(F("QUEDA"));
+        Serial.println(F("QUEDA"));
 #ifdef DEBUG
         Serial_All();
 #endif
     }
 
 END:
-    TV.tone(200, 2000);
+    tone(PIN_TONE, 200, 2000);
     PT_All();
     TV_All("FIM", 0, 0, 0);
     Serial_All();
-    pserial.println(F("= FIM ="));
-    TV.delay(5000);
+    Serial.println(F("= FIM ="));
+    delay(5000);
 
     while (1) {
         int got = Await_Press(true);
         if (got == -1) {
             return;         // restart
         }
-        TV.delay(1000);
+        delay(1000);
         if (digitalRead(PIN_ESQ)==LOW && digitalRead(PIN_DIR)==LOW) {
             break;
         }

@@ -1,12 +1,12 @@
 void Serial_Hit (char* name, u32 kmh, bool is_back) {
-    pserial.print(F("> "));
-    pserial.print(name);
-    pserial.print(F(": "));
-    pserial.print(kmh);
+    Serial.print(F("> "));
+    Serial.print(name);
+    Serial.print(F(": "));
+    Serial.print(kmh);
     if (is_back) {
-        pserial.print(F(" !"));
+        Serial.print(F(" !"));
     }
-    pserial.println();
+    Serial.println();
 }
 
 void Serial_All (void) {
@@ -19,60 +19,60 @@ void Serial_All (void) {
 
     // AFTER GET_TOTAL: p0/p1
 
-    pserial.println();
-    pserial.println(F("--------------------------------"));
+    Serial.println();
+    Serial.println(F("--------------------------------"));
     sprintf_P(STR, PSTR("%15s"), NAMES[0]);
-    pserial.print(STR);
-    pserial.print(F(" / "));
+    Serial.print(STR);
+    Serial.print(F(" / "));
     sprintf_P(STR, PSTR("%s"), NAMES[1]);
-    pserial.print(STR);
-    pserial.println();
+    Serial.print(STR);
+    Serial.println();
 
-    pserial.print(F("         ("));
-    pserial.print(DISTANCE);
-    pserial.print(F("cm - "));
-    pserial.print(TIMEOUT/1000);
-    pserial.println(F("s)"));
+    Serial.print(F("         ("));
+    Serial.print(DISTANCE);
+    Serial.print(F("cm - "));
+    Serial.print(TIMEOUT/1000);
+    Serial.println(F("s)"));
 
-    pserial.println(F("--------------------------------"));
-    pserial.println();
+    Serial.println(F("--------------------------------"));
+    Serial.println();
 
     sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
-    pserial.print(STR);
-    pserial.print(total);
+    Serial.print(STR);
+    Serial.print(total);
     if (GAME.time > 5000) {
-        pserial.print(F(" ("));
-        pserial.print(pace);
-        pserial.print(F(")"));
+        Serial.print(F(" ("));
+        Serial.print(pace);
+        Serial.print(F(")"));
     }
-    pserial.println();
+    Serial.println();
 
     sprintf_P(STR, PSTR("%15S: "), F("Tempo"));
-    pserial.print(STR);
-    pserial.print(GAME.time);
-    pserial.println(F("ms"));
+    Serial.print(STR);
+    Serial.print(GAME.time);
+    Serial.println(F("ms"));
 
     sprintf_P(STR, PSTR("%15S: "), F("Quedas"));
-    pserial.print(STR);
-    pserial.println(GAME.falls);
+    Serial.print(STR);
+    Serial.println(GAME.falls);
 
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
-    pserial.print(STR);
-    pserial.println(GAME.hits);
+    Serial.print(STR);
+    Serial.println(GAME.hits);
 
     for (int i=0; i<2; i++) {
         sprintf_P(STR, PSTR("%15s: "), NAMES[i]);
-        pserial.print(STR);
-        pserial.println(GAME.ps[i]/100);
+        Serial.print(STR);
+        Serial.println(GAME.ps[i]/100);
         for (int j=0; j<2; j++) {
-            pserial.print(F(" [ "));
+            Serial.print(F(" [ "));
             for (int k=0; k<BESTS; k++) {
-                pserial.print(GAME.bests[i][j][k]);
-                pserial.print(" ");
+                Serial.print(GAME.bests[i][j][k]);
+                Serial.print(" ");
             }
-            pserial.println(F("]"));
+            Serial.println(F("]"));
         }
-        pserial.println();
+        Serial.println();
     }
 
     int i = -1;
@@ -86,10 +86,10 @@ void Serial_All (void) {
 
         if (v.dt == BALL_SERVICE) {
             bola = bola + 1;
-            pserial.print(F("-- Sequencia "));
+            Serial.print(F("-- Sequencia "));
             sprintf_P(STR, PSTR("%2d"), bola);
-            pserial.print(STR);
-            pserial.println(F(" ----------------"));
+            Serial.print(STR);
+            Serial.println(F(" ----------------"));
         }
 
         if (v.dt == BALL_NONE) {
@@ -97,48 +97,48 @@ void Serial_All (void) {
         }
 
         if (i%2 == 0) {
-            pserial.print(F("         "));
+            Serial.print(F("         "));
             if (v.kmh < 0) {
-                pserial.print(F("! "));
+                Serial.print(F("! "));
             } else {
-                pserial.print(F("  "));
+                Serial.print(F("  "));
             }
         } else {
-            pserial.print(F("                 "));
+            Serial.print(F("                 "));
         }
 
         if (v.dt == BALL_SERVICE) {
-            pserial.println(F("****"));
+            Serial.println(F("****"));
         } else {
             sprintf_P(STR, PSTR("%4d"), v.dt);
-            pserial.print(STR);
+            Serial.print(STR);
             if (i%2==1 and v.kmh<0) {
-                pserial.print(F(" !"));
+                Serial.print(F(" !"));
             }
-            pserial.println();
+            Serial.println();
         }
     }
-    pserial.println();
+    Serial.println();
 }
 
 int Serial_Check (void) {
     static char CMD[32];
     static int  i = 0;
 
-    if (! pserial.available()) {
+    if (! Serial.available()) {
         return 0;
     }
 
-    while (pserial.available()) {
-        CMD[i++] = pserial.read();
+    while (Serial.available()) {
+        CMD[i++] = Serial.read();
     }
 
     char last = CMD[i-1];
-    if (last!='\n' && last!='\r') {
+    if (last!='\n' && last!='\r' && last!='$') {
         return 0;
     }
 
-    while (CMD[i-1]=='\n' || CMD[i-1]=='\r') {
+    while (CMD[i-1]=='\n' || CMD[i-1]=='\r' || CMD[i-1]=='$') {
         i--;
     }
     CMD[i++] = '\0';
@@ -215,10 +215,10 @@ int Serial_Check (void) {
 
     if (0) {
 ERR:;
-        pserial.println(F("err"));
+        Serial.println(F("err"));
 OK:;
     } else {
-        pserial.println(F("ok"));
+        Serial.println(F("ok"));
     }
     PT_All();
     TV_All("CMD", 0, 0, 0);
