@@ -67,7 +67,7 @@ void Serial_All (void) {
         for (int j=0; j<2; j++) {
             Serial.print(F(" [ "));
             for (int k=0; k<HITS_BESTS; k++) {
-                Serial.print(GAME.bests[i][j][k]);
+                Serial.print((int)GAME.bests[i][j][k]);
                 Serial.print(" ");
             }
             Serial.println(F("]"));
@@ -125,26 +125,25 @@ int Serial_Check (void) {
     static char CMD[32];
     static int  i = 0;
 
-    if (! Serial.available()) {
-        return 0;
-    }
-
+    char c;
     while (Serial.available()) {
-        CMD[i++] = Serial.read();
+        c = Serial.read();
+        if (c=='\n' || c=='\r' || c=='$' ) {
+            if (i == 0) {
+                                // skip
+            } else {
+                CMD[i] = '\0';
+                goto COMPLETE;   // complete
+            }
+        } else {
+            CMD[i++] = c;       // continue
+        }
     }
-
-    char last = CMD[i-1];
-    if (last!='\n' && last!='\r' && last!='$') {
-        return 0;
-    }
-
-    while (CMD[i-1]=='\n' || CMD[i-1]=='\r' || CMD[i-1]=='$') {
-        i--;
-    }
-    CMD[i++] = '\0';
+    return 0;
+COMPLETE:
+    i = 0;
 
     if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
-        i = 0;
         return -1;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_All();
@@ -222,7 +221,6 @@ OK:;
     }
     PT_All();
     TV_All("CMD", 0, 0, 0);
-    i = 0;
 
     return 0;
 }
