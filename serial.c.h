@@ -59,9 +59,7 @@ void Serial_Score (void) {
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
     Serial.print(STR);
     Serial.println(GAME.hits);
-}
 
-void Serial_Log (void) {
     for (int i=0; i<2; i++) {
         sprintf_P(STR, PSTR("%15s: "), NAMES[i]);
         Serial.print(STR);
@@ -76,7 +74,9 @@ void Serial_Log (void) {
         }
         Serial.println();
     }
+}
 
+void Serial_Log (void) {
     int i = -1;
     int bola = 0;
     while (1) {

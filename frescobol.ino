@@ -39,6 +39,7 @@ pollserial pserial;
 #define HITS_MAX    700
 #define HITS_BESTS 10
 
+#define HIT_BACK_DT 200         // minimum time to hold for back
 #define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
 #define HIT_KMH_MAX 125         // to fit in s8
 
@@ -99,16 +100,18 @@ int  Serial_Check (void);
 #include "serial.c.h"
 
 void Sound (s8 kmh) {
-    if (kmh < 40) {
-        tone(PIN_TONE, 500, 30);
-    } else if (kmh < 50) {
+    if (kmh < 45) {
+        tone(PIN_TONE,  500, 30);
+    } else if (kmh < 55) {
         tone(PIN_TONE, 1500, 30);
-    } else if (kmh < 60) {
+    } else if (kmh < 65) {
         tone(PIN_TONE, 2500, 30);
-    } else if (kmh < 70) {
+    } else if (kmh < 75) {
         tone(PIN_TONE, 3500, 30);
-    } else {
+    } else if (kmh < 85) {
         tone(PIN_TONE, 4500, 30);
+    } else {
+        tone(PIN_TONE, 5000, 30);
     }
 }
 
@@ -216,8 +219,8 @@ void loop (void)
                 if (both && digitalRead(PIN_ESQ)==LOW &&
                             digitalRead(PIN_DIR)==LOW)
                 {
-                    tone(PIN_TONE, 300, 100);
-                    for (int i=0; i<20; i++) {
+                    tone(PIN_TONE, 4000, 10);
+                    for (int i=0; i<50; i++) {
                         delay(100);
                         if (digitalRead(PIN_ESQ)==HIGH || digitalRead(PIN_DIR)==HIGH) {
                             goto _FALL;
@@ -271,19 +274,28 @@ void loop (void)
                 goto _TIMEOUT;
             }
 
-            // sleep inside hit to reach HIT_MIN_DT and check BACK below
-            u32 dt_ = millis() - t1;
-            if (HIT_MIN_DT > dt_) {
-                delay(HIT_MIN_DT-dt_);
+            // sleep inside hit to reach HIT_BACK_DT
+            {
+                u32 dt_ = millis() - t1;
+                if (HIT_BACK_DT > dt_) {
+                    delay(HIT_BACK_DT-dt_);
+                }
+                if (got == 0) {
+                    IS_BACK = (digitalRead(PIN_ESQ) == LOW);
+                } else {
+                    IS_BACK = (digitalRead(PIN_DIR) == LOW);
+                }
+                if (IS_BACK) {
+                    tone(PIN_TONE, 200, 30);
+                }
             }
 
-            if (got == 0) {
-                IS_BACK = (digitalRead(PIN_ESQ) == LOW);
-            } else {
-                IS_BACK = (digitalRead(PIN_DIR) == LOW);
-            }
-            if (IS_BACK) {
-                tone(PIN_TONE, 200, 30);
+            // sleep inside hit to reach HIT_MIN_DT
+            {
+                u32 dt_ = millis() - t1;
+                if (HIT_MIN_DT > dt_) {
+                    delay(HIT_MIN_DT-dt_);
+                }
             }
         }
 _FALL:
