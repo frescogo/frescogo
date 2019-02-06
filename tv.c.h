@@ -3,7 +3,7 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     TV.clear_screen();
     //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
-    int falls = GAME.falls - (str==NULL ? 1 : 0);
+    int falls = GAME.servs - (str=="INICIO" ? 0 : 1);
 
     // KMH
     if (str == NULL) {
@@ -41,7 +41,7 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
 
     // TOTAL
     TV.print(0, DY-2*FY, "TOTAL");
-    sprintf(STR, "%5d", PT_Total(falls) / 100);
+    sprintf(STR, "%5d", PT_Total() / 100);
     TV.print(0, DY-1*FY, STR);
 
     // AFTER GET_TOTAL: p0/p1

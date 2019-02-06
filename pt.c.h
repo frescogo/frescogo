@@ -20,11 +20,11 @@ void PT_Bests_Apply (void) {
     }
 }
 
-u32 PT_Total (int falls) {
+u32 PT_Total (void) {
     PT_Bests_Apply();
     u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
     u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
-    int pct   = 100 - min(100, (falls)*3);
+    int pct   = 100 - min(100, (GAME.servs-1)*3);
     return total * pct/100;
 }
 
@@ -33,7 +33,7 @@ void PT_All (void) {
     GAME.ps[1] = 0;
     GAME.time  = 0;
     GAME.hits  = 0;
-    GAME.falls = 0;
+    GAME.servs = 0;
 
     memset(GAME.bests, 0, 2*2*HITS_BESTS*sizeof(s8));
 
@@ -47,13 +47,13 @@ void PT_All (void) {
             GAME.hits++;
         }
 
-        if (v.dt == HIT_FALL) {
-            GAME.falls++;
+        if (v.dt == HIT_SERV) {
+            GAME.servs++;
         }
 
-        if (v.dt!=HIT_NONE && v.dt!=HIT_FALL) {
+        if (v.dt!=HIT_NONE && v.dt!=HIT_SERV) {
             Hit nxt = HITS[i+1];
-            if (i==HIT-1 || nxt.dt==HIT_NONE || nxt.dt==HIT_FALL) {
+            if (i==HIT-1 || nxt.dt==HIT_NONE || nxt.dt==HIT_SERV) {
                 // ignore last hit
             }
             else

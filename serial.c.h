@@ -15,7 +15,7 @@ void Serial_Score (void) {
 
     // BEFORE GET_TOTAL: pace
 
-    u32 total = PT_Total(GAME.falls) / 100;
+    u32 total = PT_Total() / 100;
 
     // AFTER GET_TOTAL: p0/p1
 
@@ -54,7 +54,7 @@ void Serial_Score (void) {
 
     sprintf_P(STR, PSTR("%15S: "), F("Quedas"));
     Serial.print(STR);
-    Serial.println(GAME.falls);
+    Serial.println(GAME.servs-1);
 
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
     Serial.print(STR);
@@ -86,7 +86,7 @@ void Serial_Log (void) {
         }
         Hit v = HITS[i];
 
-        if (v.dt == HIT_FALL) {
+        if (v.dt == HIT_SERV) {
             bola = bola + 1;
             Serial.print(F("-- Sequencia "));
             sprintf_P(STR, PSTR("%2d"), bola);
@@ -109,7 +109,7 @@ void Serial_Log (void) {
             Serial.print(F("                 "));
         }
 
-        if (v.dt == HIT_FALL) {
+        if (v.dt == HIT_SERV) {
             Serial.println(F("****"));
         } else {
             sprintf_P(STR, PSTR("%4d"), v.dt*10);
@@ -178,7 +178,7 @@ COMPLETE:
             HIT -= 1;
             if (HIT == 0) {
                 break;
-            } else if (HITS[HIT].dt == HIT_FALL) {
+            } else if (HITS[HIT].dt == HIT_SERV) {
                 if (HITS[HIT-1].dt == HIT_NONE) {
                     HIT -= 1;
                 }
@@ -191,7 +191,7 @@ COMPLETE:
         }
         while (1) {
             HIT += 1;
-            if (HITS[HIT].dt==HIT_MARK or HITS[HIT].dt==HIT_FALL) {
+            if (HITS[HIT].dt==HIT_MARK or HITS[HIT].dt==HIT_SERV) {
                 break;
             }
         }
@@ -207,7 +207,7 @@ COMPLETE:
     } else if (strncmp_P(CMD, PSTR("+1"), 2) == 0) {
         if (HITS[HIT].dt != HIT_MARK) {
             HIT += 1;
-            if (HITS[HIT].dt == HIT_FALL) {
+            if (HITS[HIT].dt == HIT_SERV) {
                 HIT += 1;    // skip HIT_NONE
             }
         } else {
@@ -225,6 +225,7 @@ OK:;
         Serial.println(F("ok"));
     }
     PT_All();
+    Serial_Score();
     TV_All("CMD", 0, 0, 0);
 
     return 0;

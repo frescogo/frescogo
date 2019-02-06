@@ -44,7 +44,7 @@ pollserial pserial;
 
 #define HIT_MARK 0
 #define HIT_NONE 1
-#define HIT_FALL 2
+#define HIT_SERV 2
 
 typedef struct {
     u8 dt;                      // cs (ms*10)
@@ -69,13 +69,13 @@ typedef struct {
     u32 ps[2];                      // sum(kmh*kmh)
     u32 time;                       // ms (total time)
     u16 hits;
-    u8  falls;
+    u8  servs;
 } Game;
 Game GAME;
 
 int  PT_Bests       (s8* bests, int* min_, int* max_);
 void PT_Bests_Apply (void);
-u32  PT_Total       (int falls);
+u32  PT_Total       (void);
 void PT_All         (void);
 #include "pt.c.h"
 
@@ -159,6 +159,7 @@ void loop (void)
         if (got != HIT%2) {
             HITS[HIT++].dt = HIT_NONE;
         }
+        HITS[HIT++].dt = HIT_SERV;
 
         tone(PIN_TONE, 500, 30);
 
@@ -264,8 +265,6 @@ void loop (void)
                 tone(PIN_TONE, 200, 30);
             }
         }
-
-        HITS[HIT++].dt = HIT_FALL;
 
         tone(PIN_TONE, 300, 100);
         delay(150);
