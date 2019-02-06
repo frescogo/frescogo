@@ -7,9 +7,16 @@ typedef short s16;
 typedef unsigned long u32;
 
 //#define DEBUG
+//#define TV_ON
 
+#ifdef ARDUINO_AVR_NANO
+#define PIN_ESQ 2
+#define PIN_DIR 3
+#endif
+#ifdef ARDUINO_AVR_MEGA2560
 #define PIN_ESQ 21
 #define PIN_DIR 20
+#endif
 
 #define DX  184
 #define DY   64
@@ -32,7 +39,7 @@ typedef struct {
     u8 dt;                      // cs (ms*10)
     s8 kmh;                     // +/-kmh (max 125km/h)
 } Hit;
-Hit  HITS[1000];
+Hit  HITS[800];
 int  HIT = 0;
 
 char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
@@ -101,10 +108,17 @@ int Await_Press (bool serial) {
 }
 
 void setup (void) {
+    pinMode(PIN_ESQ, INPUT_PULLUP);
+    pinMode(PIN_DIR, INPUT_PULLUP);
+
     EICRA = 0b1010;     // FALLING for both INT0/INT1
 
+#ifdef TV_ON
     TV.begin(PAL,DX,DY);
     TV.select_font(font4x6);
+#else
+    TV.begin(PAL,0,0);
+#endif
     TV.set_hbi_hook(pserial.begin(9600));
 }
 
@@ -193,7 +207,7 @@ void loop (void)
             s16 kmh = min(kmh_, KMH_MAX);
             Sound(kmh);
 
-#ifdef DEBUG
+#ifndef TV_ON
             if (nxt != got) {
                 Serial_Hit(NAMES[got],   kmh, IS_BACK);
                 Serial_Hit(NAMES[1-got], kmh, false);

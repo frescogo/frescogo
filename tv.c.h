@@ -1,4 +1,5 @@
 void TV_All (const char* str, int p, int kmh, int is_back) {
+#ifdef TV_ON
     TV.clear_screen();
     //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
@@ -75,6 +76,5 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     }
     sprintf(STR, "%ld", GAME.ps[1]/100);
     TV.print(DX-FX*strlen(STR)-1, DY-4*FY, STR);
+#endif
 }
-
-
