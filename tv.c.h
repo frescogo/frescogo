@@ -26,6 +26,8 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     TV.print(DX-FX*strlen(STR)-1,    0, STR);
     sprintf(STR, "Quedas:  %3d", falls);
     TV.print(DX-FX*strlen(STR)-1,   FY, STR);
+    sprintf(STR, "Golpes:  %3d", GAME.hits);
+    TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
     if (GAME.time > 5000) {
         u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
         u32 pace  = avg * 10 / GAME.time;
@@ -33,7 +35,7 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     } else {
         sprintf(STR, "Ritmo:  ---");
     }
-    TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
+    TV.print(DX-FX*strlen(STR)-1, 3*FY, STR);
 
     // BEFORE GET_TOTAL: pace
 

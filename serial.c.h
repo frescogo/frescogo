@@ -110,7 +110,7 @@ void Serial_All (void) {
         if (v.dt == HIT_SERVICE) {
             Serial.println(F("****"));
         } else {
-            sprintf_P(STR, PSTR("%4d"), v.dt);
+            sprintf_P(STR, PSTR("%4d"), v.dt*10);
             Serial.print(STR);
             if (i%2==1 and v.kmh<0) {
                 Serial.print(F(" !"));

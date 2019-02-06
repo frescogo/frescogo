@@ -40,8 +40,8 @@ void PT_All (void) {
     for (int i=0 ; i<HIT ; i++) {
     //for (int i=0 ; i<600 ; i++) {
         Hit v = HITS[i];
-        u16 kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
-        u16 pt  = kmh*kmh;
+        s8  kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
+        u16 pt  = ((u16)kmh)*((u16)kmh);
 
         if (v.dt != HIT_NONE) {
             GAME.hits++;
