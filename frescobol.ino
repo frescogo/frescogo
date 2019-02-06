@@ -3,7 +3,7 @@ typedef short s16;
 typedef unsigned long u32;
 
 //#define DEBUG
-//#define TV_ON
+#define TV_ON
 
 #ifdef TV_ON
 #include <TVout.h>
@@ -88,7 +88,7 @@ int  Serial_Check (void);
 
 void Sound (u32 kmh) {
     if (kmh < 40) {
-        tone( 500, 30);
+        tone(PIN_TONE, 500, 30);
     } else if (kmh < 50) {
         tone(PIN_TONE, 1500, 30);
     } else if (kmh < 60) {
