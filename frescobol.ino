@@ -3,9 +3,10 @@ typedef short s16;
 typedef unsigned long u32;
 
 //#define DEBUG
-#define TV_ON
+//#define TV_ON
 
 #ifdef TV_ON
+
 #include <TVout.h>
 #include <pollserial.h>
 #include <fontALL.h>
@@ -13,8 +14,17 @@ typedef unsigned long u32;
 #define delay       TV.delay
 #define millis      TV.millis
 #define tone(x,y,z) TV.tone(y,z)
-#else
+#define DX  184
+#define DY   64
+#define FX    4
+#define FY    6
+TVout TV;
+pollserial pserial;
+
+#else // !TV_ON
+
 #define PIN_TONE 11
+
 #endif
 
 #ifdef ARDUINO_AVR_NANO
@@ -26,30 +36,21 @@ typedef unsigned long u32;
 #define PIN_DIR 20
 #endif
 
-#define DX  184
-#define DY   64
-#define FX    4
-#define FY    6
+#define HITS_MAX    750
+#define HITS_BESTS 10
 
-#define BALL_MARK    0
-#define BALL_NONE    1
-#define BALL_SERVICE 2
+#define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
+#define HIT_KMH_MAX 125         // to fit in s8
 
-#define BESTS 10
-
-#define HIT_MIN 235       // minimum time between two hits (125kmh)
-#define KMH_MAX 125       // to fit in s8
-
-#ifdef TV_ON
-TVout TV;
-pollserial pserial;
-#endif
+#define HIT_MARK    0
+#define HIT_NONE    1
+#define HIT_SERVICE 2
 
 typedef struct {
     u8 dt;                      // cs (ms*10)
     s8 kmh;                     // +/-kmh (max 125km/h)
 } Hit;
-Hit  HITS[750];
+Hit  HITS[HITS_MAX];
 int  HIT = 0;
 
 char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
@@ -64,9 +65,9 @@ char STR[32];
 int MAP[2] = { PIN_ESQ, PIN_DIR };
 
 typedef struct {
-    s8  bests[2][2][BESTS];     // kmh (max 125kmh/h)
-    u32 ps[2];                  // sum(kmh*kmh)
-    u32 time;                   // ms (total time)
+    s8  bests[2][2][HITS_BESTS];    // kmh (max 125kmh/h)
+    u32 ps[2];                      // sum(kmh*kmh)
+    u32 time;                       // ms (total time)
     u16 hits;
     u8  falls;
 } Game;
@@ -157,9 +158,9 @@ void loop (void)
         u32 t0 = millis();
 
         if (got != HIT%2) {
-            HITS[HIT++].dt = BALL_NONE;
+            HITS[HIT++].dt = HIT_NONE;
         }
-        HITS[HIT++].dt = BALL_SERVICE;
+        HITS[HIT++].dt = HIT_SERVICE;
 
         tone(PIN_TONE, 500, 30);
 
@@ -167,7 +168,7 @@ void loop (void)
 
         Serial.println(F("> saque"));
         TV_All("---", 0, 0, 0);
-        delay(HIT_MIN);
+        delay(HIT_MIN_DT);
 
         int nxt = 1 - got;
         while (1)
@@ -186,7 +187,7 @@ void loop (void)
                 got = Await_Press(false);
                 t1 = millis();
                 dt = (t1 - t0);
-                if (got==nxt || dt>=2*HIT_MIN) {
+                if (got==nxt || dt>=2*HIT_MIN_DT) {
                     break;
                 } else {
                     // ball cannot go back and forth so fast
@@ -200,7 +201,7 @@ void loop (void)
             // if both were unpressed and now both are pressed,
             // and its long since the previous hit, then this is a fall
             if (dt > 1000 ) {
-                delay(HIT_MIN/2);
+                delay(HIT_MIN_DT/2);
                 if (both && digitalRead(PIN_ESQ)==LOW &&
                             digitalRead(PIN_DIR)==LOW)
                 {
@@ -214,7 +215,7 @@ void loop (void)
 
             u32 kmh_ = ((u32)36) * DISTANCE / dt;
                        // prevents overflow
-            s16 kmh = min(kmh_, KMH_MAX);
+            s16 kmh = min(kmh_, HIT_KMH_MAX);
             Sound(kmh);
 
 #ifndef TV_ON
@@ -250,10 +251,10 @@ void loop (void)
                 goto END;
             }
 
-            // sleep inside hit to reach HIT_MIN and check BACK below
+            // sleep inside hit to reach HIT_MIN_DT and check BACK below
             u32 dt_ = millis() - t1;
-            if (HIT_MIN > dt_) {
-                delay(HIT_MIN-dt_);
+            if (HIT_MIN_DT > dt_) {
+                delay(HIT_MIN_DT-dt_);
             }
 
             if (got == 0) {

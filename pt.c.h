@@ -1,18 +1,18 @@
 int PT_Bests (s8* bests, int* min_, int* max_) {
-    *min_ = bests[BESTS-1];
+    *min_ = bests[HITS_BESTS-1];
     *max_ = bests[0];
-    for (int i=0; i<BESTS; i++) {
+    for (int i=0; i<HITS_BESTS; i++) {
         if (bests[i] == 0) {
             return i;
         }
     }
-    return BESTS;
+    return HITS_BESTS;
 }
 
 void PT_Bests_Apply (void) {
     for (int i=0; i<2; i++) {
         for (int j=0; j<2; j++) {
-            for (int k=0; k<BESTS; k++) {
+            for (int k=0; k<HITS_BESTS; k++) {
                 s8 v = GAME.bests[i][j][k];
                 GAME.ps[i] += v*v*4;
             }
@@ -35,7 +35,7 @@ void PT_All (void) {
     GAME.hits  = 0;
     GAME.falls = 0;
 
-    memset(GAME.bests, 0, 2*2*BESTS*sizeof(s8));
+    memset(GAME.bests, 0, 2*2*HITS_BESTS*sizeof(s8));
 
     for (int i=0 ; i<HIT ; i++) {
     //for (int i=0 ; i<600 ; i++) {
@@ -43,17 +43,17 @@ void PT_All (void) {
         u16 kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
         u16 pt  = kmh*kmh;
 
-        if (v.dt != BALL_NONE) {
+        if (v.dt != HIT_NONE) {
             GAME.hits++;
         }
 
-        if (v.dt == BALL_SERVICE) {
+        if (v.dt == HIT_SERVICE) {
             GAME.falls++;
         }
 
-        if (v.dt!=BALL_NONE && v.dt!=BALL_SERVICE) {
+        if (v.dt!=HIT_NONE && v.dt!=HIT_SERVICE) {
             Hit nxt = HITS[i+1];
-            if (i==HIT-1 || nxt.dt==BALL_NONE || nxt.dt==BALL_SERVICE) {
+            if (i==HIT-1 || nxt.dt==HIT_NONE || nxt.dt==HIT_SERVICE) {
                 // ignore last hit
             }
             else
@@ -63,9 +63,9 @@ void PT_All (void) {
 
                 // bests
                 s8* vec = GAME.bests[ 1-(i%2) ][ v.kmh>0 ];
-                for (int j=0; j<BESTS; j++) {
+                for (int j=0; j<HITS_BESTS; j++) {
                     if (kmh > vec[j]) {
-                        for (int k=BESTS-1; k>j; k--) {
+                        for (int k=HITS_BESTS-1; k>j; k--) {
                             vec[k] = vec[k-1];
                         }
                         vec[j] = kmh;

@@ -66,7 +66,7 @@ void Serial_All (void) {
         Serial.println(GAME.ps[i]/100);
         for (int j=0; j<2; j++) {
             Serial.print(F(" [ "));
-            for (int k=0; k<BESTS; k++) {
+            for (int k=0; k<HITS_BESTS; k++) {
                 Serial.print(GAME.bests[i][j][k]);
                 Serial.print(" ");
             }
@@ -84,7 +84,7 @@ void Serial_All (void) {
         }
         Hit v = HITS[i];
 
-        if (v.dt == BALL_SERVICE) {
+        if (v.dt == HIT_SERVICE) {
             bola = bola + 1;
             Serial.print(F("-- Sequencia "));
             sprintf_P(STR, PSTR("%2d"), bola);
@@ -92,7 +92,7 @@ void Serial_All (void) {
             Serial.println(F(" ----------------"));
         }
 
-        if (v.dt == BALL_NONE) {
+        if (v.dt == HIT_NONE) {
             continue;
         }
 
@@ -107,7 +107,7 @@ void Serial_All (void) {
             Serial.print(F("                 "));
         }
 
-        if (v.dt == BALL_SERVICE) {
+        if (v.dt == HIT_SERVICE) {
             Serial.println(F("****"));
         } else {
             sprintf_P(STR, PSTR("%4d"), v.dt);
@@ -174,37 +174,37 @@ int Serial_Check (void) {
             HIT -= 1;
             if (HIT == 0) {
                 break;
-            } else if (HITS[HIT].dt == BALL_SERVICE) {
-                if (HITS[HIT-1].dt == BALL_NONE) {
+            } else if (HITS[HIT].dt == HIT_SERVICE) {
+                if (HITS[HIT-1].dt == HIT_NONE) {
                     HIT -= 1;
                 }
                 break;
             }
         }
     } else if (strncmp_P(CMD, PSTR("+seq"), 4) == 0) {
-        if (HITS[HIT].dt == BALL_MARK) {
+        if (HITS[HIT].dt == HIT_MARK) {
             goto ERR;
         }
         while (1) {
             HIT += 1;
-            if (HITS[HIT].dt==BALL_MARK or HITS[HIT].dt==BALL_SERVICE) {
+            if (HITS[HIT].dt==HIT_MARK or HITS[HIT].dt==HIT_SERVICE) {
                 break;
             }
         }
     } else if (strncmp_P(CMD, PSTR("-1"), 2) == 0) {
         if (HIT > 0) {
             HIT -= 1;
-            if (HITS[HIT].dt == BALL_NONE) {
+            if (HITS[HIT].dt == HIT_NONE) {
                 HIT -= 1;
             }
         } else {
             goto ERR;
         }
     } else if (strncmp_P(CMD, PSTR("+1"), 2) == 0) {
-        if (HITS[HIT].dt != BALL_MARK) {
+        if (HITS[HIT].dt != HIT_MARK) {
             HIT += 1;
-            if (HITS[HIT].dt == BALL_SERVICE) {
-                HIT += 1;    // skip BALL_NONE
+            if (HITS[HIT].dt == HIT_SERVICE) {
+                HIT += 1;    // skip HIT_NONE
             }
         } else {
             goto ERR;
