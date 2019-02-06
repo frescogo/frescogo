@@ -36,7 +36,7 @@ pollserial pserial;
 #define PIN_DIR 20
 #endif
 
-#define HITS_MAX    750
+#define HITS_MAX    700
 #define HITS_BESTS 10
 
 #define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
@@ -122,8 +122,6 @@ void setup (void) {
     pinMode(PIN_ESQ, INPUT_PULLUP);
     pinMode(PIN_DIR, INPUT_PULLUP);
 
-    EICRA = 0b1010;     // FALLING for both INT0/INT1
-
 #ifdef TV_ON
     TV.begin(PAL,DX,DY);
     TV.select_font(font4x6);
@@ -187,7 +185,7 @@ void loop (void)
                 got = Await_Press(false);
                 t1 = millis();
                 dt = (t1 - t0);
-                if (got==nxt || dt>=2*HIT_MIN_DT) {
+                if (got==nxt || dt>=3*HIT_MIN_DT) {
                     break;
                 } else {
                     // ball cannot go back and forth so fast
