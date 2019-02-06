@@ -86,7 +86,7 @@ void Serial_Log (void) {
         }
         Hit v = HITS[i];
 
-        if (v.dt == HIT_SERVICE) {
+        if (v.dt == HIT_FALL) {
             bola = bola + 1;
             Serial.print(F("-- Sequencia "));
             sprintf_P(STR, PSTR("%2d"), bola);
@@ -109,7 +109,7 @@ void Serial_Log (void) {
             Serial.print(F("                 "));
         }
 
-        if (v.dt == HIT_SERVICE) {
+        if (v.dt == HIT_FALL) {
             Serial.println(F("****"));
         } else {
             sprintf_P(STR, PSTR("%4d"), v.dt*10);
@@ -178,7 +178,7 @@ COMPLETE:
             HIT -= 1;
             if (HIT == 0) {
                 break;
-            } else if (HITS[HIT].dt == HIT_SERVICE) {
+            } else if (HITS[HIT].dt == HIT_FALL) {
                 if (HITS[HIT-1].dt == HIT_NONE) {
                     HIT -= 1;
                 }
@@ -191,7 +191,7 @@ COMPLETE:
         }
         while (1) {
             HIT += 1;
-            if (HITS[HIT].dt==HIT_MARK or HITS[HIT].dt==HIT_SERVICE) {
+            if (HITS[HIT].dt==HIT_MARK or HITS[HIT].dt==HIT_FALL) {
                 break;
             }
         }
@@ -207,7 +207,7 @@ COMPLETE:
     } else if (strncmp_P(CMD, PSTR("+1"), 2) == 0) {
         if (HITS[HIT].dt != HIT_MARK) {
             HIT += 1;
-            if (HITS[HIT].dt == HIT_SERVICE) {
+            if (HITS[HIT].dt == HIT_FALL) {
                 HIT += 1;    // skip HIT_NONE
             }
         } else {

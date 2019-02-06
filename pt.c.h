@@ -47,13 +47,13 @@ void PT_All (void) {
             GAME.hits++;
         }
 
-        if (v.dt == HIT_SERVICE) {
+        if (v.dt == HIT_FALL) {
             GAME.falls++;
         }
 
-        if (v.dt!=HIT_NONE && v.dt!=HIT_SERVICE) {
+        if (v.dt!=HIT_NONE && v.dt!=HIT_FALL) {
             Hit nxt = HITS[i+1];
-            if (i==HIT-1 || nxt.dt==HIT_NONE || nxt.dt==HIT_SERVICE) {
+            if (i==HIT-1 || nxt.dt==HIT_NONE || nxt.dt==HIT_FALL) {
                 // ignore last hit
             }
             else

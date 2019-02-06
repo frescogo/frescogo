@@ -42,9 +42,9 @@ pollserial pserial;
 #define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
 #define HIT_KMH_MAX 125         // to fit in s8
 
-#define HIT_MARK    0
-#define HIT_NONE    1
-#define HIT_SERVICE 2
+#define HIT_MARK 0
+#define HIT_NONE 1
+#define HIT_FALL 2
 
 typedef struct {
     u8 dt;                      // cs (ms*10)
@@ -159,7 +159,6 @@ void loop (void)
         if (got != HIT%2) {
             HITS[HIT++].dt = HIT_NONE;
         }
-        HITS[HIT++].dt = HIT_SERVICE;
 
         tone(PIN_TONE, 500, 30);
 
@@ -265,6 +264,8 @@ void loop (void)
                 tone(PIN_TONE, 200, 30);
             }
         }
+
+        HITS[HIT++].dt = HIT_FALL;
 
         tone(PIN_TONE, 300, 100);
         delay(150);
