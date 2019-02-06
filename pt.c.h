@@ -22,9 +22,10 @@ void PT_Bests_Apply (void) {
 
 u32 PT_Total (void) {
     PT_Bests_Apply();
+
     u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
     u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
-    int pct   = 100 - min(100, (GAME.servs-1)*3);
+    int pct   = 100 - min(100, Falls()*3);
     return total * pct/100;
 }
 

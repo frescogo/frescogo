@@ -46,6 +46,12 @@ pollserial pserial;
 #define HIT_NONE 1
 #define HIT_SERV 2
 
+#define STATE_IDLE       0
+#define STATE_PLAYING    1
+#define STATE_TIMEOUT    2
+
+int STATE;
+
 typedef struct {
     u8 dt;                      // cs (ms*10)
     s8 kmh;                     // +/-kmh (max 125km/h)
@@ -72,6 +78,10 @@ typedef struct {
     u8  servs;
 } Game;
 Game GAME;
+
+int Falls (void) {
+    return GAME.servs - (STATE==STATE_IDLE ? 0 : 1);
+}
 
 int  PT_Bests       (s8* bests, int* min_, int* max_);
 void PT_Bests_Apply (void);
@@ -135,6 +145,7 @@ void setup (void) {
 void loop (void)
 {
     Serial.println(F("= INICIO ="));
+    STATE = STATE_IDLE;
     HIT = 0;
     PT_All();
     TV_All("INICIO", 0, 0, 0);
@@ -153,6 +164,7 @@ void loop (void)
         if (got == -1) {
             return;         // restart
         }
+        STATE = STATE_IDLE;
 
         u32 t0 = millis();
 
@@ -204,7 +216,14 @@ void loop (void)
                 if (both && digitalRead(PIN_ESQ)==LOW &&
                             digitalRead(PIN_DIR)==LOW)
                 {
-                    break;
+                    tone(PIN_TONE, 300, 100);
+                    for (int i=0; i<20; i++) {
+                        delay(100);
+                        if (digitalRead(PIN_ESQ)==HIGH || digitalRead(PIN_DIR)==HIGH) {
+                            goto _FALL;
+                        }
+                    }
+                    goto _TIMEOUT;
                 }
             }
 
@@ -246,8 +265,10 @@ void loop (void)
 //Serial.print("> ");
 //Serial.println(x2-x1);
             TV_All(NULL, 1-got, kmh, IS_BACK);
+
+// TIMEOUT
             if (GAME.time >= TIMEOUT) {
-                goto END;
+                goto _TIMEOUT;
             }
 
             // sleep inside hit to reach HIT_MIN_DT and check BACK below
@@ -265,6 +286,8 @@ void loop (void)
                 tone(PIN_TONE, 200, 30);
             }
         }
+_FALL:
+        STATE = STATE_IDLE;
 
         tone(PIN_TONE, 300, 100);
         delay(150);
@@ -279,7 +302,8 @@ void loop (void)
         Serial_Score();
     }
 
-END:
+_TIMEOUT:
+    STATE = STATE_TIMEOUT;
     tone(PIN_TONE, 200, 2000);
     PT_All();
     TV_All("FIM", 0, 0, 0);

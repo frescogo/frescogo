@@ -54,7 +54,7 @@ void Serial_Score (void) {
 
     sprintf_P(STR, PSTR("%15S: "), F("Quedas"));
     Serial.print(STR);
-    Serial.println(GAME.servs-1);
+    Serial.println(Falls());
 
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
     Serial.print(STR);
@@ -149,9 +149,11 @@ COMPLETE:
         return -1;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_Score();
+        return 0;
     } else if (strncmp_P(CMD, PSTR("relatorio"), 9) == 0) {
         Serial_Score();
         Serial_Log();
+        return 0;
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
         String str = &CMD[6];
         TIMEOUT = str.toInt() * 1000;

@@ -3,8 +3,6 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     TV.clear_screen();
     //TV.draw_rect(0,0,DX-1,DY-1,WHITE,-1);
 
-    int falls = GAME.servs - (str=="INICIO" ? 0 : 1);
-
     // KMH
     if (str == NULL) {
         char c = (is_back ? '*' : ' ');
@@ -24,7 +22,7 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     int time = (GAME.time > TIMEOUT) ? 0 : (TIMEOUT-GAME.time)/1000;
     sprintf(STR, "Tempo:  %3ds", time);
     TV.print(DX-FX*strlen(STR)-1,    0, STR);
-    sprintf(STR, "Quedas:  %3d", falls);
+    sprintf(STR, "Quedas:  %3d", Falls());
     TV.print(DX-FX*strlen(STR)-1,   FY, STR);
     sprintf(STR, "Golpes:  %3d", GAME.hits);
     TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
