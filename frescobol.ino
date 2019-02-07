@@ -1,9 +1,9 @@
+//#define DEBUG
+#define TV_ON
+
 typedef char  s8;
 typedef short s16;
 typedef unsigned long u32;
-
-//#define DEBUG
-//#define TV_ON
 
 #ifdef TV_ON
 
@@ -239,7 +239,7 @@ void loop (void)
             s8 kmh = min(kmh_, HIT_KMH_MAX);
             Sound(kmh);
 
-#ifndef TV_ON
+#ifdef DEBUG
             if (nxt != got) {
                 Serial_Hit(NAMES[got],   kmh, IS_BACK);
                 Serial_Hit(NAMES[1-got], kmh, false);
