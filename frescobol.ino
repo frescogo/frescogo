@@ -1,4 +1,4 @@
-//#define DEBUG
+#define DEBUG
 #define TV_ON
 
 typedef char  s8;
@@ -77,6 +77,8 @@ typedef struct {
     u32 time;                       // ms (total time)
     u16 hits;
     u8  servs;
+    s8  pace;                       // kmh
+    u16 total;
 } Game;
 Game GAME;
 
@@ -84,10 +86,8 @@ int Falls (void) {
     return GAME.servs - (STATE==STATE_IDLE ? 0 : 1);
 }
 
-int  PT_Bests       (s8* bests, int* min_, int* max_);
-void PT_Bests_Apply (void);
-u32  PT_Total       (void);
-void PT_All         (void);
+int  PT_Bests (s8* bests, int* min_, int* max_);
+void PT_All   (void);
 #include "pt.c.h"
 
 void TV_All (const char* str, int p, int kmh, int is_back);
@@ -180,7 +180,10 @@ void loop (void)
 
         IS_BACK = false;
 
+#ifdef DEBUG
         Serial.println(F("> saque"));
+#endif
+        PT_All();
         TV_All("---", 0, 0, 0);
         delay(HIT_MIN_DT);
 

@@ -27,19 +27,15 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     sprintf(STR, "Golpes:  %3d", GAME.hits);
     TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
     if (GAME.time > 5000) {
-        u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-        u32 pace  = avg * 10 / GAME.time;
-        sprintf(STR, "Ritmo:   %3d", pace);
+        sprintf(STR, "Ritmo:   %3d", GAME.pace);
     } else {
         sprintf(STR, "Ritmo:  ---");
     }
     TV.print(DX-FX*strlen(STR)-1, 3*FY, STR);
 
-    // BEFORE GET_TOTAL: pace
-
     // TOTAL
     TV.print(0, DY-2*FY, "TOTAL");
-    sprintf(STR, "%5d", PT_Total() / 100);
+    sprintf(STR, "%5d", GAME.total);
     TV.print(0, DY-1*FY, STR);
 
     // AFTER GET_TOTAL: p0/p1

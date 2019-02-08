@@ -10,15 +10,6 @@ void Serial_Hit (char* name, u32 kmh, bool is_back) {
 }
 
 void Serial_Score (void) {
-    u32 avg  = (GAME.ps[0] + GAME.ps[1]) / 2;
-    u32 pace = avg * 10 / GAME.time;
-
-    // BEFORE GET_TOTAL: pace
-
-    u32 total = PT_Total() / 100;
-
-    // AFTER GET_TOTAL: p0/p1
-
     Serial.println();
     Serial.println(F("--------------------------------"));
     sprintf_P(STR, PSTR("%15s"), NAMES[0]);
@@ -39,10 +30,10 @@ void Serial_Score (void) {
 
     sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
     Serial.print(STR);
-    Serial.print(total);
+    Serial.print(GAME.total);
     if (GAME.time > 5000) {
         Serial.print(F(" ("));
-        Serial.print(pace);
+        Serial.print((int)GAME.pace);
         Serial.print(F(")"));
     }
     Serial.println();

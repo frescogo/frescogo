@@ -20,15 +20,6 @@ void PT_Bests_Apply (void) {
     }
 }
 
-u32 PT_Total (void) {
-    PT_Bests_Apply();
-
-    u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
-    u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
-    int pct   = 100 - min(100, Falls()*3);
-    return total * pct/100;
-}
-
 void PT_All (void) {
     GAME.ps[0] = 0;
     GAME.ps[1] = 0;
@@ -38,15 +29,13 @@ void PT_All (void) {
 
     memset(GAME.bests, 0, 2*2*HITS_BESTS*sizeof(s8));
 
+    u32 pace = 0;
+
     for (int i=0 ; i<HIT ; i++) {
     //for (int i=0 ; i<600 ; i++) {
         Hit v = HITS[i];
         s8  kmh = (v.kmh >= 0 ? v.kmh : -v.kmh);
         u16 pt  = ((u16)kmh)*((u16)kmh);
-
-        if (v.dt != HIT_NONE) {
-            GAME.hits++;
-        }
 
         if (v.dt == HIT_SERV) {
             GAME.servs++;
@@ -59,8 +48,9 @@ void PT_All (void) {
             }
             else
             {
-                // ps
+                GAME.hits++;
                 GAME.ps[1-(i%2)] += pt;
+                pace += kmh;
 
                 // bests
                 s8* vec = GAME.bests[ 1-(i%2) ][ v.kmh>0 ];
@@ -79,5 +69,14 @@ void PT_All (void) {
         }
     }
     GAME.time *= 10;
+
+    GAME.pace = pace/GAME.hits;
+
+    PT_Bests_Apply();
+
+    u32 avg   = (GAME.ps[0] + GAME.ps[1]) / 2;
+    u32 total = min(avg, min(GAME.ps[0],GAME.ps[1])*1.1);
+    int pct   = 100 - min(100, Falls()*3);
+    GAME.total = total * pct/10000;
 }
 
