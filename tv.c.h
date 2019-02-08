@@ -26,7 +26,11 @@ void TV_All (const char* str, int p, int kmh, int is_back) {
     TV.print(DX-FX*strlen(STR)-1,   FY, STR);
     sprintf(STR, "Golpes:  %3d", GAME.hits);
     TV.print(DX-FX*strlen(STR)-1, 2*FY, STR);
-    sprintf(STR, "Ritmo:   %3d", GAME.pace);
+    if (GAME.time > 5000) {
+        sprintf(STR, "Ritmo:   %3d", GAME.pace);
+    } else {
+        sprintf(STR, "Ritmo:  ---");
+    }
     TV.print(DX-FX*strlen(STR)-1, 3*FY, STR);
 
     // TOTAL
