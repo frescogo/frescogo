@@ -30,13 +30,7 @@ void Serial_Score (void) {
 
     sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
     Serial.print(STR);
-    Serial.print(GAME.total);
-    if (GAME.time > 5000) {
-        Serial.print(F(" ("));
-        Serial.print((int)GAME.pace);
-        Serial.print(F(")"));
-    }
-    Serial.println();
+    Serial.println(GAME.total);
 
     sprintf_P(STR, PSTR("%15S: "), F("Tempo"));
     Serial.print(STR);
@@ -50,6 +44,9 @@ void Serial_Score (void) {
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
     Serial.print(STR);
     Serial.println(GAME.hits);
+
+    sprintf_P(STR, PSTR("%15S: "), F("Ritmo"));
+    Serial.println((int)GAME.pace);
 
     for (int i=0; i<2; i++) {
         sprintf_P(STR, PSTR("%15s: "), NAMES[i]);
