@@ -1,5 +1,5 @@
-#define DEBUG
-#define TV_ON
+//#define DEBUG
+//#define TV_ON
 
 typedef char  s8;
 typedef short s16;
@@ -36,6 +36,8 @@ pollserial pserial;
 #define PIN_DIR 20
 #endif
 
+static const int MAP[2] = { PIN_ESQ, PIN_DIR };
+
 #define HITS_MAX    700
 #define HITS_BESTS 10
 
@@ -51,28 +53,25 @@ pollserial pserial;
 #define STATE_PLAYING    1
 #define STATE_TIMEOUT    2
 
-int STATE;
+#define NAME_MAX 20
 
-typedef struct {
-    u8 dt;                      // cs (ms*10)
-    s8 kmh;                     // +/-kmh (max 125km/h)
-} Hit;
-Hit  HITS[HITS_MAX];
-int  HIT = 0;
-
-char NAMES[2][20] = { "Atleta ESQ", "Atleta DIR" };
-
-u32  TIMEOUT  = 300 * ((u32)1000);
-int  DISTANCE = 800;
-
+int  STATE;
 bool IS_BACK;
-
 char STR[32];
 
-int MAP[2] = { PIN_ESQ, PIN_DIR };
+typedef struct {
+    char names[2][NAME_MAX+1] = { "Atleta ESQ", "Atleta DIR" };
+    u32  timeout  = 300 * ((u32)1000);
+    int  distance = 800;
+
+    u16  hit;
+    u8   dts[HITS_MAX];           // cs (ms*10)
+} Save;
+Save S;
 
 typedef struct {
     s8  bests[2][2][HITS_BESTS];    // kmh (max 125kmh/h)
+    s8  kmhs[HITS_MAX];            // +/-kmh (max 125km/h)
     u32 ps[2];                      // sum(kmh*kmh)
     u32 time;                       // ms (total time)
     u16 hits;
@@ -80,10 +79,10 @@ typedef struct {
     s8  pace;                       // kmh
     u16 total;
 } Game;
-Game GAME;
+Game G;
 
 int Falls (void) {
-    return GAME.servs - (STATE==STATE_IDLE ? 0 : 1);
+    return G.servs - (STATE==STATE_IDLE ? 0 : 1);
 }
 
 int  PT_Bests (s8* bests, int* min_, int* max_);
@@ -143,13 +142,22 @@ void setup (void) {
 #else
     Serial.begin(9600);
 #endif
+
+    //EEPROM.read(&S, sizeof(S));
 }
 
 void loop (void)
 {
+/*
+    strcpy(S.names[0], "AAA");
+    strcpy(S.names[1], "BBB");
+    S.distance = 800;
+    S.timeout  = 300*1000;
+    S.hit      = 0;
+*/
+
     Serial.println(F("= INICIO ="));
     STATE = STATE_IDLE;
-    HIT = 0;
     PT_All();
     TV_All("INICIO", 0, 0, 0);
 
@@ -167,14 +175,14 @@ void loop (void)
         if (got == -1) {
             return;         // restart
         }
-        STATE = STATE_IDLE;
 
         u32 t0 = millis();
 
-        if (got != HIT%2) {
-            HITS[HIT++].dt = HIT_NONE;
+        if (got != S.hit%2) {
+            S.dts[S.hit++] = HIT_NONE;
         }
-        HITS[HIT++].dt = HIT_SERV;
+        S.dts[S.hit++] = HIT_SERV;
+        STATE = STATE_PLAYING;
 
         tone(PIN_TONE, 500, 30);
 
@@ -237,31 +245,31 @@ void loop (void)
                 dt = dt / 2;
             }
 
-            u32 kmh_ = ((u32)36) * DISTANCE / dt;
+            u32 kmh_ = ((u32)36) * S.distance / dt;
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
             Sound(kmh);
 
 #ifdef DEBUG
             if (nxt != got) {
-                Serial_Hit(NAMES[got],   kmh, IS_BACK);
-                Serial_Hit(NAMES[1-got], kmh, false);
+                Serial_Hit(S.names[got],   kmh, IS_BACK);
+                Serial_Hit(S.names[1-got], kmh, false);
             } else {
-                Serial_Hit(NAMES[1-got], kmh, IS_BACK);
+                Serial_Hit(S.names[1-got], kmh, IS_BACK);
             }
 #endif
 
-            HITS[HIT].dt = min(dt/10, 255);
+            S.dts[S.hit] = min(dt/10, 255);
             if (IS_BACK) {
-                HITS[HIT].kmh = -kmh;
+                G.kmhs[S.hit] = -kmh;
             } else {
-                HITS[HIT].kmh = kmh;
+                G.kmhs[S.hit] = kmh;
             }
-            HIT++;
+            S.hit++;
             if (nxt != got) {
-                HITS[HIT].dt  = min(dt/10, 255);
-                HITS[HIT].kmh = kmh;
-                HIT++;
+                S.dts[S.hit] = min(dt/10, 255);
+                G.kmhs[S.hit] = kmh;
+                S.hit++;
             }
             nxt = 1 - got;
 
@@ -273,7 +281,7 @@ void loop (void)
             TV_All(NULL, 1-got, kmh, IS_BACK);
 
 // TIMEOUT
-            if (GAME.time >= TIMEOUT) {
+            if (G.time >= S.timeout) {
                 goto _TIMEOUT;
             }
 

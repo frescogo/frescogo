@@ -12,17 +12,17 @@ void Serial_Hit (char* name, u32 kmh, bool is_back) {
 void Serial_Score (void) {
     Serial.println();
     Serial.println(F("--------------------------------"));
-    sprintf_P(STR, PSTR("%15s"), NAMES[0]);
+    sprintf_P(STR, PSTR("%15s"), S.names[0]);
     Serial.print(STR);
     Serial.print(F(" / "));
-    sprintf_P(STR, PSTR("%s"), NAMES[1]);
+    sprintf_P(STR, PSTR("%s"), S.names[1]);
     Serial.print(STR);
     Serial.println();
 
     Serial.print(F("         ("));
-    Serial.print(DISTANCE);
+    Serial.print(S.distance);
     Serial.print(F("cm - "));
-    Serial.print(TIMEOUT/1000);
+    Serial.print(S.timeout/1000);
     Serial.println(F("s)"));
 
     Serial.println(F("--------------------------------"));
@@ -30,11 +30,11 @@ void Serial_Score (void) {
 
     sprintf_P(STR, PSTR("%15S: "), F("TOTAL"));
     Serial.print(STR);
-    Serial.println(GAME.total);
+    Serial.println(G.total);
 
     sprintf_P(STR, PSTR("%15S: "), F("Tempo"));
     Serial.print(STR);
-    Serial.print(GAME.time);
+    Serial.print(G.time);
     Serial.println(F("ms"));
 
     sprintf_P(STR, PSTR("%15S: "), F("Quedas"));
@@ -43,24 +43,24 @@ void Serial_Score (void) {
 
     sprintf_P(STR, PSTR("%15S: "), F("Golpes"));
     Serial.print(STR);
-    Serial.println(GAME.hits);
+    Serial.println(G.hits);
 
     sprintf_P(STR, PSTR("%15S: "), F("Ritmo"));
     Serial.print(STR);
-    if (GAME.time > 5000) {
-        Serial.println((int)GAME.pace);
+    if (G.time > 5000) {
+        Serial.println((int)G.pace);
     } else {
         Serial.println("---");
     }
 
     for (int i=0; i<2; i++) {
-        sprintf_P(STR, PSTR("%15s: "), NAMES[i]);
+        sprintf_P(STR, PSTR("%15s: "), S.names[i]);
         Serial.print(STR);
-        Serial.println(GAME.ps[i]/100);
+        Serial.println(G.ps[i]/100);
         for (int j=0; j<2; j++) {
             Serial.print(F(" [ "));
             for (int k=0; k<HITS_BESTS; k++) {
-                Serial.print((int)GAME.bests[i][j][k]);
+                Serial.print((int)G.bests[i][j][k]);
                 Serial.print(" ");
             }
             Serial.println(F("]"));
@@ -74,12 +74,13 @@ void Serial_Log (void) {
     int bola = 0;
     while (1) {
         i = i + 1;
-        if (i == HIT) {
+        if (i == S.hit) {
             break;
         }
-        Hit v = HITS[i];
+        u8  dt  = S.dts[i];
+        s8  kmh = S.dts[i];
 
-        if (v.dt == HIT_SERV) {
+        if (dt == HIT_SERV) {
             bola = bola + 1;
             Serial.print(F("-- Sequencia "));
             sprintf_P(STR, PSTR("%2d"), bola);
@@ -87,13 +88,13 @@ void Serial_Log (void) {
             Serial.println(F(" ----------------"));
         }
 
-        if (v.dt == HIT_NONE) {
+        if (dt == HIT_NONE) {
             continue;
         }
 
         if (i%2 == 0) {
             Serial.print(F("         "));
-            if (v.kmh < 0) {
+            if (kmh < 0) {
                 Serial.print(F("! "));
             } else {
                 Serial.print(F("  "));
@@ -102,12 +103,12 @@ void Serial_Log (void) {
             Serial.print(F("                 "));
         }
 
-        if (v.dt == HIT_SERV) {
+        if (dt == HIT_SERV) {
             Serial.println(F("****"));
         } else {
-            sprintf_P(STR, PSTR("%4d"), v.dt*10);
+            sprintf_P(STR, PSTR("%4d"), dt*10);
             Serial.print(STR);
-            if (i%2==1 and v.kmh<0) {
+            if (i%2==1 and kmh<0) {
                 Serial.print(F(" !"));
             }
             Serial.println();
@@ -149,61 +150,61 @@ COMPLETE:
         return 0;
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
         String str = &CMD[6];
-        TIMEOUT = str.toInt() * 1000;
+        S.timeout = str.toInt() * 1000;
     } else if (strncmp_P(CMD, PSTR("dist "), 5) == 0) {
         String str = &CMD[5];
-        DISTANCE = str.toInt();
+        S.distance = str.toInt();
     } else if (strncmp_P(CMD, PSTR("esq "), 4) == 0) {
         if (strlen(&CMD[4]) < 15) {
-            strcpy(NAMES[0], &CMD[4]);
+            strcpy(S.names[0], &CMD[4]);
         } else {
             goto ERR;
         }
     } else if (strncmp_P(CMD, PSTR("dir "), 4) == 0) {
         if (strlen(&CMD[4]) < 15) {
-            strcpy(NAMES[1], &CMD[4]);
+            strcpy(S.names[1], &CMD[4]);
         } else {
             goto ERR;
         }
     } else if (strncmp_P(CMD, PSTR("-seq"), 4) == 0) {
-        if (HIT == 0) {
+        if (S.hit == 0) {
             goto ERR;
         }
         while (1) {
-            HIT -= 1;
-            if (HIT == 0) {
+            S.hit -= 1;
+            if (S.hit == 0) {
                 break;
-            } else if (HITS[HIT].dt == HIT_SERV) {
-                if (HITS[HIT-1].dt == HIT_NONE) {
-                    HIT -= 1;
+            } else if (S.dts[S.hit] == HIT_SERV) {
+                if (S.dts[S.hit-1] == HIT_NONE) {
+                    S.hit -= 1;
                 }
                 break;
             }
         }
     } else if (strncmp_P(CMD, PSTR("+seq"), 4) == 0) {
-        if (HITS[HIT].dt == HIT_MARK) {
+        if (S.dts[S.hit] == HIT_MARK) {
             goto ERR;
         }
         while (1) {
-            HIT += 1;
-            if (HITS[HIT].dt==HIT_MARK or HITS[HIT].dt==HIT_SERV) {
+            S.hit += 1;
+            if (S.dts[S.hit]==HIT_MARK or S.dts[S.hit]==HIT_SERV) {
                 break;
             }
         }
     } else if (strncmp_P(CMD, PSTR("-1"), 2) == 0) {
-        if (HIT > 0) {
-            HIT -= 1;
-            if (HITS[HIT].dt == HIT_NONE) {
-                HIT -= 1;
+        if (S.hit > 0) {
+            S.hit -= 1;
+            if (S.dts[S.hit] == HIT_NONE) {
+                S.hit -= 1;
             }
         } else {
             goto ERR;
         }
     } else if (strncmp_P(CMD, PSTR("+1"), 2) == 0) {
-        if (HITS[HIT].dt != HIT_MARK) {
-            HIT += 1;
-            if (HITS[HIT].dt == HIT_SERV) {
-                HIT += 1;    // skip HIT_NONE
+        if (S.dts[S.hit] != HIT_MARK) {
+            S.hit += 1;
+            if (S.dts[S.hit] == HIT_SERV) {
+                S.hit += 1;    // skip HIT_NONE
             }
         } else {
             goto ERR;
