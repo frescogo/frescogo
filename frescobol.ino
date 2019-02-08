@@ -1,6 +1,8 @@
 //#define DEBUG
 //#define TV_ON
 
+#include <EEPROM.h>
+
 typedef char  s8;
 typedef short s16;
 typedef unsigned long u32;
@@ -38,12 +40,12 @@ pollserial pserial;
 
 static const int MAP[2] = { PIN_ESQ, PIN_DIR };
 
-#define HITS_MAX    700
+#define HITS_MAX   700
 #define HITS_BESTS 10
 
 #define HIT_BACK_DT 200         // minimum time to hold for back
 #define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
-#define HIT_KMH_MAX 125         // to fit in s8
+#define HIT_KMH_MAX 125         // to fit in s8 (changed to u8, but lets keep 125)
 
 #define HIT_MARK 0
 #define HIT_NONE 1
@@ -60,20 +62,23 @@ bool IS_BACK;
 char STR[32];
 
 typedef struct {
-    char names[2][NAME_MAX+1] = { "Atleta ESQ", "Atleta DIR" };
-    u32  timeout  = 300 * ((u32)1000);
-    int  distance = 800;
+    char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" };
+    u32  timeout;               //  = 300 * ((u32)1000);
+    int  distance;              // = 800;
 
     u16  hit;
-    u8   dts[HITS_MAX];           // cs (ms*10)
+    s8   dts[HITS_MAX];         // cs (ms*10)
 } Save;
 Save S;
 
 typedef struct {
+    // needed on EEPROM_Load
+    u8  kmhs[HITS_MAX];            // kmh (max 125km/h)
+
+    // calculated when required
     s8  bests[2][2][HITS_BESTS];    // kmh (max 125kmh/h)
-    s8  kmhs[HITS_MAX];            // +/-kmh (max 125km/h)
-    u32 ps[2];                      // sum(kmh*kmh)
     u32 time;                       // ms (total time)
+    u32 ps[2];                      // sum(kmh*kmh)
     u16 hits;
     u8  servs;
     s8  pace;                       // kmh
@@ -131,6 +136,30 @@ int Await_Press (bool serial) {
     }
 }
 
+void EEPROM_Load (void) {
+    for (int i=0; i<sizeof(Save); i++) {
+        ((byte*)&S)[i] = EEPROM[i];
+    }
+    S.hit = min(S.hit, HITS_MAX);
+    S.names[0][NAME_MAX] = '\0';
+    S.names[1][NAME_MAX] = '\0';
+
+    for (int i=0; i<S.hit; i++) {
+        s8 dt = S.dts[i];
+        dt = (dt > 0) ? dt : -dt;
+
+        u32 kmh_ = ((u32)36) * S.distance / dt*10;
+                   // prevents overflow
+        G.kmhs[i] = min(kmh_, HIT_KMH_MAX);
+    }
+}
+
+void EEPROM_Save (void) {
+    for (int i=0; i<sizeof(Save); i++) {
+        EEPROM[i] = ((byte*)&S)[i];
+    }
+}
+
 void setup (void) {
     pinMode(PIN_ESQ, INPUT_PULLUP);
     pinMode(PIN_DIR, INPUT_PULLUP);
@@ -143,37 +172,29 @@ void setup (void) {
     Serial.begin(9600);
 #endif
 
-    //EEPROM.read(&S, sizeof(S));
+    EEPROM_Load();
 }
 
 void loop (void)
 {
-/*
-    strcpy(S.names[0], "AAA");
-    strcpy(S.names[1], "BBB");
-    S.distance = 800;
-    S.timeout  = 300*1000;
-    S.hit      = 0;
-*/
-
+// RESTART
     Serial.println(F("= INICIO ="));
     STATE = STATE_IDLE;
-    PT_All();
-    TV_All("INICIO", 0, 0, 0);
 
     while (1)
     {
+// SERVICE
         delay(2000);
         tone(PIN_TONE, 3000, 500);
         delay(1000);
 
         PT_All();
         TV_All("GO!", 0, 0, 0);
+        Serial_Score();
 
-// SERVICE
         int got = Await_Press(true);
         if (got == -1) {
-            return;         // restart
+            goto _RESTART;
         }
 
         u32 t0 = millis();
@@ -244,8 +265,10 @@ void loop (void)
             if (nxt != got) {
                 dt = dt / 2;
             }
+            dt = min(dt/10, 127); // we don't have space for dt>1270ms,so we'll
+                                  // just assume it since its already slow
 
-            u32 kmh_ = ((u32)36) * S.distance / dt;
+            u32 kmh_ = ((u32)36) * S.distance / dt*10;
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
             Sound(kmh);
@@ -259,15 +282,15 @@ void loop (void)
             }
 #endif
 
-            S.dts[S.hit] = min(dt/10, 255);
             if (IS_BACK) {
-                G.kmhs[S.hit] = -kmh;
+                S.dts[S.hit] = -dt;
             } else {
-                G.kmhs[S.hit] = kmh;
+                S.dts[S.hit] = dt;
             }
+            G.kmhs[S.hit] = kmh;
             S.hit++;
             if (nxt != got) {
-                S.dts[S.hit] = min(dt/10, 255);
+                S.dts[S.hit]  = dt;
                 G.kmhs[S.hit] = kmh;
                 S.hit++;
             }
@@ -311,6 +334,7 @@ void loop (void)
         }
 _FALL:
         STATE = STATE_IDLE;
+        EEPROM_Save();
 
         tone(PIN_TONE, 300, 100);
         delay(150);
@@ -322,7 +346,6 @@ _FALL:
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
         Serial.println(F("QUEDA"));
-        Serial_Score();
     }
 
 _TIMEOUT:
@@ -337,11 +360,18 @@ _TIMEOUT:
     while (1) {
         int got = Await_Press(true);
         if (got == -1) {
-            return;         // restart
+            goto _RESTART;
         }
-        delay(1000);
-        if (digitalRead(PIN_ESQ)==LOW && digitalRead(PIN_DIR)==LOW) {
-            break;
+        if (got > 0) {
+            tone(PIN_TONE, 4000, 10);
+            delay(1000);
+            if (digitalRead(PIN_ESQ)==LOW && digitalRead(PIN_DIR)==LOW) {
+                break;
+            }
         }
     }
+
+_RESTART:
+    S.hit = 0;
+    EEPROM_Save();
 }

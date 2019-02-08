@@ -77,8 +77,8 @@ void Serial_Log (void) {
         if (i == S.hit) {
             break;
         }
-        u8  dt  = S.dts[i];
-        s8  kmh = S.dts[i];
+        s8  dt  = S.dts[i];
+        u8  kmh = G.kmhs[i];
 
         if (dt == HIT_SERV) {
             bola = bola + 1;
@@ -94,7 +94,7 @@ void Serial_Log (void) {
 
         if (i%2 == 0) {
             Serial.print(F("         "));
-            if (kmh < 0) {
+            if (dt < 0) {
                 Serial.print(F("! "));
             } else {
                 Serial.print(F("  "));
@@ -108,7 +108,7 @@ void Serial_Log (void) {
         } else {
             sprintf_P(STR, PSTR("%4d"), dt*10);
             Serial.print(STR);
-            if (i%2==1 and kmh<0) {
+            if (i%2==1 and dt<0) {
                 Serial.print(F(" !"));
             }
             Serial.println();
@@ -124,19 +124,20 @@ int Serial_Check (void) {
     char c;
     while (Serial.available()) {
         c = Serial.read();
+Serial.println(c);
         if (c=='\n' || c=='\r' || c=='$' ) {
             if (i == 0) {
                                 // skip
             } else {
                 CMD[i] = '\0';
-                goto COMPLETE;   // complete
+                goto _COMPLETE;   // complete
             }
         } else {
             CMD[i++] = c;       // continue
         }
     }
     return 0;
-COMPLETE:
+_COMPLETE:
     i = 0;
 
     if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
