@@ -268,7 +268,7 @@ void loop (void)
             dt = min(dt/10, 127); // we don't have space for dt>1270ms,so we'll
                                   // just assume it since its already slow
 
-            u32 kmh_ = ((u32)36) * S.distance / dt*10;
+            u32 kmh_ = ((u32)36) * S.distance / (dt*10);
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
             Sound(kmh);

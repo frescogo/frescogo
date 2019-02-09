@@ -124,7 +124,6 @@ int Serial_Check (void) {
     char c;
     while (Serial.available()) {
         c = Serial.read();
-Serial.println(c);
         if (c=='\n' || c=='\r' || c=='$' ) {
             if (i == 0) {
                                 // skip
@@ -221,6 +220,7 @@ OK:;
     } else {
         Serial.println(F("ok"));
     }
+    EEPROM_Save();
     PT_All();
     Serial_Score();
     TV_All("CMD", 0, 0, 0);
