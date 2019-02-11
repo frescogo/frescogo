@@ -33,17 +33,16 @@ void PT_All (void) {
 
     for (int i=0 ; i<S.hit ; i++) {
     //for (int i=0 ; i<600 ; i++) {
-        u8  dt1  = S.dts[i];
-        s8  kmh1 = G.kmhs[i];
-        s8  kmh2 = (kmh1 >= 0 ? kmh1 : -kmh1);
-        u16 pt   = ((u16)kmh2)*((u16)kmh2);
+        s8  dt1 = S.dts[i];
+        s8  kmh = G.kmhs[i];
+        u16 pt  = ((u16)kmh)*((u16)kmh);
 
         if (dt1 == HIT_SERV) {
             G.servs++;
         }
 
         if (dt1!=HIT_NONE && dt1!=HIT_SERV) {
-            u8 dt2 = S.dts[i+1];
+            s8 dt2 = S.dts[i+1];
             if (i==S.hit-1 || dt2==HIT_NONE || dt2==HIT_SERV) {
                 // ignore last hit
             }
@@ -51,16 +50,16 @@ void PT_All (void) {
             {
                 G.hits++;
                 G.ps[1-(i%2)] += pt;
-                pace += kmh2;
+                pace += kmh;
 
                 // bests
-                s8* vec = G.bests[ 1-(i%2) ][ kmh1>0 ];
+                s8* vec = G.bests[ 1-(i%2) ][ dt1>0 ];
                 for (int j=0; j<HITS_BESTS; j++) {
-                    if (kmh2 > vec[j]) {
+                    if (kmh > vec[j]) {
                         for (int k=HITS_BESTS-1; k>j; k--) {
                             vec[k] = vec[k-1];
                         }
-                        vec[j] = kmh2;
+                        vec[j] = kmh;
                         break;
                     }
                 }
