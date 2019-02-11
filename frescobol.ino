@@ -2,6 +2,7 @@
 //#define TV_ON
 
 #include <EEPROM.h>
+#include "pitches.h"
 
 typedef char  s8;
 typedef short s16;
@@ -104,18 +105,20 @@ int  Serial_Check (void);
 #include "serial.c.h"
 
 void Sound (s8 kmh) {
-    if (kmh < 45) {
-        tone(PIN_TONE,  500, 30);
-    } else if (kmh < 55) {
-        tone(PIN_TONE, 1500, 30);
-    } else if (kmh < 65) {
-        tone(PIN_TONE, 2500, 30);
-    } else if (kmh < 75) {
-        tone(PIN_TONE, 3500, 30);
-    } else if (kmh < 85) {
-        tone(PIN_TONE, 4500, 30);
+    if (kmh < 40) {
+        tone(PIN_TONE, NOTE_C5, 50);
+    } else if (kmh < 50) {
+        tone(PIN_TONE, NOTE_D5, 50);
+    } else if (kmh < 60) {
+        tone(PIN_TONE, NOTE_E5, 50);
+    } else if (kmh < 70) {
+        tone(PIN_TONE, NOTE_F5, 50);
+    } else if (kmh < 80) {
+        tone(PIN_TONE, NOTE_G5, 50);
+    } else if (kmh < 90) {
+        tone(PIN_TONE, NOTE_A5, 50);
     } else {
-        tone(PIN_TONE, 5000, 30);
+        tone(PIN_TONE, NOTE_B5, 50);
     }
 }
 
@@ -185,7 +188,7 @@ void loop (void)
     {
 // SERVICE
         delay(2000);
-        tone(PIN_TONE, 3000, 500);
+        tone(PIN_TONE, NOTE_G7, 500);
         delay(1000);
 
         PT_All();
@@ -205,7 +208,7 @@ void loop (void)
         S.dts[S.hit++] = HIT_SERV;
         STATE = STATE_PLAYING;
 
-        tone(PIN_TONE, 500, 30);
+        tone(PIN_TONE, NOTE_C5, 50);
 
         IS_BACK = false;
 
@@ -251,7 +254,7 @@ void loop (void)
                 if (both && digitalRead(PIN_ESQ)==LOW &&
                             digitalRead(PIN_DIR)==LOW)
                 {
-                    tone(PIN_TONE, 4000, 10);
+                    tone(PIN_TONE, NOTE_C8, 10);
                     for (int i=0; i<50; i++) {
                         delay(100);
                         if (digitalRead(PIN_ESQ)==HIGH || digitalRead(PIN_DIR)==HIGH) {
@@ -320,7 +323,7 @@ void loop (void)
                     IS_BACK = (digitalRead(PIN_DIR) == LOW);
                 }
                 if (IS_BACK) {
-                    tone(PIN_TONE, 200, 30);
+                    tone(PIN_TONE, NOTE_C4, 30);
                 }
             }
 
@@ -334,15 +337,15 @@ void loop (void)
         }
 _FALL:
         STATE = STATE_IDLE;
+
+        tone(PIN_TONE, NOTE_C4, 100);
+        delay(110);
+        tone(PIN_TONE, NOTE_C3, 100);
+        delay(110);
+        tone(PIN_TONE, NOTE_C2, 300);
+        delay(310);
+
         EEPROM_Save();
-
-        tone(PIN_TONE, 300, 100);
-        delay(150);
-        tone(PIN_TONE, 200, 100);
-        delay(150);
-        tone(PIN_TONE, 100, 200);
-        delay(200);
-
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
         Serial.println(F("QUEDA"));
@@ -350,7 +353,7 @@ _FALL:
 
 _TIMEOUT:
     STATE = STATE_TIMEOUT;
-    tone(PIN_TONE, 200, 2000);
+    tone(PIN_TONE, 200, NOTE_C7);
     PT_All();
     TV_All("FIM", 0, 0, 0);
     Serial_Score();
@@ -363,7 +366,7 @@ _TIMEOUT:
             goto _RESTART;
         }
         if (got > 0) {
-            tone(PIN_TONE, 4000, 10);
+            tone(PIN_TONE, NOTE_C8, 10);
             delay(1000);
             if (digitalRead(PIN_ESQ)==LOW && digitalRead(PIN_DIR)==LOW) {
                 break;
