@@ -233,7 +233,7 @@ void EEPROM_Load (void) {
         s8 dt = S.dts[i];
         dt = (dt > 0) ? dt : -dt;
 
-        u32 kmh_ = ((u32)36) * S.distance / dt*10;
+        u32 kmh_ = ((u32)36) * S.distance / (dt*10);
                    // prevents overflow
         G.kmhs[i] = min(kmh_, HIT_KMH_MAX);
     }
