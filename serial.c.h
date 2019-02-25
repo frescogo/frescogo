@@ -53,6 +53,7 @@ void Serial_Score (void) {
         Serial.println("---");
     }
 
+    Serial.println();
     for (int i=0; i<2; i++) {
         sprintf_P(STR, PSTR("%15s: "), S.names[i]);
         Serial.print(STR);

@@ -1,5 +1,20 @@
-//#define DEBUG
+#define DEBUG
 //#define TV_ON
+
+#ifdef DEBUG
+#define assert(x) \
+    if (!x) {                               \
+        pinMode(LED_BUILTIN,OUTPUT);        \
+        while (1) {                         \
+            digitalWrite(LED_BUILTIN,HIGH); \
+            delay(250);                     \
+            digitalWrite(LED_BUILTIN,LOW);  \
+            delay(250);                     \
+        }                                   \
+    }
+#else
+#define assert(x)
+#endif
 
 #include <EEPROM.h>
 #include "pitches.h"
@@ -33,6 +48,7 @@ pollserial pserial;
 #ifdef ARDUINO_AVR_NANO
 #define PIN_LEFT  2
 #define PIN_RIGHT 3
+#define PIN_CFG   4
 #endif
 #ifdef ARDUINO_AVR_MEGA2560
 #define PIN_LEFT  21
@@ -64,7 +80,7 @@ char STR[32];
 
 typedef struct {
     char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" };
-    u32  timeout;               //  = 300 * ((u32)1000);
+    u32  timeout;               // = 300 * ((u32)1000);
     int  distance;              // = 800;
 
     u16  hit;
@@ -88,10 +104,12 @@ typedef struct {
 Game G;
 
 enum {
-    IN_LEFT  = 0,   // must be 0 (bc of MAP)
-    IN_RIGHT = 1,   // must be 1 (bc of MAP)
+    IN_LEFT  = 0,   // must be 0 (bc of MAP and 1-X)
+    IN_RIGHT = 1,   // must be 1 (bc of MAP and 1-X)
     IN_NONE,
+    IN_FALL,
     IN_RESTART,
+    IN_ALL
 };
 
 int Falls (void) {
@@ -129,7 +147,17 @@ void Sound (s8 kmh) {
     }
 }
 
+enum {
+    CFG_OFF,
+    CFG_ON,
+    CFG_FALL,       // 2s,  !LEFT, !RIGHT
+    CFG_RESTART,    // 5s,   LEFT,  RIGHT
+    CFG_ALL         // 30s, !LEFT, !RIGHT
+};
+
 int Await_Input (bool serial) {
+    static u32 old;
+    static int cfg = CFG_OFF;
     while (1) {
         if (serial) {
             int ret = Serial_Check();
@@ -137,11 +165,58 @@ int Await_Input (bool serial) {
                 return ret;
             }
         }
-        if (digitalRead(PIN_LEFT) == LOW) {
-            return IN_LEFT;
+
+        // CFG UNPRESSED
+        if (digitalRead(PIN_CFG) == HIGH)
+        {
+            int pin_left  = digitalRead(PIN_LEFT);
+            int pin_right = digitalRead(PIN_RIGHT);
+
+            // CFG was OFF
+            if (cfg == CFG_OFF)
+            {
+                if (pin_left == LOW) {
+                    return IN_LEFT;
+                }
+                if (pin_right == LOW) {
+                    return IN_RIGHT;
+                }
+            }
+
+            // CFG was ON
+            else
+            {
+                int old = cfg;
+                cfg = CFG_OFF;             // leave CFG mode
+                //delay(500);
+                if        (old==CFG_FALL    && pin_left==HIGH && pin_right==HIGH) {
+                    return IN_FALL;
+                } else if (old==CFG_RESTART && pin_left==LOW  && pin_right==LOW) {
+                    return IN_RESTART;
+                } else if (old==CFG_ALL     && pin_left==HIGH && pin_right==HIGH) {
+                    return IN_ALL;
+                }
+            }
         }
-        if (digitalRead(PIN_RIGHT) == LOW) {
-            return IN_RIGHT;
+
+        // CFG PRESSED
+        else
+        {
+            u32 now = millis();
+            if (cfg == CFG_OFF) {          // enter CFG mode
+                cfg = CFG_ON;
+                old = millis();
+                tone(PIN_TONE, NOTE_C2, 50);
+            } else if (cfg==CFG_ON && now-old>=2000) {
+                cfg = CFG_FALL;
+                tone(PIN_TONE, NOTE_C3, 50);
+            } else if (cfg==CFG_FALL && now-old>=5000) {
+                cfg = CFG_RESTART;
+                tone(PIN_TONE, NOTE_C4, 50);
+            } else if (cfg==CFG_RESTART && now-old>=15000) {
+                cfg = CFG_ALL;
+                tone(PIN_TONE, NOTE_C5, 50);
+            }
         }
     }
 }
@@ -170,7 +245,15 @@ void EEPROM_Save (void) {
     }
 }
 
+void EEPROM_Default (void) {
+    strcpy(S.names[0], "Atleta ESQ");
+    strcpy(S.names[1], "Atleta DIR");
+    S.distance = 800;
+    S.timeout  = 180 * ((u32)1000);
+}
+
 void setup (void) {
+    pinMode(PIN_CFG,   INPUT_PULLUP);
     pinMode(PIN_LEFT,  INPUT_PULLUP);
     pinMode(PIN_RIGHT, INPUT_PULLUP);
 
@@ -202,9 +285,17 @@ void loop (void)
         TV_All("GO!", 0, 0, 0);
         Serial_Score();
 
-        int got = Await_Input(true);
-        if (got == -1) {
-            goto _RESTART;
+        int got;
+        while (1) {
+            got = Await_Input(true);
+            if (got == IN_ALL) {
+                EEPROM_Default();
+                goto _RESTART;
+            } else if (got == IN_RESTART) {
+                goto _RESTART;
+            } else if (got==IN_LEFT || got==IN_RIGHT) {
+                break;
+            }
         }
 
         u32 t0 = millis();
@@ -233,44 +324,27 @@ void loop (void)
             while (digitalRead(MAP[got]) == LOW)
                 ;
 
-            // both are unpresseed?
-            bool both = digitalRead(MAP[nxt]) == HIGH;
-
-// HIT
             u32 t1;
             int dt;
             while (1) {
                 got = Await_Input(false);
-                t1 = millis();
-                dt = (t1 - t0);
-                if (got==nxt || dt>=3*HIT_MIN_DT) {
-                    break;
-                } else {
-                    // ball cannot go back and forth so fast
+                if (got == IN_RESTART) {
+                    goto _RESTART;
+                } else if (got == IN_FALL) {
+                    goto _FALL;
+                } else if (got==IN_LEFT || got==IN_RIGHT) {
+                    t1 = millis();
+                    dt = (t1 - t0);
+                    if (got==nxt || dt>=3*HIT_MIN_DT) {
+                        break;
+                    } else {
+                        // ball cannot go back and forth so fast
+                    }
                 }
             }
             //ceu_arduino_assert(dt>50, 2);
 
             t0 = t1;
-
-// FALL
-            // if both were unpressed and now both are pressed,
-            // and its long since the previous hit, then this is a fall
-            if (dt > 1000 ) {
-                delay(HIT_MIN_DT/2);
-                if (both && digitalRead(PIN_LEFT) ==LOW &&
-                            digitalRead(PIN_RIGHT)==LOW)
-                {
-                    tone(PIN_TONE, NOTE_C8, 10);
-                    for (int i=0; i<50; i++) {
-                        delay(100);
-                        if (digitalRead(PIN_LEFT)==HIGH || digitalRead(PIN_RIGHT)==HIGH) {
-                            goto _FALL;
-                        }
-                    }
-                    goto _TIMEOUT;
-                }
-            }
 
             if (nxt != got) {
                 dt = dt / 2;
@@ -369,15 +443,11 @@ _TIMEOUT:
 
     while (1) {
         int got = Await_Input(true);
-        if (got == -1) {
+        if (got == IN_ALL) {
+            EEPROM_Default();
             goto _RESTART;
-        }
-        if (got > 0) {
-            tone(PIN_TONE, NOTE_C8, 10);
-            delay(1000);
-            if (digitalRead(PIN_LEFT)==LOW && digitalRead(PIN_RIGHT)==LOW) {
-                break;
-            }
+        } else if (got == IN_RESTART) {
+            goto _RESTART;
         }
     }
 
