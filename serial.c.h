@@ -135,19 +135,19 @@ int Serial_Check (void) {
             CMD[i++] = c;       // continue
         }
     }
-    return 0;
+    return IN_NONE;
 _COMPLETE:
     i = 0;
 
     if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
-        return -1;
+        return IN_RESTART;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_Score();
-        return 0;
+        return IN_NONE;
     } else if (strncmp_P(CMD, PSTR("relatorio"), 9) == 0) {
         Serial_Score();
         Serial_Log();
-        return 0;
+        return IN_NONE;
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
         String str = &CMD[6];
         S.timeout = str.toInt() * 1000;
@@ -225,5 +225,5 @@ OK:;
     Serial_Score();
     TV_All("CMD", 0, 0, 0);
 
-    return 0;
+    return IN_NONE;
 }

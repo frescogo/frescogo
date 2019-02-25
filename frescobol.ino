@@ -31,15 +31,15 @@ pollserial pserial;
 #endif
 
 #ifdef ARDUINO_AVR_NANO
-#define PIN_ESQ 2
-#define PIN_DIR 3
+#define PIN_LEFT  2
+#define PIN_RIGHT 3
 #endif
 #ifdef ARDUINO_AVR_MEGA2560
-#define PIN_ESQ 21
-#define PIN_DIR 20
+#define PIN_LEFT  21
+#define PIN_RIGHT 20
 #endif
 
-static const int MAP[2] = { PIN_ESQ, PIN_DIR };
+static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define HITS_MAX   700
 #define HITS_BESTS 10
@@ -87,6 +87,13 @@ typedef struct {
 } Game;
 Game G;
 
+enum {
+    IN_LEFT  = 0,   // must be 0 (bc of MAP)
+    IN_RIGHT = 1,   // must be 1 (bc of MAP)
+    IN_NONE,
+    IN_RESTART,
+};
+
 int Falls (void) {
     return G.servs - (STATE==STATE_IDLE ? 0 : 1);
 }
@@ -122,19 +129,19 @@ void Sound (s8 kmh) {
     }
 }
 
-int Await_Press (bool serial) {
+int Await_Input (bool serial) {
     while (1) {
         if (serial) {
             int ret = Serial_Check();
-            if (ret < 0) {
+            if (ret != IN_NONE) {
                 return ret;
             }
         }
-        if (digitalRead(PIN_ESQ) == LOW) {
-            return 0;
+        if (digitalRead(PIN_LEFT) == LOW) {
+            return IN_LEFT;
         }
-        if (digitalRead(PIN_DIR) == LOW) {
-            return 1;
+        if (digitalRead(PIN_RIGHT) == LOW) {
+            return IN_RIGHT;
         }
     }
 }
@@ -164,8 +171,8 @@ void EEPROM_Save (void) {
 }
 
 void setup (void) {
-    pinMode(PIN_ESQ, INPUT_PULLUP);
-    pinMode(PIN_DIR, INPUT_PULLUP);
+    pinMode(PIN_LEFT,  INPUT_PULLUP);
+    pinMode(PIN_RIGHT, INPUT_PULLUP);
 
 #ifdef TV_ON
     TV.begin(PAL,DX,DY);
@@ -195,7 +202,7 @@ void loop (void)
         TV_All("GO!", 0, 0, 0);
         Serial_Score();
 
-        int got = Await_Press(true);
+        int got = Await_Input(true);
         if (got == -1) {
             goto _RESTART;
         }
@@ -233,7 +240,7 @@ void loop (void)
             u32 t1;
             int dt;
             while (1) {
-                got = Await_Press(false);
+                got = Await_Input(false);
                 t1 = millis();
                 dt = (t1 - t0);
                 if (got==nxt || dt>=3*HIT_MIN_DT) {
@@ -251,13 +258,13 @@ void loop (void)
             // and its long since the previous hit, then this is a fall
             if (dt > 1000 ) {
                 delay(HIT_MIN_DT/2);
-                if (both && digitalRead(PIN_ESQ)==LOW &&
-                            digitalRead(PIN_DIR)==LOW)
+                if (both && digitalRead(PIN_LEFT) ==LOW &&
+                            digitalRead(PIN_RIGHT)==LOW)
                 {
                     tone(PIN_TONE, NOTE_C8, 10);
                     for (int i=0; i<50; i++) {
                         delay(100);
-                        if (digitalRead(PIN_ESQ)==HIGH || digitalRead(PIN_DIR)==HIGH) {
+                        if (digitalRead(PIN_LEFT)==HIGH || digitalRead(PIN_RIGHT)==HIGH) {
                             goto _FALL;
                         }
                     }
@@ -318,9 +325,9 @@ void loop (void)
                     delay(HIT_BACK_DT-dt_);
                 }
                 if (got == 0) {
-                    IS_BACK = (digitalRead(PIN_ESQ) == LOW);
+                    IS_BACK = (digitalRead(PIN_LEFT)  == LOW);
                 } else {
-                    IS_BACK = (digitalRead(PIN_DIR) == LOW);
+                    IS_BACK = (digitalRead(PIN_RIGHT) == LOW);
                 }
                 if (IS_BACK) {
                     tone(PIN_TONE, NOTE_C4, 30);
@@ -361,14 +368,14 @@ _TIMEOUT:
     delay(5000);
 
     while (1) {
-        int got = Await_Press(true);
+        int got = Await_Input(true);
         if (got == -1) {
             goto _RESTART;
         }
         if (got > 0) {
             tone(PIN_TONE, NOTE_C8, 10);
             delay(1000);
-            if (digitalRead(PIN_ESQ)==LOW && digitalRead(PIN_DIR)==LOW) {
+            if (digitalRead(PIN_LEFT)==LOW && digitalRead(PIN_RIGHT)==LOW) {
                 break;
             }
         }
