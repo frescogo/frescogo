@@ -107,6 +107,7 @@ enum {
     IN_LEFT  = 0,   // must be 0 (bc of MAP and 1-X)
     IN_RIGHT = 1,   // must be 1 (bc of MAP and 1-X)
     IN_NONE,
+    IN_GO,
     IN_FALL,
     IN_RESTART,
     IN_ALL
@@ -149,7 +150,7 @@ void Sound (s8 kmh) {
 
 enum {
     CFG_OFF,
-    CFG_ON,
+    CFG_GO,         // 0s,  !LEFT, !RIGHT
     CFG_FALL,       // 2s,  !LEFT, !RIGHT
     CFG_RESTART,    // 5s,   LEFT,  RIGHT
     CFG_ALL         // 30s, !LEFT, !RIGHT
@@ -189,7 +190,9 @@ int Await_Input (bool serial) {
                 int old = cfg;
                 cfg = CFG_OFF;             // leave CFG mode
                 //delay(500);
-                if        (old==CFG_FALL    && pin_left==HIGH && pin_right==HIGH) {
+                if        (old==CFG_GO      && pin_left==HIGH && pin_right==HIGH) {
+                    return IN_GO;
+                } else if (old==CFG_FALL    && pin_left==HIGH && pin_right==HIGH) {
                     return IN_FALL;
                 } else if (old==CFG_RESTART && pin_left==LOW  && pin_right==LOW) {
                     return IN_RESTART;
@@ -204,10 +207,10 @@ int Await_Input (bool serial) {
         {
             u32 now = millis();
             if (cfg == CFG_OFF) {          // enter CFG mode
-                cfg = CFG_ON;
+                cfg = CFG_GO;
                 old = millis();
                 tone(PIN_TONE, NOTE_C2, 50);
-            } else if (cfg==CFG_ON && now-old>=2000) {
+            } else if (cfg==CFG_GO && now-old>=2000) {
                 cfg = CFG_FALL;
                 tone(PIN_TONE, NOTE_C3, 50);
             } else if (cfg==CFG_FALL && now-old>=5000) {
@@ -276,16 +279,26 @@ void loop (void)
 
     while (1)
     {
-// SERVICE
-        delay(2000);
+// GO
+        int got;
+        while (1) {
+            got = Await_Input(true);
+            if (got == IN_ALL) {
+                EEPROM_Default();
+                goto _RESTART;
+            } else if (got == IN_RESTART) {
+                goto _RESTART;
+            } else if (got == IN_GO) {
+                break;
+            }
+        }
         tone(PIN_TONE, NOTE_G7, 500);
-        delay(1000);
 
         PT_All();
         TV_All("GO!", 0, 0, 0);
         Serial_Score();
 
-        int got;
+// SERVICE
         while (1) {
             got = Await_Input(true);
             if (got == IN_ALL) {
@@ -324,6 +337,7 @@ void loop (void)
             while (digitalRead(MAP[got]) == LOW)
                 ;
 
+// HIT
             u32 t1;
             int dt;
             while (1) {
