@@ -141,7 +141,7 @@ _COMPLETE:
     i = 0;
 
     if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
-        return IN_RESTART;
+        return IN_TIMEOUT;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_Score();
         return IN_NONE;

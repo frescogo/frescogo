@@ -109,7 +109,7 @@ enum {
     IN_NONE,
     IN_GO,
     IN_FALL,
-    IN_RESTART,
+    IN_TIMEOUT,
     IN_ALL
 };
 
@@ -152,7 +152,7 @@ enum {
     CFG_OFF,
     CFG_GO,         // 0s,  !LEFT, !RIGHT
     CFG_FALL,       // 2s,  !LEFT, !RIGHT
-    CFG_RESTART,    // 5s,   LEFT,  RIGHT
+    CFG_TIMEOUT,    // 5s,   LEFT,  RIGHT
     CFG_ALL         // 30s, !LEFT, !RIGHT
 };
 
@@ -194,8 +194,8 @@ int Await_Input (bool serial) {
                     return IN_GO;
                 } else if (old==CFG_FALL    && pin_left==HIGH && pin_right==HIGH) {
                     return IN_FALL;
-                } else if (old==CFG_RESTART && pin_left==LOW  && pin_right==LOW) {
-                    return IN_RESTART;
+                } else if (old==CFG_TIMEOUT && pin_left==LOW  && pin_right==LOW) {
+                    return IN_TIMEOUT;
                 } else if (old==CFG_ALL     && pin_left==HIGH && pin_right==HIGH) {
                     return IN_ALL;
                 }
@@ -214,9 +214,9 @@ int Await_Input (bool serial) {
                 cfg = CFG_FALL;
                 tone(PIN_TONE, NOTE_C3, 50);
             } else if (cfg==CFG_FALL && now-old>=5000) {
-                cfg = CFG_RESTART;
+                cfg = CFG_TIMEOUT;
                 tone(PIN_TONE, NOTE_C4, 50);
-            } else if (cfg==CFG_RESTART && now-old>=15000) {
+            } else if (cfg==CFG_TIMEOUT && now-old>=15000) {
                 cfg = CFG_ALL;
                 tone(PIN_TONE, NOTE_C5, 50);
             }
@@ -286,8 +286,8 @@ void loop (void)
             if (got == IN_ALL) {
                 EEPROM_Default();
                 goto _RESTART;
-            } else if (got == IN_RESTART) {
-                goto _RESTART;
+            } else if (got == IN_TIMEOUT) {
+                goto _TIMEOUT;
             } else if (got == IN_GO) {
                 break;
             }
@@ -301,11 +301,8 @@ void loop (void)
 // SERVICE
         while (1) {
             got = Await_Input(true);
-            if (got == IN_ALL) {
-                EEPROM_Default();
-                goto _RESTART;
-            } else if (got == IN_RESTART) {
-                goto _RESTART;
+            if (got == IN_TIMEOUT) {
+                goto _TIMEOUT;
             } else if (got==IN_LEFT || got==IN_RIGHT) {
                 break;
             }
@@ -342,8 +339,8 @@ void loop (void)
             int dt;
             while (1) {
                 got = Await_Input(false);
-                if (got == IN_RESTART) {
-                    goto _RESTART;
+                if (got == IN_TIMEOUT) {
+                    goto _TIMEOUT;
                 } else if (got == IN_FALL) {
                     goto _FALL;
                 } else if (got==IN_LEFT || got==IN_RIGHT) {
@@ -453,15 +450,11 @@ _TIMEOUT:
     TV_All("FIM", 0, 0, 0);
     Serial_Score();
     Serial.println(F("= FIM ="));
-    delay(5000);
 
     while (1) {
         int got = Await_Input(true);
-        if (got == IN_ALL) {
-            EEPROM_Default();
-            goto _RESTART;
-        } else if (got == IN_RESTART) {
-            goto _RESTART;
+        if (got == IN_FALL) {
+            break;
         }
     }
 
