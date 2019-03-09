@@ -64,7 +64,7 @@ void PT_All (void) {
                 }
             }
 
-            G.time += dt;
+            G.time += (dt>0 ? dt : -dt);
         }
     }
     G.time *= 10;
