@@ -444,7 +444,7 @@ _FALL:
 
 _TIMEOUT:
     STATE = STATE_TIMEOUT;
-    tone(PIN_TONE, 200, NOTE_C7);
+    tone(PIN_TONE, 200, NOTE_C5);
     PT_All();
     TV_All("FIM", 0, 0, 0);
     Serial_Score();
@@ -458,13 +458,7 @@ _TIMEOUT:
     }
 
 _RESTART:
-    tone(PIN_TONE, NOTE_C2, 100);
-    delay(110);
-    tone(PIN_TONE, NOTE_C3, 100);
-    delay(110);
-    tone(PIN_TONE, NOTE_C4, 300);
-    delay(310);
-
+    tone(PIN_TONE, 200, NOTE_C6);
     S.hit = 0;
     EEPROM_Save();
 }
