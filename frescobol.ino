@@ -436,10 +436,10 @@ _FALL:
         tone(PIN_TONE, NOTE_C2, 300);
         delay(310);
 
-        EEPROM_Save();
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
         Serial.println(F("QUEDA"));
+        EEPROM_Save();
     }
 
 _TIMEOUT:
@@ -458,6 +458,13 @@ _TIMEOUT:
     }
 
 _RESTART:
+    tone(PIN_TONE, NOTE_C2, 100);
+    delay(110);
+    tone(PIN_TONE, NOTE_C3, 100);
+    delay(110);
+    tone(PIN_TONE, NOTE_C4, 300);
+    delay(310);
+
     S.hit = 0;
     EEPROM_Save();
 }
