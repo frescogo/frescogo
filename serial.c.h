@@ -19,7 +19,7 @@ void Serial_Score (void) {
     Serial.print(STR);
     Serial.println();
 
-    Serial.print(F("         ("));
+    Serial.print(F("    ("));
     Serial.print(S.distance);
     Serial.print(F("cm - "));
     Serial.print(S.timeout/1000);
@@ -206,17 +206,17 @@ _COMPLETE:
         return IN_NONE;
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
         S.timeout = ((u32)atoi(&CMD[6])) * 1000;
-    } else if (strncmp_P(CMD, PSTR("dist "), 5) == 0) {
-        S.distance = atoi(&CMD[5]);
-    } else if (strncmp_P(CMD, PSTR("esq "), 4) == 0) {
-        if (strlen(&CMD[4]) < 15) {
-            strcpy(S.names[0], &CMD[4]);
+    } else if (strncmp_P(CMD, PSTR("distancia "), 5) == 0) {
+        S.distance = atoi(&CMD[10]);
+    } else if (strncmp_P(CMD, PSTR("esquerda "), 4) == 0) {
+        if (strlen(&CMD[9]) < 15) {
+            strcpy(S.names[0], &CMD[9]);
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(CMD, PSTR("dir "), 4) == 0) {
-        if (strlen(&CMD[4]) < 15) {
-            strcpy(S.names[1], &CMD[4]);
+    } else if (strncmp_P(CMD, PSTR("direita "), 4) == 0) {
+        if (strlen(&CMD[8]) < 15) {
+            strcpy(S.names[1], &CMD[8]);
         } else {
             goto ERR;
         }

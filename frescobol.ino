@@ -439,6 +439,7 @@ _FALL:
         PT_All();
         TV_All("QUEDA", 0, 0, 0);
         Serial.println(F("QUEDA"));
+        Serial_Score();
         EEPROM_Save();
     }
 
