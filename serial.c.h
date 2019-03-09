@@ -205,11 +205,9 @@ _COMPLETE:
         Serial_Log();
         return IN_NONE;
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
-        String str = &CMD[6];
-        S.timeout = str.toInt() * 1000;
+        S.timeout = ((u32)atoi(&CMD[6])) * 1000;
     } else if (strncmp_P(CMD, PSTR("dist "), 5) == 0) {
-        String str = &CMD[5];
-        S.distance = str.toInt();
+        S.distance = atoi(&CMD[5]);
     } else if (strncmp_P(CMD, PSTR("esq "), 4) == 0) {
         if (strlen(&CMD[4]) < 15) {
             strcpy(S.names[0], &CMD[4]);
