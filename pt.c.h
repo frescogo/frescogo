@@ -33,17 +33,16 @@ void PT_All (void) {
 
     for (int i=0 ; i<S.hit ; i++) {
     //for (int i=0 ; i<600 ; i++) {
-        s8  dt1 = S.dts[i];
+        s8  dt  = S.dts[i];
         s8  kmh = G.kmhs[i];
         u16 pt  = ((u16)kmh)*((u16)kmh);
 
-        if (dt1 == HIT_SERV) {
+        if (dt == HIT_SERV) {
             G.servs++;
         }
 
-        if (dt1!=HIT_NONE && dt1!=HIT_SERV) {
-            s8 dt2 = S.dts[i+1];
-            if (i==S.hit-1 || dt2==HIT_NONE || dt2==HIT_SERV) {
+        if (dt!=HIT_NONE && dt!=HIT_SERV) {
+            if (i==S.hit-1 || S.dts[i+1]==HIT_NONE || S.dts[i+1]==HIT_SERV) {
                 // ignore last hit
             }
             else
@@ -53,7 +52,7 @@ void PT_All (void) {
                 pace += kmh;
 
                 // bests
-                s8* vec = G.bests[ 1-(i%2) ][ dt1>0 ];
+                s8* vec = G.bests[ 1-(i%2) ][ dt>0 ];
                 for (int j=0; j<HITS_BESTS; j++) {
                     if (kmh > vec[j]) {
                         for (int k=HITS_BESTS-1; k>j; k--) {
@@ -65,7 +64,7 @@ void PT_All (void) {
                 }
             }
 
-            G.time += dt1;
+            G.time += dt;
         }
     }
     G.time *= 10;
@@ -75,7 +74,7 @@ void PT_All (void) {
     PT_Bests_Apply();
 
     u32 avg   = (G.ps[0] + G.ps[1]) / 2;
-    u32 total = min(avg, min(G.ps[0],G.ps[1])*1.1);
+    u32 total = min(avg, min(G.ps[0],G.ps[1])*11/10);
     int pct   = 100 - min(100, Falls()*3);
     G.total = total * pct/10000;
 }

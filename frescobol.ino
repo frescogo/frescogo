@@ -46,9 +46,9 @@ pollserial pserial;
 #endif
 
 #ifdef ARDUINO_AVR_NANO
-#define PIN_LEFT  2
-#define PIN_RIGHT 3
-#define PIN_CFG   4
+#define PIN_LEFT  3
+#define PIN_RIGHT 4
+#define PIN_CFG   2
 #endif
 #ifdef ARDUINO_AVR_MEGA2560
 #define PIN_LEFT  21
@@ -280,6 +280,7 @@ void loop (void)
     while (1)
     {
 // GO
+        PT_All();
         int got;
         while (1) {
             got = Await_Input(true);
@@ -293,8 +294,6 @@ void loop (void)
             }
         }
         tone(PIN_TONE, NOTE_G7, 500);
-
-        PT_All();
         TV_All("GO!", 0, 0, 0);
         Serial_Score();
 
