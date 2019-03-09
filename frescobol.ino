@@ -1,4 +1,4 @@
-#define DEBUG
+//#define DEBUG
 //#define TV_ON
 
 #ifdef DEBUG
@@ -36,8 +36,8 @@ typedef unsigned long u32;
 #define DY   64
 #define FX    4
 #define FY    6
-TVout TV;
-pollserial pserial;
+static TVout TV;
+static pollserial pserial;
 
 #else // !TV_ON
 
@@ -62,7 +62,8 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define HIT_BACK_DT 200         // minimum time to hold for back
 #define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
-#define HIT_KMH_MAX 125         // to fit in s8 (changed to u8, but lets keep 125)
+//#define HIT_KMH_MAX 125         // to fit in s8 (changed to u8, but lets keep 125)
+#define HIT_KMH_MAX  90         // safe value to avoid errors
 
 #define HIT_MARK 0
 #define HIT_NONE 1
@@ -74,9 +75,9 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define NAME_MAX 20
 
-int  STATE;
-bool IS_BACK;
-char STR[32];
+static int  STATE;
+static bool IS_BACK;
+static char STR[64];
 
 typedef struct {
     char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" };
@@ -86,7 +87,7 @@ typedef struct {
     u16  hit;
     s8   dts[HITS_MAX];         // cs (ms*10)
 } Save;
-Save S;
+static Save S;
 
 typedef struct {
     // needed on EEPROM_Load
@@ -101,7 +102,7 @@ typedef struct {
     s8  pace;                       // kmh
     u16 total;
 } Game;
-Game G;
+static Game G;
 
 enum {
     IN_LEFT  = 0,   // must be 0 (bc of MAP and 1-X)
@@ -114,7 +115,7 @@ enum {
 };
 
 int Falls (void) {
-    return G.servs - (STATE==STATE_IDLE ? 0 : 1);
+    return G.servs - (STATE==STATE_PLAYING ? 1 : 0);
 }
 
 int  PT_Bests (s8* bests, int* min_, int* max_);
