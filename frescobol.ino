@@ -449,8 +449,9 @@ _TIMEOUT:
     tone(PIN_TONE, 200, NOTE_C5);
     PT_All();
     TV_All("FIM", 0, 0, 0);
-    Serial_Score();
     Serial.println(F("= FIM ="));
+    Serial_Score();
+    EEPROM_Save();
 
     while (1) {
         int got = Await_Input(true);
