@@ -195,7 +195,7 @@ int Serial_Check (void) {
 _COMPLETE:
     i = 0;
 
-    if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
+    if (strncmp_P(CMD, PSTR("fim"), 3) == 0) {
         return IN_TIMEOUT;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_Score();
