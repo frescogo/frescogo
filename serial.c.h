@@ -130,7 +130,7 @@ void Serial_Log (void) {
             if (i%2 == 0) {
                 Serial.print(F("        "));
             }
-            sprintf_P(STR, PSTR("(%3d^2 = %5d)"), kmh, pt);
+            sprintf_P(STR, PSTR("(%2d / %4d)"), kmh, pt);
             Serial.print(STR);
         }
         Serial.println();

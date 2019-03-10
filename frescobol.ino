@@ -115,7 +115,8 @@ enum {
 };
 
 int Falls (void) {
-    return G.servs - (STATE==STATE_PLAYING ? 1 : 0);
+    return G.servs - (STATE==STATE_IDLE ? 0 : 1);
+                        // after fall
 }
 
 int  PT_Bests (s8* bests, int* min_, int* max_);
