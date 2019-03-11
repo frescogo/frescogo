@@ -41,18 +41,14 @@ static pollserial pserial;
 
 #else // !TV_ON
 
-#define PIN_TONE 11
-
 #endif
 
-#ifdef ARDUINO_AVR_NANO
 #define PIN_LEFT  3
 #define PIN_RIGHT 4
 #define PIN_CFG   2
-#endif
-#ifdef ARDUINO_AVR_MEGA2560
-#define PIN_LEFT  21
-#define PIN_RIGHT 20
+
+#ifdef ARDUINO_AVR_NANO
+#define PIN_TONE 11
 #endif
 
 static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
@@ -136,17 +132,25 @@ void Sound (s8 kmh) {
     if (kmh < 40) {
         tone(PIN_TONE, NOTE_C5, 50);
     } else if (kmh < 50) {
-        tone(PIN_TONE, NOTE_D5, 50);
-    } else if (kmh < 60) {
         tone(PIN_TONE, NOTE_E5, 50);
-    } else if (kmh < 70) {
-        tone(PIN_TONE, NOTE_F5, 50);
-    } else if (kmh < 80) {
+    } else if (kmh < 60) {
         tone(PIN_TONE, NOTE_G5, 50);
+    } else if (kmh < 70) {
+        tone(PIN_TONE, NOTE_C6, 20);
+        delay(30);
+        tone(PIN_TONE, NOTE_C6, 20);
+    } else if (kmh < 80) {
+        tone(PIN_TONE, NOTE_E6, 20);
+        delay(30);
+        tone(PIN_TONE, NOTE_E6, 20);
     } else if (kmh < 90) {
-        tone(PIN_TONE, NOTE_A5, 50);
+        tone(PIN_TONE, NOTE_G6, 20);
+        delay(30);
+        tone(PIN_TONE, NOTE_G6, 20);
     } else {
-        tone(PIN_TONE, NOTE_B5, 50);
+        tone(PIN_TONE, NOTE_C7, 20);
+        delay(30);
+        tone(PIN_TONE, NOTE_C7, 20);
     }
 }
 
@@ -417,6 +421,19 @@ void loop (void)
                 }
                 if (IS_BACK) {
                     tone(PIN_TONE, NOTE_C4, 30);
+                } else {
+                    // desequilibrio
+                    u32 p0  = G.ps[0];
+                    u32 p1  = G.ps[1];
+                    u32 avg = (p0 + p1) / 2;
+                    u32 m   = min(p0,p1);
+                    if (G.time >= S.timeout/2) {
+                        if (kmh>60 && m*11/10<avg) {
+                            if (p0>p1 && nxt==0 || p1>p0 && nxt==1) {
+                                tone(PIN_TONE, NOTE_C3, 30);
+                            }
+                        }
+                    }
                 }
             }
 
