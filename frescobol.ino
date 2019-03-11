@@ -379,7 +379,7 @@ void loop (void)
                 al_cnt==2 && left<10000       || al_cnt==3 && left< 5000) {
                 al_cnt += 1;
                 al_set = 1;
-                tone(PIN_TONE, NOTE_C6, 150);
+                tone(PIN_TONE, NOTE_C6, 250);
             } else {
                 Sound(kmh);
             }
@@ -420,7 +420,7 @@ void loop (void)
             }
 
             // sleep inside hit to reach HIT_BACK_DT
-            if (!al_set) {
+            {
                 u32 dt_ = millis() - t1;
                 if (HIT_BACK_DT > dt_) {
                     delay(HIT_BACK_DT-dt_);
@@ -430,18 +430,20 @@ void loop (void)
                 } else {
                     IS_BACK = (digitalRead(PIN_RIGHT) == LOW);
                 }
-                if (IS_BACK) {
-                    tone(PIN_TONE, NOTE_C4, 30);
-                } else {
-                    // desequilibrio
-                    u32 p0  = G.ps[0];
-                    u32 p1  = G.ps[1];
-                    u32 avg = (p0 + p1) / 2;
-                    u32 m   = min(p0,p1);
-                    if (G.time >= S.timeout/2) {
-                        if (kmh>60 && m*11/10<avg) {
-                            if (p0>p1 && nxt==0 || p1>p0 && nxt==1) {
-                                tone(PIN_TONE, NOTE_C3, 30);
+                if (!al_set) {
+                    if (IS_BACK) {
+                        tone(PIN_TONE, NOTE_C4, 30);
+                    } else {
+                        // desequilibrio
+                        u32 p0  = G.ps[0];
+                        u32 p1  = G.ps[1];
+                        u32 avg = (p0 + p1) / 2;
+                        u32 m   = min(p0,p1);
+                        if (G.time >= S.timeout/2) {
+                            if (kmh>60 && m*11/10<avg) {
+                                if (p0>p1 && nxt==0 || p1>p0 && nxt==1) {
+                                    tone(PIN_TONE, NOTE_C3, 30);
+                                }
                             }
                         }
                     }
