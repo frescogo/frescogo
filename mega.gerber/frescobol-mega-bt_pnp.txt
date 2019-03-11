@@ -1,0 +1,43 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=frescobol-mega-bt
+*Date=11:06:14
+*CreatedBy=Fritzing 0.9.3b.04.19.5c895d327c44a3114e5fcc9d8260daf0cbb52806
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;THT;61.1454;-5.14989;0;Bottom;DIR-GND-B
+2;;THT;53.5254;-40.7099;0;Bottom;Audio-11-B
+3;;THT;43.3654;-12.7699;0;Bottom;ESQ-3-B
+4;;THT;66.2254;-12.7699;0;Bottom;DIR-2-A
+5;;THT;43.3654;-43.2499;0;Bottom;BAT+
+6;470;THT;89.0854;-22.9299;90;Bottom;R-29
+7;;;51.0277;-26.7399;0;Bottom;Part6
+8;;THT;38.2854;-12.7699;0;Bottom;ESQ-3-A
+9;;;82.7354;-24.8349;-90;Bottom;Part5
+10;;THT;61.1454;-12.7699;0;Bottom;DIR-2-B
+11;;ksa_sealed_tac_switch;37.0154;-10.2299;0;Bottom;S1
+12;;;52.7304;-31.369;0;Bottom;Via1
+13;;THT;48.4454;-48.3299;0;Bottom;Audio-GND-A
+14;2.2k;THT;84.0054;-35.6299;-90;Bottom;R-GND
+15;;THT;85.2754;-10.2299;90;Bottom;VIDEO
+16;1k;THT;78.9254;-35.6299;-90;Bottom;R-TX
+17;;THT;43.3654;-5.14989;0;Bottom;ESQ-GND-B
+18;;ksa_sealed_tac_switch;39.5554;-28.0099;180;Bottom;S3
+19;;dipswitch-02;64.9554;-29.2799;-90;Bottom;SW1
+20;;THT;48.4454;-40.7099;0;Bottom;Audio-11-A
+21;;THT;5.26537;-43.2499;0;Bottom;BAT-
+22;;DIP (Dual Inline) [THT];14.7145;-20.9547;0;Bottom;TP1
+23;;ksa_sealed_tac_switch;67.4954;-10.2299;0;Bottom;S2
+24;;THT;38.2854;-5.14989;0;Bottom;ESQ-GND-A
+25;;;52.7304;-37.465;0;Bottom;Via2
+26;;THT;66.2254;-5.14989;0;Bottom;DIR-GND-A
+27;1k;THT;73.8454;-17.8499;0;Bottom;R-11
+28;;THT;53.5254;-48.3299;0;Bottom;Audio-GND-B
