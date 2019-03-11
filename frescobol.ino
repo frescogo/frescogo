@@ -59,7 +59,7 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 #define HIT_BACK_DT 200         // minimum time to hold for back
 #define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
 //#define HIT_KMH_MAX 125         // to fit in s8 (changed to u8, but lets keep 125)
-#define HIT_KMH_MAX  90         // safe value to avoid errors
+#define HIT_KMH_MAX 100         // safe value to avoid errors
 
 #define HIT_MARK 0
 #define HIT_NONE 1
