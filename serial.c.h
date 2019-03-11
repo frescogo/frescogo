@@ -220,7 +220,7 @@ _COMPLETE:
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(CMD, PSTR("-seq"), 4) == 0) {
+    } else if (strncmp_P(CMD, PSTR("-queda"), 6) == 0) {
         if (S.hit == 0) {
             goto ERR;
         }
@@ -235,7 +235,7 @@ _COMPLETE:
                 break;
             }
         }
-    } else if (strncmp_P(CMD, PSTR("+seq"), 4) == 0) {
+    } else if (strncmp_P(CMD, PSTR("+queda"), 6) == 0) {
         if (S.dts[S.hit] == HIT_MARK) {
             goto ERR;
         }

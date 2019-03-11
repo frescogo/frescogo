@@ -371,7 +371,18 @@ void loop (void)
             u32 kmh_ = ((u32)36) * S.distance / (dt*10);
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
-            Sound(kmh);
+
+            static u8 al_cnt = 0;
+            u8 al_set = 0;
+            u32 left = S.timeout - G.time;
+            if (al_cnt==0 && left<S.timeout/2 || al_cnt==1 && left<30000 ||
+                al_cnt==2 && left<10000       || al_cnt==3 && left< 5000) {
+                al_cnt += 1;
+                al_set = 1;
+                tone(PIN_TONE, NOTE_C6, 150);
+            } else {
+                Sound(kmh);
+            }
 
 #ifdef DEBUG
             if (nxt != got) {
@@ -409,7 +420,7 @@ void loop (void)
             }
 
             // sleep inside hit to reach HIT_BACK_DT
-            {
+            if (!al_set) {
                 u32 dt_ = millis() - t1;
                 if (HIT_BACK_DT > dt_) {
                     delay(HIT_BACK_DT-dt_);
