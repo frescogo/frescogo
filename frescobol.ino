@@ -287,6 +287,10 @@ void loop (void)
     {
 // GO
         PT_All();
+        if (G.time >= S.timeout) {
+            goto _TIMEOUT;          // if reset on ended game
+        }
+
         int got;
         while (1) {
             got = Await_Input(true);

@@ -13,7 +13,7 @@ void PT_Bests_Apply (void) {
     for (int i=0; i<2; i++) {
         for (int j=0; j<2; j++) {
             for (int k=0; k<HITS_BESTS; k++) {
-                s8 v = G.bests[i][j][k];
+                u32 v = G.bests[i][j][k];
                 G.ps[i] += v*v*4;
             }
         }
