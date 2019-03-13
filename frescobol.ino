@@ -136,21 +136,21 @@ void Sound (s8 kmh) {
     } else if (kmh < 60) {
         tone(PIN_TONE, NOTE_G5, 50);
     } else if (kmh < 70) {
-        tone(PIN_TONE, NOTE_C6, 20);
+        tone(PIN_TONE, NOTE_C5, 20);
         delay(30);
-        tone(PIN_TONE, NOTE_C6, 20);
+        tone(PIN_TONE, NOTE_C5, 20);
     } else if (kmh < 80) {
-        tone(PIN_TONE, NOTE_E6, 20);
+        tone(PIN_TONE, NOTE_E5, 20);
         delay(30);
-        tone(PIN_TONE, NOTE_E6, 20);
+        tone(PIN_TONE, NOTE_E5, 20);
     } else if (kmh < 90) {
-        tone(PIN_TONE, NOTE_G6, 20);
+        tone(PIN_TONE, NOTE_G5, 20);
         delay(30);
-        tone(PIN_TONE, NOTE_G6, 20);
+        tone(PIN_TONE, NOTE_G5, 20);
     } else {
-        tone(PIN_TONE, NOTE_C7, 20);
+        tone(PIN_TONE, NOTE_C6, 20);
         delay(30);
-        tone(PIN_TONE, NOTE_C7, 20);
+        tone(PIN_TONE, NOTE_C6, 20);
     }
 }
 
@@ -282,6 +282,7 @@ void loop (void)
 // RESTART
     Serial.println(F("= INICIO ="));
     STATE = STATE_IDLE;
+    u8 al_cnt = 0;
 
     while (1)
     {
@@ -303,7 +304,7 @@ void loop (void)
                 break;
             }
         }
-        tone(PIN_TONE, NOTE_G7, 500);
+        tone(PIN_TONE, NOTE_C7, 500);
         TV_All("GO!", 0, 0, 0);
         Serial_Score();
 
@@ -376,14 +377,13 @@ void loop (void)
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
 
-            static u8 al_cnt = 0;
-            u8 al_set = 0;
+            u8 al_now = 0;
             u32 left = S.timeout - G.time;
-            if (al_cnt==0 && left<S.timeout/2 || al_cnt==1 && left<30000 ||
-                al_cnt==2 && left<10000       || al_cnt==3 && left< 5000) {
+            if (al_cnt<=0 && left<S.timeout/2 || al_cnt<=1 && left<30000 ||
+                al_cnt<=2 && left<10000       || al_cnt<=3 && left< 5000) {
                 al_cnt += 1;
-                al_set = 1;
-                tone(PIN_TONE, NOTE_C6, 250);
+                al_now = 1;
+                tone(PIN_TONE, NOTE_C7, 250);
             } else {
                 Sound(kmh);
             }
@@ -434,7 +434,7 @@ void loop (void)
                 } else {
                     IS_BACK = (digitalRead(PIN_RIGHT) == LOW);
                 }
-                if (!al_set) {
+                if (!al_now) {
                     if (IS_BACK) {
                         tone(PIN_TONE, NOTE_C4, 30);
                     } else {
