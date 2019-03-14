@@ -299,8 +299,6 @@ void loop (void)
     STATE = STATE_IDLE;
     PT_All();
     u32 al_nxt = alarm();
-    Serial.println(G.time);
-    Serial.println(al_nxt);
 
     while (1)
     {
@@ -400,8 +398,6 @@ void loop (void)
                 tone(PIN_TONE, NOTE_C7, 250);
                 al_now = 1;
                 al_nxt = alarm();
-                Serial.println(G.time);
-                Serial.println(al_nxt);
             } else {
                 Sound(kmh);
             }
@@ -429,11 +425,7 @@ void loop (void)
             }
             nxt = 1 - got;
 
-//u32 x1 = millis();
             PT_All();
-//u32 x2 = millis();
-//Serial.print("> ");
-//Serial.println(x2-x1);
             TV_All(NULL, 1-got, kmh, IS_BACK);
 
 // TIMEOUT
