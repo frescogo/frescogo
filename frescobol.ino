@@ -71,8 +71,6 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define NAME_MAX        20
 
-#define PT_PCT_FALL     4
-
 static int  STATE;
 static bool IS_BACK;
 static char STR[64];
