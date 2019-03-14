@@ -75,7 +75,7 @@ void PT_All (void) {
 
     u32 avg   = (G.ps[0] + G.ps[1]) / 2;
     u32 total = min(avg, min(G.ps[0],G.ps[1])*11/10);
-    int pct   = 100 - min(100, Falls()*3);
+    int pct   = 100 - min(100, Falls()*PT_PCT_FALL);
     G.total = total * pct/10000;
 }
 

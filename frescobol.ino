@@ -53,23 +53,25 @@ static pollserial pserial;
 
 static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
-#define HITS_MAX   700
-#define HITS_BESTS 10
+#define HITS_MAX        700
+#define HITS_BESTS      10
 
-#define HIT_BACK_DT 200         // minimum time to hold for back
-#define HIT_MIN_DT  235         // minimum time between two hits (125kmh)
-//#define HIT_KMH_MAX 125         // to fit in s8 (changed to u8, but lets keep 125)
-#define HIT_KMH_MAX 100         // safe value to avoid errors
+#define HIT_BACK_DT     180         // minimum time to hold for back
+#define HIT_MIN_DT      235         // minimum time between two hits (125kmh)
+//#define HIT_KMH_MAX   125         // to fit in s8 (changed to u8, but lets keep 125)
+#define HIT_KMH_MAX     100         // safe value to avoid errors
 
-#define HIT_MARK 0
-#define HIT_NONE 1
-#define HIT_SERV 2
+#define HIT_MARK        0
+#define HIT_NONE        1
+#define HIT_SERV        2
 
-#define STATE_IDLE       0
-#define STATE_PLAYING    1
-#define STATE_TIMEOUT    2
+#define STATE_IDLE      0
+#define STATE_PLAYING   1
+#define STATE_TIMEOUT   2
 
-#define NAME_MAX 20
+#define NAME_MAX        20
+
+#define PT_PCT_FALL     4
 
 static int  STATE;
 static bool IS_BACK;
@@ -277,12 +279,30 @@ void setup (void) {
     EEPROM_Load();
 }
 
+u32 alarm (void) {
+    u32 left = S.timeout - G.time;
+    if (left < 5000) {
+        return S.timeout - 0;
+    } else if (left < 10000) {
+        return S.timeout - 5000;
+    } else if (left < 30000) {
+        return S.timeout - 10000;
+    } else if (left < 60000) {
+        return S.timeout - 30000;
+    } else {
+        return (G.time/60000 + 1) * 60000;
+    }
+}
+
 void loop (void)
 {
 // RESTART
     Serial.println(F("= INICIO ="));
     STATE = STATE_IDLE;
-    u8 al_cnt = 0;
+    PT_All();
+    u32 al_nxt = alarm();
+    Serial.println(G.time);
+    Serial.println(al_nxt);
 
     while (1)
     {
@@ -378,12 +398,12 @@ void loop (void)
             s8 kmh = min(kmh_, HIT_KMH_MAX);
 
             u8 al_now = 0;
-            u32 left = S.timeout - G.time;
-            if (al_cnt<=0 && left<S.timeout/2 || al_cnt<=1 && left<30000 ||
-                al_cnt<=2 && left<10000       || al_cnt<=3 && left< 5000) {
-                al_cnt += 1;
-                al_now = 1;
+            if (G.time > al_nxt) {
                 tone(PIN_TONE, NOTE_C7, 250);
+                al_now = 1;
+                al_nxt = alarm();
+                Serial.println(G.time);
+                Serial.println(al_nxt);
             } else {
                 Sound(kmh);
             }
@@ -434,7 +454,8 @@ void loop (void)
                 } else {
                     IS_BACK = (digitalRead(PIN_RIGHT) == LOW);
                 }
-                if (!al_now) {
+                if (!al_now)
+                {
                     if (IS_BACK) {
                         tone(PIN_TONE, NOTE_C4, 30);
                     } else {
