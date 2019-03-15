@@ -454,7 +454,7 @@ void loop (void)
                         u32 p1  = G.ps[1];
                         u32 avg = (p0 + p1) / 2;
                         u32 m   = min(p0,p1);
-                        if (G.time >= S.timeout/2) {
+                        if (G.time >= 30000) {
                             if (kmh>60 && m*11/10<avg) {
                                 if (p0>p1 && nxt==0 || p1>p0 && nxt==1) {
                                     tone(PIN_TONE, NOTE_C3, 30);
