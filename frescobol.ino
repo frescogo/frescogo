@@ -192,7 +192,7 @@ int Await_Input (bool serial) {
             }
 
             // fall
-            if        (now-old>=2000 && pin_left==HIGH && pin_right==HIGH) {
+            if        (now-old>=1000 && pin_left==HIGH && pin_right==HIGH) {
                 old = now;
                 return IN_GO_FALL;
             } else if (now-old>=5000 && pin_left==LOW  && pin_right==HIGH) {
@@ -321,8 +321,10 @@ void loop (void)
             } else if (got == IN_TIMEOUT) {
                 goto _TIMEOUT;
 */
+/* No FALL just after service: prevents double falls.
             } else if (got == IN_GO_FALL) {
                 goto _FALL;
+*/
             } else if (got==IN_LEFT || got==IN_RIGHT) {
                 break;
             }

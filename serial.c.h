@@ -35,7 +35,10 @@ void Serial_Score (void) {
     sprintf_P(STR, PSTR("%10S: "), F("Tempo"));
     Serial.print(STR);
     Serial.print(G.time);
-    Serial.println(F("ms"));
+    Serial.print(F("ms"));
+    Serial.print(F(" (-"));
+    Serial.print(G.time > S.timeout ? 0 : (S.timeout-G.time)/1000);
+    Serial.println(F("s)"));
 
     sprintf_P(STR, PSTR("%10S: "), F("Quedas"));
     Serial.print(STR);
