@@ -104,10 +104,10 @@ enum {
     IN_LEFT  = 0,   // must be 0 (bc of MAP and 1-X)
     IN_RIGHT = 1,   // must be 1 (bc of MAP and 1-X)
     IN_NONE,
-    IN_GO,
-    IN_FALL,
+    IN_GO_FALL,
     IN_TIMEOUT,
-    IN_ALL
+    IN_RESTART,
+    IN_RESET
 };
 
 int Falls (void) {
@@ -154,17 +154,9 @@ void Sound (s8 kmh) {
     }
 }
 
-enum {
-    CFG_OFF,
-    CFG_GO,         // 0s,  !LEFT, !RIGHT
-    CFG_FALL,       // 2s,  !LEFT, !RIGHT
-    CFG_TIMEOUT,    // 5s,   LEFT,  RIGHT
-    CFG_ALL         // 30s, !LEFT, !RIGHT
-};
-
 int Await_Input (bool serial) {
     static u32 old;
-    static int cfg = CFG_OFF;
+    static int pressed = 0;
     while (1) {
         if (serial) {
             int ret = Serial_Check();
@@ -173,58 +165,45 @@ int Await_Input (bool serial) {
             }
         }
 
+        u32 now = millis();
+
+        int pin_left  = digitalRead(PIN_LEFT);
+        int pin_right = digitalRead(PIN_RIGHT);
+
         // CFG UNPRESSED
         if (digitalRead(PIN_CFG) == HIGH)
         {
-            int pin_left  = digitalRead(PIN_LEFT);
-            int pin_right = digitalRead(PIN_RIGHT);
-
-            // CFG was OFF
-            if (cfg == CFG_OFF)
-            {
-                if (pin_left == LOW) {
-                    return IN_LEFT;
-                }
-                if (pin_right == LOW) {
-                    return IN_RIGHT;
-                }
+            pressed = 0;
+            old = now;
+            if (pin_left == LOW) {
+                return IN_LEFT;
             }
-
-            // CFG was ON
-            else
-            {
-                int old = cfg;
-                cfg = CFG_OFF;             // leave CFG mode
-                //delay(500);
-                if        (old==CFG_GO      && pin_left==HIGH && pin_right==HIGH) {
-                    return IN_GO;
-                } else if (old==CFG_FALL    && pin_left==HIGH && pin_right==HIGH) {
-                    return IN_FALL;
-                } else if (old==CFG_TIMEOUT && pin_left==LOW  && pin_right==LOW) {
-                    return IN_TIMEOUT;
-                } else if (old==CFG_ALL     && pin_left==HIGH && pin_right==HIGH) {
-                    return IN_ALL;
-                }
+            if (pin_right == LOW) {
+                return IN_RIGHT;
             }
         }
 
         // CFG PRESSED
         else
         {
-            u32 now = millis();
-            if (cfg == CFG_OFF) {          // enter CFG mode
-                cfg = CFG_GO;
-                old = millis();
+            if (!pressed) {
                 tone(PIN_TONE, NOTE_C2, 50);
-            } else if (cfg==CFG_GO && now-old>=2000) {
-                cfg = CFG_FALL;
-                tone(PIN_TONE, NOTE_C3, 50);
-            } else if (cfg==CFG_FALL && now-old>=5000) {
-                cfg = CFG_TIMEOUT;
-                tone(PIN_TONE, NOTE_C4, 50);
-            } else if (cfg==CFG_TIMEOUT && now-old>=15000) {
-                cfg = CFG_ALL;
-                tone(PIN_TONE, NOTE_C5, 50);
+                pressed = 1;
+            }
+
+            // fall
+            if        (now-old>=2000 && pin_left==HIGH && pin_right==HIGH) {
+                old = now;
+                return IN_GO_FALL;
+            } else if (now-old>=5000 && pin_left==LOW  && pin_right==HIGH) {
+                old = now;
+                return IN_TIMEOUT;
+            } else if (now-old>=5000 && pin_left==HIGH  && pin_right==LOW) {
+                old = now;
+                return IN_RESTART;
+            } else if (now-old>=5000 && pin_left==LOW  && pin_right==LOW) {
+                old = now;
+                return IN_RESET;
             }
         }
     }
@@ -298,6 +277,8 @@ void loop (void)
     Serial.println(F("= INICIO ="));
     STATE = STATE_IDLE;
     PT_All();
+    TV_All("GO!", 0, 0, 0);
+    Serial_Score();
     u32 al_nxt = alarm();
 
     while (1)
@@ -311,12 +292,16 @@ void loop (void)
         int got;
         while (1) {
             got = Await_Input(true);
-            if (got == IN_ALL) {
+            if (got == IN_RESET) {
                 EEPROM_Default();
                 goto _RESTART;
+            } else if (got == IN_RESTART) {
+                goto _RESTART;
+/* No TIMEOUT outside playing: prevents falls miscount.
             } else if (got == IN_TIMEOUT) {
                 goto _TIMEOUT;
-            } else if (got == IN_GO) {
+*/
+            } else if (got == IN_GO_FALL) {
                 break;
             }
         }
@@ -327,8 +312,17 @@ void loop (void)
 // SERVICE
         while (1) {
             got = Await_Input(true);
-            if (got == IN_TIMEOUT) {
+            if (got == IN_RESET) {
+                EEPROM_Default();
+                goto _RESTART;
+            } else if (got == IN_RESTART) {
+                goto _RESTART;
+/* No TIMEOUT outside playing: prevents falls miscount.
+            } else if (got == IN_TIMEOUT) {
                 goto _TIMEOUT;
+*/
+            } else if (got == IN_GO_FALL) {
+                goto _FALL;
             } else if (got==IN_LEFT || got==IN_RIGHT) {
                 break;
             }
@@ -364,10 +358,15 @@ void loop (void)
             u32 t1;
             int dt;
             while (1) {
-                got = Await_Input(false);
-                if (got == IN_TIMEOUT) {
+                got = Await_Input(true);
+                if (got == IN_RESET) {
+                    EEPROM_Default();
+                    goto _RESTART;
+                } else if (got == IN_RESTART) {
+                    goto _RESTART;
+                } else if (got == IN_TIMEOUT) {
                     goto _TIMEOUT;
-                } else if (got == IN_FALL) {
+                } else if (got == IN_GO_FALL) {
                     goto _FALL;
                 } else if (got==IN_LEFT || got==IN_RIGHT) {
                     t1 = millis();
@@ -492,7 +491,7 @@ _FALL:
 
 _TIMEOUT:
     STATE = STATE_TIMEOUT;
-    tone(PIN_TONE, 200, NOTE_C5);
+    tone(PIN_TONE, NOTE_C2, 2000);
     PT_All();
     TV_All("FIM", 0, 0, 0);
     Serial.println(F("= FIM ="));
@@ -501,13 +500,16 @@ _TIMEOUT:
 
     while (1) {
         int got = Await_Input(true);
-        if (got == IN_FALL) {
-            break;
+        if (got == IN_RESET) {
+            EEPROM_Default();
+            goto _RESTART;
+        } else if (got == IN_RESTART) {
+            goto _RESTART;
         }
     }
 
 _RESTART:
-    tone(PIN_TONE, 200, NOTE_C6);
+    tone(PIN_TONE, NOTE_C5, 2000);
     S.hit = 0;
     EEPROM_Save();
 }
