@@ -26,13 +26,13 @@ Existem quatro quesitos que afetam a pontuação do jogo:
 - Volume:
     - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
       dividida por 100 e somada ao total do atleta.
-        - Ex., uma bola a 50km/h vale **25 pontos**:
+        - Ex., uma bola a 50 kmh vale **25 pontos**:
           `50x50=2500 => 2500/100=25`.
 - Potência:
     - Cada um dos 10 golpes mais velozes de direita e de esquerda de cada
       atleta são elevados ao quadrado (e divididos por 100), multiplicados por
       4 e somados ao total do atleta.
-        - Ex., se um dos 10 melhores golpes de esquerda do atleta foi a 50km/h,
+        - Ex., se um dos 10 melhores golpes de esquerda do atleta foi a 50 kmh,
           ele vai somar mais **100 pontos** por aquele golpe (`25x4=100`).
 - Equilíbrio:
     - A menor pontuação dentre os dois atletas será considerada como a
@@ -62,13 +62,13 @@ Fluxo do jogo:
 - Após o saque, o juiz pressiona o botão correspondente a cada atleta toda vez
   que ele acerta a bola. O tempo só passa quando há pressionamento do botão.
 - Um som identifica a faixa de velocidade do golpe anterior:
-    - ` < 40km/h`: som simples grave
-    - ` < 50km/h`: som simples médio
-    - ` < 60km/h`: som simples agudo
-    - ` < 70km/h`: som duplo   grave
-    - ` < 80km/h`: som duplo   médio
-    - ` < 90km/h`: som duplo   agudo
-    - `>= 90km/h`: som simples muito agudo
+    - ` < 40 kmh`: som simples grave
+    - ` < 50 kmh`: som simples médio
+    - ` < 60 kmh`: som simples agudo
+    - ` < 70 kmh`: som duplo   grave
+    - ` < 80 kmh`: som duplo   médio
+    - ` < 90 kmh`: som duplo   agudo
+    - `>= 90 kmh`: som simples muito agudo
 - Golpes do lado não preferencial do atleta acompanham um som grave após o som
   correspondente à velocidade.
 - Quando o jogo está desequilibrado, os ataques do atleta que mais pontuou são
@@ -93,22 +93,22 @@ Fluxo do jogo:
           consecutivos para calcular a velocidade.
         - Exemplo: se os atletas estão a 8 metros de distância e em um momento
           a bola leva 1 segundo para se deslocar entre os dois, então a
-          velocidade foi de 8m/s (29km/h).
+          velocidade foi de 8m/s (29 kmh).
 
 - Quais as desvantagens em relação ao radar?
     - A principal desvantagem é que a medição não é 100% precisa pois os
       atletas se movimentam e o juiz inevitavelmente irá atrasar ou adiantar as
       medições.
     - OBS:
-      O radar também não é perfeito (erro de +1/-2 km/h) e qualquer angulação
+      O radar também não é perfeito (erro de +1/-2 kmh) e qualquer angulação
       entre a trajetória da bola e a posição do radar afeta negativamente as
       medições (ex., um ângulo de 25 graus diminui as medições em 10%).
-      (Fonte: <https://www.stalkerradar.com/stalker-speed-sensor/faq/stalker-speed-sensor-FAQ.shtml>)
+        - Fonte: <https://www.stalkerradar.com/stalker-speed-sensor/faq/stalker-speed-sensor-FAQ.shtml>
 
 - Por quê as velocidades são elevadas ao quadrado?
     - Para bonificar os golpes mais potentes.
       Quanto maior a velocidade, maior ainda será o quadrado dela.
-      Uma bola a 50km/h vale `50x50=2500`, uma a 70km/h vale `70x70=4900`,
+      Uma bola a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
       praticamente o dobro (25 vs 49 pontos após a divisão por 100).
 
 - Tem como o juiz "roubar"?
@@ -126,8 +126,8 @@ Fluxo do jogo:
 - Tem alguma vantagem em relação ao radar?
     - **Custo**:
         Os componentes do aparelho somados custam menos de R$100.
-        O radar custa em torno de US$1000 (nos EUA) e não inclui o software
-        para frescobol.
+        O radar custa em torno de US$1000 e não inclui o software para
+        frescobol.
     - **Licença de uso**:
         Além do custo ser menor, não há nenhuma restrição legal sobre o uso
         do aparelho, software ou regra.
@@ -136,13 +136,13 @@ Fluxo do jogo:
         gratuito (para obter as informações do jogo) e uma caixa de som
         potente (de preferência com bateria interna).
         Não é necessário computador, ponto de luz elétrica, área protegida ou
-        outros ajustes finos para medição do jogo.
+        outros ajustes finos para a medição do jogo.
     - **Transparência das medições**:
         Apesar de serem menos precisas, as medições são transparentes e
         qualquer erro pode ser notado imediatamente.
         Todos os golpes acompanham um feedback sonoro imediato, mesmo as bolas
-        abaixo de 40km/h.
-        O radar só mede bolas acima de 40km/h e não é possível identificar se
+        abaixo de 40 kmh.
+        O radar só mede bolas acima de 40 kmh e não é possível identificar se
         as medições estão sempre corretas (o posicionamento dos atletas, vento
         e outros fatores externos podem afetar as medições).
     - **Verificabilidade das medições**:
