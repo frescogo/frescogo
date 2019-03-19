@@ -4,15 +4,14 @@
 
 *FrescoGO!* é um marcador eletrônico semi-automático para jogos de Frescobol.
 
-O aparelho marcador contém dois botões de marcação, um para o atleta à esquerda
+O aparelho marcador contém dois botões de marcação: um para o atleta à esquerda
 (em vermelho) e um para o atleta à direita (em branco).
 A marcação é feita por um juiz, que pressiona o botão correspondente ao atleta
 toda vez que ele acerta a bola.
 Golpes de esquerda e direita são distinguidos pelo tempo de pressionamento do
 botão.
 Com base em uma distância previamente estabelecida e o tempo decorrido entre
-dois toques, o aparelho calcula a velocidade atingida pela bola em cada
-momento.
+dois toques, o aparelho calcula a velocidade atingida pela bola a cada momento.
 O botão preto sinaliza início de sequência, queda de bola, fim de jogo, etc.
 
 ![Foto do marcador](device-small.jpg "Foto do Aparelho")
