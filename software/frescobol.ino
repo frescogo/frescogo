@@ -1,3 +1,4 @@
+#define VERSION 1
 //#define DEBUG
 //#define TV_ON
 
@@ -274,7 +275,9 @@ u32 alarm (void) {
 void loop (void)
 {
 // RESTART
-    Serial.println(F("= INICIO ="));
+    Serial.print(F("= FrescoGO! (versao "));
+    Serial.print(VERSION);
+    Serial.println(F(") ="));
     STATE = STATE_IDLE;
     PT_All();
     TV_All("GO!", 0, 0, 0);
