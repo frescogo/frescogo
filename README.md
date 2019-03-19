@@ -53,7 +53,7 @@ Existem quatro quesitos que constituem a pontuação do jogo:
 - **Continuidade:**
     - Cada queda subtrai 4% da pontuação final da dupla.
       Exemplos:
-        - Com 25 quedas a dupla perderá todos os pontos (`25x4% = 100%`).
+        - Com 25 quedas, a dupla perderá todos os pontos (`25x4% = 100%`).
         - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
           será de **3520 pontos** (`4400x80%`).
 
