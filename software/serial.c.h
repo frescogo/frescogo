@@ -157,22 +157,33 @@ void Serial_Log (void) {
 
     Serial.println(F("--------------------------------"));
     Serial.println();
-    sprintf_P(STR, PSTR("%10s: %5ld + %5ld +%5ld = %5ld"),
+    Serial.println(F("    Atleta    Vol     Esq     Dir   Total"));
+    sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld"),
         S.names[0], ps[0]/100, bests[0][0]/100, bests[0][1]/100, p0/100);
     Serial.println(STR);
-    sprintf_P(STR, PSTR("%10s: %5ld + %5ld +%5ld = %5ld"),
+    sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld"),
         S.names[1], ps[1]/100, bests[1][0]/100, bests[1][1]/100, p1/100);
     Serial.println(STR);
+    Serial.println();
 
     u32 avg   = (p0 + p1) / 2;
     u32 total = min(avg, min(p0,p1)*11/10);
+/*
     sprintf_P(STR, PSTR("MED: %ld | MIN+10%%: %ld | MIN: %ld"),
                     (p0 + p1) / 2 / 100,
                      min(p0,p1)*11 / 1000,
                      total / 100);
     Serial.println(STR);
+*/
     int pct = 100 - min(100, Falls() * (S.timeout>180000 ? 3 : 4));
-    sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
+    //sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
+    sprintf_P(STR, PSTR("Média:      %5ld"), avg/100);
+    Serial.println(STR);
+    sprintf_P(STR, PSTR("Equilibrio: %5ld (-)"), (avg/100)-(total/100));
+    Serial.println(STR);
+    sprintf_P(STR, PSTR("Quedas:     %5ld (-)"), total/100-total*pct/10000);
+    Serial.println(STR);
+    sprintf_P(STR, PSTR("FINAL:      %5ld"), total*pct/10000);
     Serial.println(STR);
 }
 
