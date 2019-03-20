@@ -109,7 +109,7 @@ Fluxo do jogo:
       se movimentam e o juiz inevitavelmente irá atrasar ou adiantar as
       medições.
     - OBS:
-      O radar também não é perfeito, com erro estimado de +1/-2 kmh.
+      O radar também não é perfeito, tendo erro estimado entre +1/-2 kmh.
       Além disso, qualquer angulação entre a trajetória da bola e a posição do
       radar afeta negativamente as medições (ex., um ângulo de 25 graus diminui
       as medições em 10%).
@@ -127,7 +127,7 @@ Fluxo do jogo:
       O golpe "A" terá a velocidade reduzida e o golpe "B" terá a velocidade
       aumentada.
       Como a regra usa o quadrado das velocidades, esse atraso e adiantamento
-      (se for sistemático) podem afetar a pontuação final.
+      (se forem sistemáticos) podem afetar a pontuação final.
 
 - Tem como o atleta "roubar" ou "tirar vantagem" da regra?
     - O atleta pode projetar o corpo para frente e adiantar ao máximo os golpes
