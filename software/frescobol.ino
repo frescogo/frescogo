@@ -44,9 +44,9 @@ static pollserial pserial;
 
 #endif
 
-#define PIN_LEFT  3
-#define PIN_RIGHT 4
-#define PIN_CFG   2
+#define PIN_LEFT  4
+#define PIN_RIGHT 2
+#define PIN_CFG   3
 
 #ifdef ARDUINO_AVR_NANO
 #define PIN_TONE 11
@@ -78,8 +78,8 @@ static char STR[64];
 
 typedef struct {
     char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" };
-    u32  timeout;               // = 300 * ((u32)1000);
-    int  distance;              // = 800;
+    u32  timeout;               // = 180 * ((u32)1000);
+    int  distance;              // = 700;
 
     u16  hit;
     s8   dts[HITS_MAX];         // cs (ms*10)
@@ -237,7 +237,7 @@ void EEPROM_Save (void) {
 void EEPROM_Default (void) {
     strcpy(S.names[0], "Atleta ESQ");
     strcpy(S.names[1], "Atleta DIR");
-    S.distance = 800;
+    S.distance = 750;
     S.timeout  = 180 * ((u32)1000);
 }
 
