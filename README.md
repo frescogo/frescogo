@@ -5,25 +5,26 @@
 *FrescoGO!* é um marcador eletrônico semi-automático para jogos de Frescobol.
 
 O aparelho marcador contém dois botões de marcação: um para o atleta à esquerda
-(em vermelho) e um para o atleta à direita (em branco).
+e um para o atleta à direita.
 A marcação é feita por um juiz, que pressiona o botão correspondente ao atleta
 toda vez que ele acerta a bola.
 Golpes de esquerda e direita são distinguidos pelo tempo de pressionamento do
 botão.
 Com base em uma distância previamente estabelecida e o tempo decorrido entre
 dois golpes, o aparelho calcula a velocidade atingida pela bola a cada momento.
-O botão preto sinaliza início de sequência, queda de bola, fim de jogo, etc.
+O botão do meio sinaliza início de sequência, queda de bola, fim de jogo, etc.
+Há uma entrada USB para alimentação e um saída para som.
 
-![Foto do marcador](device-small.jpg "Foto do Aparelho")
-
-**O projeto eletrônico, o software e a regra são de domínio público, podendo
-ser usados, copiados e modificados livremente.**
+![Foto do marcador](device.jpg "Foto do Aparelho")
 
 - Links do projeto:
     - Site: <https://github.com/frescogo/frescogo>
     - E-mail: <go.frescobol@gmail.com>
 
-## Pontuação
+**O projeto eletrônico, o software e a regra são de domínio público, podendo
+ser usados, copiados e modificados livremente.**
+
+## Regra de Pontuação
 
 Existem quatro quesitos que constituem a pontuação do jogo:
 
@@ -57,7 +58,7 @@ Existem quatro quesitos que constituem a pontuação do jogo:
         - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
           será de **3520 pontos** (`4400x80%`).
 
-## Funcionamento
+## Fluxo do Jogo
 
 Configuração sugerida:
 
@@ -90,6 +91,18 @@ Fluxo do jogo:
 - Um som agudo é emitido quando faltam 90s, 60s, 30s, 10s, e 5s para o jogo
   terminar.
 - Ao fim do jogo é gerado um relatório com todas as medições de golpes.
+
+<!--
+## Instruções de Uso
+
+- Ligação dos Cabos
+
+- Aplicativo Android
+    - Configuração
+    - Visualização
+
+- Contagem do Jogo
+-->
 
 ## Perguntas e Respostas
 
