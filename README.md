@@ -92,17 +92,39 @@ Fluxo do jogo:
   terminar.
 - Ao fim do jogo é gerado um relatório com todas as medições de golpes.
 
-<!--
-## Instruções de Uso
+## Instruções para o Juiz
 
 - Ligação dos Cabos
+    - TODO
 
 - Aplicativo Android
     - Configuração
+        - TODO
     - Visualização
+        - TODO
 
-- Contagem do Jogo
--->
+- Aparelho marcador:
+    - Novo jogo:
+        - Pressione o botão do meio e em seguida o da direita por 5 segundos.
+        - Resposta: um som médio de dois segundos.
+    - Início de sequência:
+        - Pressione o botão do meio por um segundo, até escutar um som.
+        - Resposta: um som agudo de meio segundo.
+    - Golpes dos atletas:
+        - Pressione o botão da esquerda ou direita quando, respectivamente, o
+          atleta à esquerda ou à direita golpearem a bola.
+        - Resposta: depende da velocidade (ver a seção "Fluxo do Jogo").
+    - Queda de bola:
+        - Pressione o botão do meio por um segundo, até escutar um som.
+        - Resposta: três sons cada vez mais graves por meio segundo.
+    - Fim do jogo:
+        - Automático quando o tempo do cronômetro expirar.
+        - Resposta: um som grave por dois segundos.
+    - Reconfiguração de fábrica:
+        - Pressione o botão do meio e em seguida os da esquerda e direita por
+          5 segundos.
+        - Resposta: um som médio de dois segundos.
+        - **Em princípio, esse procedimento nunca deverá ser necessário.**
 
 ## Perguntas e Respostas
 
