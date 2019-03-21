@@ -101,11 +101,15 @@ Quesitos de pontuação:
 - Ligação dos Cabos
     - TODO
 
+![Ligação dos Cabos](all.jpg "Ligação dos Cabos")
+
 - Aplicativo Android
     - Configuração
         - TODO
     - Visualização
         - TODO
+
+![Android App](app.jpg "Android App")
 
 - Aparelho marcador:
     - Novo jogo:
@@ -197,6 +201,3 @@ Quesitos de pontuação:
         Os atletas podem verificar se a pontuação final foi justa.
         Os jogos podem ser medidos por um aparelho igual durante as
         apresentaçõs ou podem ser gravados para medição posterior pelo vídeo.
-
-![Android App](app.jpg "Android App")
-![Ligação dos Cabos](all.jpg "Ligação dos Cabos")
