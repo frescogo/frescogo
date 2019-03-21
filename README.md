@@ -131,6 +131,8 @@ Quesitos de pontuação:
         - Resposta: um som médio de dois segundos.
         - **Em princípio, esse procedimento nunca deverá ser necessário.**
 
+![Ligação dos Cabos](all.jpg "Ligação dos Cabos")
+
 ## Perguntas e Respostas
 
 - Esse aparelho é um radar? Como o aparelho mede a velocidade da bola?
