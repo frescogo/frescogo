@@ -139,21 +139,21 @@ void Sound (s8 kmh) {
     } else if (kmh < 60) {
         tone(PIN_TONE, NOTE_G5, 50);
     } else if (kmh < 70) {
-        tone(PIN_TONE, NOTE_C5, 25);
-        delay(30);
-        tone(PIN_TONE, NOTE_C5, 25);
+        tone(PIN_TONE, NOTE_C5, 20);
+        delay(35);
+        tone(PIN_TONE, NOTE_C5, 20);
     } else if (kmh < 80) {
-        tone(PIN_TONE, NOTE_E5, 25);
-        delay(30);
-        tone(PIN_TONE, NOTE_E5, 25);
+        tone(PIN_TONE, NOTE_E5, 20);
+        delay(35);
+        tone(PIN_TONE, NOTE_E5, 20);
     } else if (kmh < 90) {
-        tone(PIN_TONE, NOTE_G5, 25);
-        delay(30);
-        tone(PIN_TONE, NOTE_G5, 25);
+        tone(PIN_TONE, NOTE_G5, 20);
+        delay(35);
+        tone(PIN_TONE, NOTE_G5, 20);
     } else {
-        tone(PIN_TONE, NOTE_C6, 25);
-        delay(30);
-        tone(PIN_TONE, NOTE_C6, 25);
+        tone(PIN_TONE, NOTE_C6, 20);
+        delay(35);
+        tone(PIN_TONE, NOTE_C6, 20);
     }
 }
 
