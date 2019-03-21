@@ -26,14 +26,23 @@ ser usados, copiados e modificados livremente.**
 
 ## Regra de Pontuação
 
-Existem quatro quesitos que constituem a pontuação do jogo:
+Configuração sugerida:
+
+- Tempo: 180s cronometrados (3 minutos)
+- Distância: 750cm (7.5m)
+
+Quesitos de pontuação:
 
 - **Volume:**
     - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
       dividida por 100 e somada ao total do atleta.
       Exemplos:
+        - 40 kmh vale **16 pontos**: `40x40/100 = 1600/100 = 16`.
         - 50 kmh vale **25 pontos**: `50x50/100 = 2500/100 = 25`.
+        - 60 kmh vale **36 pontos**: `60x60/100 = 3600/100 = 36`.
         - 70 kmh vale **49 pontos**: `70x70/100 = 4900/100 = 49`.
+        - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
+        - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Potência:**
     - Cada um dos 10 golpes mais velozes de direita e de esquerda de cada
       atleta são contabilizados conforme a regra acima e ainda são
@@ -59,13 +68,6 @@ Existem quatro quesitos que constituem a pontuação do jogo:
           será de **3520 pontos** (`4400x80%`).
 
 ## Fluxo do Jogo
-
-Configuração sugerida:
-
-- Tempo: 180s cronometrados (3 minutos)
-- Distância: 750cm (7.5m)
-
-Fluxo do jogo:
 
 - Um som agudo indica que o atleta pode sacar.
 - Após o saque, o juiz pressiona o botão correspondente a cada atleta toda vez
