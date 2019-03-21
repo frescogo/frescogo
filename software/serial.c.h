@@ -209,10 +209,25 @@ int Serial_Check (void) {
 _COMPLETE:
     i = 0;
 
-    if (strncmp_P(CMD, PSTR("reinicio"), 8) == 0) {
+    if (strncmp_P(CMD, PSTR("reiniciar"), 9) == 0) {
         return IN_RESTART;
-    } else if (strncmp_P(CMD, PSTR("fim"), 3) == 0) {
+    } else if (strncmp_P(CMD, PSTR("terminar"), 8) == 0) {
         return IN_TIMEOUT;
+    } else if (strncmp_P(CMD, PSTR("voltar"), 6) == 0) {
+        if (S.hit == 0) {
+            goto ERR;
+        }
+        while (1) {
+            S.hit -= 1;
+            if (S.hit == 0) {
+                break;
+            } else if (S.dts[S.hit] == HIT_SERV) {
+                if (S.dts[S.hit-1] == HIT_NONE) {
+                    S.hit -= 1;
+                }
+                break;
+            }
+        }
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_Score();
         return IN_NONE;
@@ -236,21 +251,7 @@ _COMPLETE:
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(CMD, PSTR("-queda"), 6) == 0) {
-        if (S.hit == 0) {
-            goto ERR;
-        }
-        while (1) {
-            S.hit -= 1;
-            if (S.hit == 0) {
-                break;
-            } else if (S.dts[S.hit] == HIT_SERV) {
-                if (S.dts[S.hit-1] == HIT_NONE) {
-                    S.hit -= 1;
-                }
-                break;
-            }
-        }
+#if 0
     } else if (strncmp_P(CMD, PSTR("+queda"), 6) == 0) {
         if (S.dts[S.hit] == HIT_MARK) {
             goto ERR;
@@ -279,6 +280,7 @@ _COMPLETE:
         } else {
             goto ERR;
         }
+#endif
     } else {
         goto ERR;
     }
