@@ -54,8 +54,10 @@ static pollserial pserial;
 
 static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
+#define FALLS_PCT       4
+
 #define HITS_MAX        700
-#define HITS_BESTS      10
+#define HITS_BESTS      7
 
 #define HIT_BACK_DT     180         // minimum time to hold for back
 #define HIT_MIN_DT      235         // minimum time between two hits (125kmh)

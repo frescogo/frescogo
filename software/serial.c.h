@@ -175,7 +175,7 @@ void Serial_Log (void) {
                      total / 100);
     Serial.println(STR);
 */
-    int pct = 100 - min(100, Falls() * (S.timeout>180000 ? 3 : 4));
+    int pct = 100 - min(100, Falls()*FALLS_PCT);
     //sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
     sprintf_P(STR, PSTR("Média:      %5ld"), avg/100);
     Serial.println(STR);

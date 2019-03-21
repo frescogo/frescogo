@@ -44,13 +44,15 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Potência:**
-    - Cada um dos 10 golpes mais velozes de direita e de esquerda de cada
+    - Cada um dos 7 golpes mais velozes de direita e de esquerda de cada
       atleta são contabilizados conforme a regra acima e ainda são
       multiplicados por 4 antes de serem somados ao total do atleta.
       Exemplo:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
           mais **100 pontos** por aquele golpe (`25x4=100`), além dos 25 pontos
           já somados no quesito de volume.
+    - OBS: 7 golpes correspondem a aproximadamente 10% dos golpes em posição de
+      ataque.
 - **Equilíbrio:**
     - A menor pontuação dentre os dois atletas será considerada como a
       pontuação da dupla. Mais precisamente, será o menor valor entre a média
@@ -173,7 +175,7 @@ Quesitos de pontuação:
 
 - Tem alguma vantagem em relação ao radar?
     - **Custo**:
-        Os componentes do aparelho somados custam menos de R$100.
+        Os componentes do aparelho somados custam menos de R$50.
         O radar custa em torno de US$1000 e não inclui o software para
         frescobol.
     - **Licença de uso**:
