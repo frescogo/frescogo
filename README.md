@@ -2,7 +2,8 @@
 
 # FrescoGO!
 
-*FrescoGO!* é um marcador eletrônico semi-automático para jogos de Frescobol.
+*FrescoGO!* é um marcador eletrônico semi-automático para apresentações de
+Frescobol.
 
 O aparelho marcador contém dois botões de marcação: um para o atleta à esquerda
 e um para o atleta à direita.
@@ -12,7 +13,8 @@ Golpes de esquerda e direita são distinguidos pelo tempo de pressionamento do
 botão.
 Com base em uma distância previamente estabelecida e o tempo decorrido entre
 dois golpes, o aparelho calcula a velocidade atingida pela bola a cada momento.
-O botão do meio sinaliza início de sequência, queda de bola, fim de jogo, etc.
+O botão do meio sinaliza início de sequência, queda de bola, fim de
+apresentação, etc.
 Há uma entrada USB para alimentação e um saída para som.
 
 ![Foto do marcador](device.jpg "Foto do Aparelho")
@@ -23,6 +25,8 @@ Há uma entrada USB para alimentação e um saída para som.
 
 **O projeto eletrônico, o software e a regra são de domínio público, podendo
 ser usados, copiados e modificados livremente.**
+
+-------------------------------------------------------------------------------
 
 ## Regra de Pontuação
 
@@ -69,7 +73,9 @@ Quesitos de pontuação:
         - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
           será de **3520 pontos** (`4400x80%`).
 
-## Fluxo do Jogo
+-------------------------------------------------------------------------------
+
+## Fluxo da Apresentação
 
 - Um som agudo indica que o atleta pode sacar.
 - Após o saque, o juiz pressiona o botão correspondente a cada atleta toda vez
@@ -81,59 +87,110 @@ Quesitos de pontuação:
     - ` < 70 kmh`: som duplo   grave
     - ` < 80 kmh`: som duplo   médio
     - ` < 90 kmh`: som duplo   agudo
-    - `>= 90 kmh`: som simples muito agudo
+    - `>= 90 kmh`: som duplo   muito agudo
 - Um golpe do lado não preferencial do atleta acompanha um som grave (após o
   som correspondente à velocidade).
-- Quando o jogo está desequilibrado, os ataques do atleta que mais pontuou
-  acompanham um som grave.
+- Quando a apresentação está desequilibrada, os ataques do atleta que mais
+  pontuou acompanham um som grave.
 - Quando a bola cai, o juiz pressiona o botão de queda que emite um som
   característico.
 - Os dois últimos golpes são ignorados e o tempo volta ao momento do último
   golpe considerado (i.e., um ataque tem que ser defendido e depois confirmado
   pelo próprio atacante).
 - O juiz então pressiona o botão de reinício e o fluxo reinicia.
-- Um som agudo é emitido quando faltam 90s, 60s, 30s, 10s, e 5s para o jogo
-  terminar.
-- Ao fim do jogo é gerado um relatório com todas as medições de golpes.
+- Um som agudo é emitido quando faltam 90s, 60s, 30s, 10s, e 5s para a
+  apresentação terminar.
+- Ao fim da apresentação, é gerado um relatório com todas as medições de
+  golpes.
+
+-------------------------------------------------------------------------------
 
 ## Instruções para o Juiz
 
-- Ligação dos Cabos
-    - TODO
+### Ligação dos Cabos
+
+- Celular (micro USB) -> Aparelho (mini USB)
+    - É necessário um adaptador micro USB para USB
+- Aparelho (PS2/AUX) -> Som (PS2/AUX)
 
 ![Ligação dos Cabos](all.jpg "Ligação dos Cabos")
 
-- Aplicativo Android
-    - Configuração
-        - TODO
-    - Visualização
-        - TODO
+### Aplicativo Android
+
+- Instalação (apenas uma vez):
+    - Instalar o app "Serial USB Terminal" (by Kai Morich).
+- Configuração (apenas uma vez):
+    - Tocar nas três barras paralelas no canto superior esquerdo e selecionar
+      "Settings".
+    - Trocar "Baud rate" para `9600`.
+    - Desabilitar "Show timestamps".
+    - Trocar "Buffer size" para `50 kB`.
+    - Habilitar "Keep screen on when connected".
+- Conexão (sempre que abrir o aplicativo):
+    - Conectar o aparelho ao celular via cabo USB.
+    - Tocar no ícone com dois cabos desconectados no centro superior direito da
+      tela.
+        - O ícone deve mudar para um com cabos conectados.
+        - A área central do app deve exibir "Connected to...".
+    - O placar da última apresentação deve ser exibido no centro da tela.
+    - A cada queda e reinício, é exibido o placar da apresentação em andamento.
+- Comandos (durante as apresentações):
+    - Digitar o comando completo na área de texto na base inferior e em seguida
+      tocar no ícone com uma seta no canto inferior direito.
+    - Exibição:
+        - `placar`
+            - exibe o placar da apresentação
+        - `relatorio`
+            - exibe o relatório completo da apresentação
+    - Ação:
+        - `reiniciar`
+            - reinicia a apresentação imediatamente
+        - `terminar`
+            - termina a apresentação imediatamente
+        - `voltar`
+            - desconsidera por inteiro a sequência anterior
+    - Configuração:
+        - `tempo SEGS`
+            - altera o tempo total das apresentações para `SEGS`, que deve ser
+              um número em segundos
+        - `distancia CMS`
+            - altera a distância das apresentações para `CMS`, que deve ser um
+              número em centímetros
+        - `esquerda NOME`
+            - altera o nome do atleta à esquerda para `NOME`, que deve ter até
+              15 caracteres
+        - `direita NOME`
+            - altera o nome do atleta à direita para `NOME`, que deve ter até
+              15 caracteres
 
 ![Android App](app.jpg "Android App")
 
-- Aparelho marcador:
-    - Novo jogo:
-        - Pressione o botão do meio e em seguida o da direita por 5 segundos.
-        - Resposta: um som médio de dois segundos.
-    - Início de sequência:
-        - Pressione o botão do meio por um segundo, até escutar um som.
-        - Resposta: um som agudo de meio segundo.
-    - Golpes dos atletas:
-        - Pressione o botão da esquerda ou direita quando, respectivamente, o
-          atleta à esquerda ou à direita golpearem a bola. Se o golpe for um
-          backhand, o pressionamento deve ser um pouco mais demorado.
-        - Resposta: depende da velocidade (ver a seção "Fluxo do Jogo").
-    - Queda de bola:
-        - Pressione o botão do meio por um segundo, até escutar um som.
-        - Resposta: três sons cada vez mais graves por meio segundo.
-    - Fim do jogo:
-        - Automático, quando o tempo do cronômetro expirar.
-        - Resposta: um som grave por dois segundos.
-    - Reconfiguração de fábrica:
-        - Pressione o botão do meio e em seguida os da esquerda e direita por
-          5 segundos.
-        - Resposta: um som médio de dois segundos.
-        - **Em princípio, esse procedimento nunca deverá ser necessário.**
+### Aparelho marcador:
+
+- Nova apresentação:
+    - Pressione o botão do meio e em seguida o da direita por 5 segundos.
+    - Resposta: um som médio de dois segundos.
+- Início de sequência:
+    - Pressione o botão do meio por um segundo, até escutar um som.
+    - Resposta: um som agudo de meio segundo.
+- Golpes dos atletas:
+    - Pressione o botão da esquerda ou direita quando, respectivamente, o
+      atleta à esquerda ou à direita golpearem a bola. Se o golpe for um
+      backhand, o pressionamento deve ser um pouco mais demorado.
+    - Resposta: depende da velocidade (ver a seção "Fluxo da Apresentação").
+- Queda de bola:
+    - Pressione o botão do meio por um segundo, até escutar um som.
+    - Resposta: três sons cada vez mais graves por meio segundo.
+- Fim da apresentação:
+    - Automático, quando o tempo do cronômetro expirar.
+    - Resposta: um som grave por dois segundos.
+- Reconfiguração de fábrica:
+    - Pressione o botão do meio e em seguida os da esquerda e direita por
+      5 segundos.
+    - Resposta: um som médio de dois segundos.
+    - **Em princípio, esse procedimento nunca deverá ser necessário.**
+
+-------------------------------------------------------------------------------
 
 ## Perguntas e Respostas
 
@@ -187,10 +244,10 @@ Quesitos de pontuação:
         do aparelho, software ou regra.
     - **Infraestrutura**:
         Além do aparelho, é necessário apenas um celular com um software
-        gratuito (para obter as informações do jogo) e uma caixa de som
+        gratuito (para obter as informações da apresentação) e uma caixa de som
         potente (de preferência com bateria interna).
         Não é necessário computador, ponto de luz elétrica, área protegida ou
-        outros ajustes finos para a medição do jogo.
+        outros ajustes finos para a medição da apresentação.
     - **Transparência das medições**:
         Apesar de serem menos precisas, as medições são audíveis e qualquer
         erro grosseiro pode ser notado imediatamente.
@@ -199,5 +256,5 @@ Quesitos de pontuação:
         e outros fatores externos podem afetar as medições).
     - **Verificabilidade das medições**:
         Os atletas podem verificar se a pontuação final foi justa.
-        Os jogos podem ser medidos por um aparelho igual durante as
+        As apresentações podem ser medidas por um aparelho igual durante as
         apresentaçõs ou podem ser gravados para medição posterior pelo vídeo.
