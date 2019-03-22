@@ -61,9 +61,11 @@ Quesitos de pontuação:
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
 - **Equilíbrio:**
-    - A menor pontuação dentre os dois atletas será considerada como a
-      pontuação da dupla. Mais precisamente, será o menor valor entre a média
-      dos dois e 110% do que pontuou menos:
+    - A pontuação da dupla será a média de pontos entre os dois atletas.
+    - Se o atleta que pontou menos estiver abaixo de 90% dessa média, então a
+      pontuação da dupla será o menor valor.
+    - Mais precisamente, a pontuação será o menor valor entre a média dos dois
+      e 110% do que pontuou menos:
         - `MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
         - Ex., se os atletas pontuaram 4000 e 5000 pontos, pega-se a média
           (`(5000+4000)/2 = 4500`) e 110% do menor (`4000x110% = 4400`).
@@ -75,7 +77,7 @@ Quesitos de pontuação:
         - Com 25 quedas, a dupla perderá todos os pontos (`25x4% = 100%`).
         - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
           será de **3520 pontos** (`4400x80%`).
-    - O jogo é encerrado sumariamente na 25a queda.
+    - A apresentação é encerrado sumariamente na 25a queda.
 
 -------------------------------------------------------------------------------
 
@@ -103,12 +105,75 @@ Quesitos de pontuação:
   golpe considerado (i.e., um ataque tem que ser defendido e depois confirmado
   pelo próprio atacante).
 - O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
-- Um som agudo é emitido quando faltam 90s, 60s, 30s, 10s, e 5s para a
-  apresentação terminar.
+- Um som agudo é emitido a cada 1 minuto e também quando faltam 30, 10, e 5
+  segundos para a apresentação terminar.
 - A apresentação termina após 3 minutos cronometrados ou após a 25a queda.
   Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
   golpes.
+
+### Formatação do Resultado
+
+A seguir são explicados os formatos de exibição do resultado da apresentação.
+
+- Placar (a cada sequência)
+
+```
+--------------------------------
+      João / Maria                  <-- nome dos atletas
+    (750cm - 180s)                  <-- distância e tempo de apresentação
+--------------------------------
+
+     TOTAL: 904                     <-- total de pontos
+     Tempo: 13290ms (-166s)         <-- tempo passado e restante
+    Quedas: 1                       <-- número de quedas
+    Golpes: 19                      <-- quantidade de golpes
+     Ritmo: 45                      <-- ritmo em km/h
+
+João: 1284                          <-- total do atleta à esquerda
+ [  29  29  27  21   0   0   0 ]    <-- 7 golpes de esquerda mais fortes
+ [  77  75  75  61  44   0   0 ]    <-- 7 golpes de direita  mais fortes
+
+Maria: 856                          <-- total do atleta à direita
+ [   0   0   0   0   0   0   0 ]    <-- 7 golpes de esquerda mais fortes
+ [  67  55  54  49  38  34  33 ]    <-- 7 golpes de direita  mais fortes
+```
+
+- Relatório (ao final da apresentação)
+
+```
+-- Sequencia  1 ----------------    <-- Início da primeira sequência.
+            ****                    <-- Maria efetuou o primeiro golpe.
+     800            (33 / 1089)     <-- João golpeou 800ms depois.
+             440    (61 / 3721)         A velocidade atingida foi de 33 kmh,
+     820            (32 / 1024)         somando 1089 pontos para Maria
+             350    (77 / 5929)         (10 pontos após a divisão por 100).
+     790            (34 / 1156)
+     ...
+             930 !  (29 /  841)     <-- João golpeou de esquerda (!).
+     550            (49 / 2401)     <-- Maria golpeou 550ms depois.
+             610    (44 / 1936)         A velocidade atingida foi de 44 kmh,
+     820            (32 / 1024)         somando 1936 pontos para João
+             360    (75 / 5625)         (19 pontos após a divisão por 100).
+     700            (38 / 1444)
+             370
+   -----   -----                    <-- Queda.
+     256     195                    <-- Soma acumulada por João e por Maria
+                                        (após a divisão por 100).
+-- Sequencia  XX ---------------    <-- Outras sequências...
+...
+
+--------------------------------    <-- Fim da apresentação.
+
+    Atleta    Vol     Esq     Dir   Total   <-- Volume e Potência (esq/dir)
+      João:  5452 +   763 +  1723 =  7939   <-- Pontuação de João
+     Maria:  6020 +   760 +  1943 =  8724   <-- Pontuação de Maria
+
+Média:       8332                           <-- Média entre os dois
+Equilibrio:     0 (-)                       <-- Desconto de equilíbrio
+Quedas:      1667 (-)                       <-- Desconto de quedas
+FINAL:       6665                           <-- Pontuação final da dupla
+```
 
 -------------------------------------------------------------------------------
 
