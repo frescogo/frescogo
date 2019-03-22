@@ -2,17 +2,20 @@
 
 # FrescoGO!
 
-*FrescoGO!* é um marcador eletrônico semi-automático para apresentações de
+*FrescoGO!* é um marcador eletrônico semi-automático para competições de
 Frescobol.
 
 O aparelho marcador contém dois botões de marcação: um para o atleta à esquerda
 e um para o atleta à direita.
 A marcação é feita por um juiz, que pressiona o botão correspondente ao atleta
 toda vez que ele acerta a bola.
+<!--
 Golpes de esquerda e direita são distinguidos pelo tempo de pressionamento do
 botão.
+-->
 Com base em uma distância previamente estabelecida e o tempo decorrido entre
-dois golpes, o aparelho calcula a velocidade atingida pela bola a cada momento.
+dois golpes consecutivos, o aparelho calcula a velocidade atingida pela bola a
+cada momento.
 O botão do meio sinaliza início de sequência, queda de bola, fim de
 apresentação, etc.
 Há uma entrada USB para alimentação e um saída para som.
@@ -33,7 +36,7 @@ ser usados, copiados e modificados livremente.**
 Configuração sugerida:
 
 - Tempo: 180s cronometrados (3 minutos)
-- Distância: 750cm (7.5m)
+- Distância: 750cm (7.5 metros)
 
 Quesitos de pontuação:
 
@@ -55,8 +58,8 @@ Quesitos de pontuação:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
           mais **100 pontos** por aquele golpe (`25x4=100`), além dos 25 pontos
           já somados no quesito de volume.
-    - OBS: 7 golpes correspondem a aproximadamente 10% dos golpes em posição de
-      ataque.
+    - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
+      aproximadamente 10% dos golpes em posição de ataque.
 - **Equilíbrio:**
     - A menor pontuação dentre os dois atletas será considerada como a
       pontuação da dupla. Mais precisamente, será o menor valor entre a média
@@ -72,14 +75,16 @@ Quesitos de pontuação:
         - Com 25 quedas, a dupla perderá todos os pontos (`25x4% = 100%`).
         - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
           será de **3520 pontos** (`4400x80%`).
+    - O jogo é encerrado sumariamente na 25a queda.
 
 -------------------------------------------------------------------------------
 
 ## Fluxo da Apresentação
 
+- Um som agudo longo indica que a uma nova apresentação irá começar.
 - Um som agudo indica que o atleta pode sacar.
 - Após o saque, o juiz pressiona o botão correspondente a cada atleta toda vez
-  que ele acerta a bola. O tempo só passa quando há pressionamento do botão.
+  que ele acerta a bola. O tempo só passa quando o botão é pressionado.
 - Um som identifica a faixa de velocidade do golpe anterior:
     - ` < 40 kmh`: som simples grave
     - ` < 50 kmh`: som simples médio
@@ -97,9 +102,11 @@ Quesitos de pontuação:
 - Os dois últimos golpes são ignorados e o tempo volta ao momento do último
   golpe considerado (i.e., um ataque tem que ser defendido e depois confirmado
   pelo próprio atacante).
-- O juiz então pressiona o botão de reinício e o fluxo reinicia.
+- O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
 - Um som agudo é emitido quando faltam 90s, 60s, 30s, 10s, e 5s para a
   apresentação terminar.
+- A apresentação termina após 3 minutos cronometrados ou após a 25a queda.
+  Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
   golpes.
 
@@ -131,9 +138,14 @@ Quesitos de pontuação:
     - Tocar no ícone com dois cabos desconectados no centro superior direito da
       tela.
         - O ícone deve mudar para um com cabos conectados.
-        - A área central do app deve exibir "Connected to...".
+        - A área central do app deve exibir "Connected to..." e o placar da
+          última apresentação.
+
+<!--
     - O placar da última apresentação deve ser exibido no centro da tela.
     - A cada queda e reinício, é exibido o placar da apresentação em andamento.
+-->
+
 - Comandos (durante as apresentações):
     - Digitar o comando completo na área de texto na base inferior e em seguida
       tocar no ícone com uma seta no canto inferior direito.
@@ -164,6 +176,7 @@ Quesitos de pontuação:
               15 caracteres
 
 ![Android App](app.jpg "Android App")
+![Conexão USB](connected.jpg "Conexão USB")
 
 ### Aparelho marcador:
 
@@ -176,13 +189,14 @@ Quesitos de pontuação:
 - Golpes dos atletas:
     - Pressione o botão da esquerda ou direita quando, respectivamente, o
       atleta à esquerda ou à direita golpearem a bola. Se o golpe for um
-      backhand, o pressionamento deve ser um pouco mais demorado.
+      backhand (ou o lado não preferencial do atleta), o pressionamento deve
+      ser um pouco mais demorado.
     - Resposta: depende da velocidade (ver a seção "Fluxo da Apresentação").
 - Queda de bola:
     - Pressione o botão do meio por um segundo, até escutar um som.
     - Resposta: três sons cada vez mais graves por meio segundo.
 - Fim da apresentação:
-    - Automático, quando o tempo do cronômetro expirar.
+    - Automático, quando o tempo do cronômetro expirar ou após a 25a queda.
     - Resposta: um som grave por dois segundos.
 - Reconfiguração de fábrica:
     - Pressione o botão do meio e em seguida os da esquerda e direita por
@@ -244,10 +258,12 @@ Quesitos de pontuação:
         do aparelho, software ou regra.
     - **Infraestrutura**:
         Além do aparelho, é necessário apenas um celular com um software
-        gratuito (para obter as informações da apresentação) e uma caixa de som
+        gratuito (para obter o placar das apresentações) e uma caixa de som
         potente (de preferência com bateria interna).
         Não é necessário computador, ponto de luz elétrica, área protegida ou
         outros ajustes finos para a medição da apresentação.
+        Essa simplicidade permite que múltiplas arenas funcionem ao mesmo
+        tempo.
     - **Transparência das medições**:
         Apesar de serem menos precisas, as medições são audíveis e qualquer
         erro grosseiro pode ser notado imediatamente.
