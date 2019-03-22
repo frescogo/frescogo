@@ -494,6 +494,11 @@ _FALL:
         Serial.println(F("QUEDA"));
         Serial_Score();
         EEPROM_Save();
+
+        if (Falls() >= 25) {
+            S.dts[S.hit++] = HIT_SERV;  // simulate timeout after service
+            goto _TIMEOUT;
+        }
     }
 
 _TIMEOUT:
