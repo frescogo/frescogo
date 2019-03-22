@@ -120,59 +120,59 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
 
 ```
 --------------------------------
-      João / Maria                  <-- nome dos atletas
-    (750cm - 180s)                  <-- distância e tempo de apresentação
+      João / Maria                      <-- nome dos atletas
+    (750cm - 180s)                      <-- distância e tempo de apresentação
 --------------------------------
 
-     TOTAL: 904                     <-- total de pontos
-     Tempo: 13290ms (-166s)         <-- tempo passado e restante
-    Quedas: 1                       <-- número de quedas
-    Golpes: 19                      <-- quantidade de golpes
-     Ritmo: 45                      <-- ritmo em km/h
+     TOTAL: 904                         <-- total de pontos
+     Tempo: 13290ms (-166s)             <-- tempo passado e restante
+    Quedas: 1                           <-- número de quedas
+    Golpes: 19                          <-- quantidade de golpes
+     Ritmo: 45                          <-- ritmo em km/h
 
-João: 1284                          <-- total do atleta à esquerda
- [  29  29  27  21   0   0   0 ]    <-- 7 golpes de esquerda mais fortes
- [  77  75  75  61  44   0   0 ]    <-- 7 golpes de direita  mais fortes
+João: 1284                              <-- total do atleta à esquerda
+ [  29  29  27  21   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
+ [  77  75  75  61  44   0   0 ]        <-- 7 golpes de direita  mais fortes
 
-Maria: 856                          <-- total do atleta à direita
- [   0   0   0   0   0   0   0 ]    <-- 7 golpes de esquerda mais fortes
- [  67  55  54  49  38  34  33 ]    <-- 7 golpes de direita  mais fortes
+Maria: 856                              <-- total do atleta à direita
+ [   0   0   0   0   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
+ [  67  55  54  49  38  34  33 ]        <-- 7 golpes de direita  mais fortes
 ```
 
 - Relatório (ao final da apresentação)
 
 ```
--- Sequencia  1 ----------------    <-- Início da primeira sequência.
-            ****                    <-- Maria efetuou o primeiro golpe.
-     800            (33 / 1089)     <-- João golpeou 800ms depois.
-             440    (61 / 3721)         A velocidade atingida foi de 33 kmh,
-     820            (32 / 1024)         somando 1089 pontos para Maria
-             350    (77 / 5929)         (10 pontos após a divisão por 100).
+-- Sequencia  1 ----------------        <-- Início da primeira sequência.
+            ****                        <-- Maria efetuou o primeiro golpe.
+     800            (33 / 1089)         <-- João golpeou 800ms depois.
+             440    (61 / 3721)             A velocidade atingida foi de 33 kmh,
+     820            (32 / 1024)             somando 1089 pontos para Maria
+             350    (77 / 5929)             (10 pontos após a divisão por 100).
      790            (34 / 1156)
      ...
-             930 !  (29 /  841)     <-- João golpeou de esquerda (!).
-     550            (49 / 2401)     <-- Maria golpeou 550ms depois.
-             610    (44 / 1936)         A velocidade atingida foi de 44 kmh,
-     820            (32 / 1024)         somando 1936 pontos para João
-             360    (75 / 5625)         (19 pontos após a divisão por 100).
+             930 !  (29 /  841)         <-- João golpeou de esquerda (!).
+     550            (49 / 2401)         <-- Maria golpeou 550ms depois.
+             610    (44 / 1936)             A velocidade atingida foi de 44 kmh,
+     820            (32 / 1024)             somando 1936 pontos para João
+             360    (75 / 5625)             (19 pontos após a divisão por 100).
      700            (38 / 1444)
              370
-   -----   -----                    <-- Queda.
-     256     195                    <-- Soma acumulada por João e por Maria
-                                        (após a divisão por 100).
--- Sequencia  XX ---------------    <-- Outras sequências...
+   -----   -----                        <-- Queda.
+     256     195                        <-- Soma acumulada por João e por Maria
+                                            (após a divisão por 100).
+-- Sequencia  XX ---------------        <-- Outras sequências...
 ...
 
---------------------------------    <-- Fim da apresentação.
+--------------------------------        <-- Fim da apresentação.
 
-    Atleta    Vol     Esq     Dir   Total   <-- Volume e Potência (esq/dir)
-      João:  5452 +   763 +  1723 =  7939   <-- Pontuação de João
-     Maria:  6020 +   760 +  1943 =  8724   <-- Pontuação de Maria
+Atleta    Vol     Esq     Dir   Total   <-- Volume e Potência (esq/dir)
+  João:  5452 +   763 +  1723 =  7939   <-- Pontuação de João
+ Maria:  6020 +   760 +  1943 =  8724   <-- Pontuação de Maria
 
-Média:       8332                           <-- Média entre os dois
-Equilibrio:     0 (-)                       <-- Desconto de equilíbrio
-Quedas:      1667 (-)                       <-- Desconto de quedas
-FINAL:       6665                           <-- Pontuação final da dupla
+Média:       8332                       <-- Média entre os dois
+Equilibrio:     0 (-)                   <-- Desconto de equilíbrio
+Quedas:      1667 (-)                   <-- Desconto de quedas
+FINAL:       6665                       <-- Pontuação final da dupla
 ```
 
 -------------------------------------------------------------------------------
