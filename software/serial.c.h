@@ -137,6 +137,7 @@ void Serial_Log (void) {
             Serial.print(STR);
         }
         Serial.println();
+        delay(10);
     }
     Serial.println();
 
@@ -209,25 +210,14 @@ int Serial_Check (void) {
 _COMPLETE:
     i = 0;
 
-    if (strncmp_P(CMD, PSTR("reiniciar"), 9) == 0) {
+    if (strncmp_P(CMD, PSTR("restaurar"), 9) == 0) {
+        return IN_RESET;
+    } else if (strncmp_P(CMD, PSTR("reiniciar"), 9) == 0) {
         return IN_RESTART;
     } else if (strncmp_P(CMD, PSTR("terminar"), 8) == 0) {
         return IN_TIMEOUT;
-    } else if (strncmp_P(CMD, PSTR("voltar"), 6) == 0) {
-        if (S.hit == 0) {
-            goto ERR;
-        }
-        while (1) {
-            S.hit -= 1;
-            if (S.hit == 0) {
-                break;
-            } else if (S.dts[S.hit] == HIT_SERV) {
-                if (S.dts[S.hit-1] == HIT_NONE) {
-                    S.hit -= 1;
-                }
-                break;
-            }
-        }
+    } else if (strncmp_P(CMD, PSTR("desfazer"), 8) == 0) {
+        return IN_UNDO;
     } else if (strncmp_P(CMD, PSTR("placar"), 6) == 0) {
         Serial_Score();
         return IN_NONE;

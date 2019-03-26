@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO!
+# FrescoGO! (versão 1.1)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para competições de
 Frescobol.
@@ -160,7 +160,7 @@ Maria: 856                              <-- total do atleta à direita
    -----   -----                        <-- Queda.
      256     195                        <-- Soma acumulada por João e por Maria
                                             (após a divisão por 100).
--- Sequencia  XX ---------------        <-- Outras sequências...
+-- Sequencia XX ----------------        <-- Outras sequências...
 ...
 
 --------------------------------        <-- Fim da apresentação.
@@ -186,6 +186,35 @@ FINAL:       6665                       <-- Pontuação final da dupla
 - Aparelho (PS2/AUX) -> Som (PS2/AUX)
 
 ![Ligação dos Cabos](all.jpg "Ligação dos Cabos")
+
+### Aparelho marcador:
+
+- Nova apresentação:
+    - Pressione o botão do meio e em seguida o da direita por 5 segundos.
+    - Resposta: um som médio de dois segundos.
+- Início de sequência:
+    - Pressione o botão do meio por um segundo, até escutar um som.
+    - Resposta: um som agudo de meio segundo.
+- Golpes dos atletas:
+    - Pressione o botão da esquerda ou direita quando, respectivamente, o
+      atleta à esquerda ou à direita golpearem a bola. Se o golpe for um
+      backhand (ou o lado não preferencial do atleta), o pressionamento deve
+      ser um pouco mais demorado.
+    - Resposta: depende da velocidade (ver a seção "Fluxo da Apresentação").
+- Queda de bola:
+    - Pressione o botão do meio por um segundo, até escutar um som.
+    - Resposta: três sons cada vez mais graves por meio segundo.
+- Fim da apresentação:
+    - Automático, quando o tempo do cronômetro expirar ou após a 25a queda.
+    - Resposta: um som grave por dois segundos.
+- Desfazer última sequência:
+    - Pressione o botão do meio e em seguida o da esquerda por 5 segundos.
+    - Resposta: três sons cada vez mais agudos por meio segundo.
+- Reconfiguração de fábrica:
+    - Pressione o botão do meio e em seguida os da esquerda e direita por
+      5 segundos.
+    - Resposta: um som médio de dois segundos.
+    - **Em princípio, esse procedimento nunca deverá ser necessário.**
 
 ### Aplicativo Android
 
@@ -224,8 +253,10 @@ FINAL:       6665                       <-- Pontuação final da dupla
             - reinicia a apresentação imediatamente
         - `terminar`
             - termina a apresentação imediatamente
-        - `voltar`
+        - `desfazer`
             - desconsidera por inteiro a sequência anterior
+        - `restaurar`
+            - restaura configuração de fábrica
     - Configuração:
         - `tempo SEGS`
             - altera o tempo total das apresentações para `SEGS`, que deve ser
@@ -242,32 +273,6 @@ FINAL:       6665                       <-- Pontuação final da dupla
 
 ![Android App](app.jpg "Android App")
 ![Conexão USB](connected.jpg "Conexão USB")
-
-### Aparelho marcador:
-
-- Nova apresentação:
-    - Pressione o botão do meio e em seguida o da direita por 5 segundos.
-    - Resposta: um som médio de dois segundos.
-- Início de sequência:
-    - Pressione o botão do meio por um segundo, até escutar um som.
-    - Resposta: um som agudo de meio segundo.
-- Golpes dos atletas:
-    - Pressione o botão da esquerda ou direita quando, respectivamente, o
-      atleta à esquerda ou à direita golpearem a bola. Se o golpe for um
-      backhand (ou o lado não preferencial do atleta), o pressionamento deve
-      ser um pouco mais demorado.
-    - Resposta: depende da velocidade (ver a seção "Fluxo da Apresentação").
-- Queda de bola:
-    - Pressione o botão do meio por um segundo, até escutar um som.
-    - Resposta: três sons cada vez mais graves por meio segundo.
-- Fim da apresentação:
-    - Automático, quando o tempo do cronômetro expirar ou após a 25a queda.
-    - Resposta: um som grave por dois segundos.
-- Reconfiguração de fábrica:
-    - Pressione o botão do meio e em seguida os da esquerda e direita por
-      5 segundos.
-    - Resposta: um som médio de dois segundos.
-    - **Em princípio, esse procedimento nunca deverá ser necessário.**
 
 -------------------------------------------------------------------------------
 

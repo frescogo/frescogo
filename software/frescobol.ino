@@ -1,4 +1,6 @@
-#define VERSION 1
+#define MAJOR 1
+#define MINOR 1
+
 //#define DEBUG
 //#define TV_ON
 
@@ -110,6 +112,7 @@ enum {
     IN_GO_FALL,
     IN_TIMEOUT,
     IN_RESTART,
+    IN_UNDO,
     IN_RESET
 };
 
@@ -195,13 +198,13 @@ int Await_Input (bool serial) {
             }
 
             // fall
-            if        (now-old>=1000 && pin_left==HIGH && pin_right==HIGH) {
+            if        (now-old>= 750 && pin_left==HIGH && pin_right==HIGH) {
                 old = now;
                 return IN_GO_FALL;
             } else if (now-old>=5000 && pin_left==LOW  && pin_right==HIGH) {
                 old = now;
-                return IN_TIMEOUT;
-            } else if (now-old>=5000 && pin_left==HIGH  && pin_right==LOW) {
+                return IN_UNDO;
+            } else if (now-old>=5000 && pin_left==HIGH && pin_right==LOW) {
                 old = now;
                 return IN_RESTART;
             } else if (now-old>=5000 && pin_left==LOW  && pin_right==LOW) {
@@ -278,7 +281,9 @@ void loop (void)
 {
 // RESTART
     Serial.print(F("= FrescoGO! (versao "));
-    Serial.print(VERSION);
+    Serial.print(MAJOR);
+    Serial.print(".");
+    Serial.print(MINOR);
     Serial.println(F(") ="));
     STATE = STATE_IDLE;
     PT_All();
@@ -302,6 +307,29 @@ void loop (void)
                 goto _RESTART;
             } else if (got == IN_RESTART) {
                 goto _RESTART;
+            } else if (got==IN_UNDO && S.hit>0) {
+                while (1) {
+                    S.hit -= 1;
+                    if (S.hit == 0) {
+                        break;
+                    } else if (S.dts[S.hit] == HIT_SERV) {
+                        if (S.dts[S.hit-1] == HIT_NONE) {
+                            S.hit -= 1;
+                        }
+                        break;
+                    }
+                }
+                tone(PIN_TONE, NOTE_C2, 100);
+                delay(110);
+                tone(PIN_TONE, NOTE_C3, 100);
+                delay(110);
+                tone(PIN_TONE, NOTE_C4, 300);
+                delay(310);
+                EEPROM_Save();
+                PT_All();
+                TV_All("GO!", 0, 0, 0);
+                Serial_Score();
+
 /* No TIMEOUT outside playing: prevents falls miscount.
             } else if (got == IN_TIMEOUT) {
                 goto _TIMEOUT;
