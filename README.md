@@ -25,6 +25,7 @@ Há uma entrada USB para alimentação e um saída para som.
 - Links do projeto:
     - Site: <https://github.com/frescogo/frescogo>
     - E-mail: <go.frescobol@gmail.com>
+    - Vídeo: <https://youtu.be/bAGGg3mtUSY>
 
 **O projeto eletrônico, o software e a regra são de domínio público, podendo
 ser usados, copiados e modificados livremente.**
@@ -42,8 +43,9 @@ Quesitos de pontuação:
 
 - **Volume:**
     - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
-      dividida por 100 e somada ao total do atleta.
+      dividida por 100 e somada ao total do atleta. Não há velocidade mínima.
       Exemplos:
+        - 30 kmh vale ** 9 pontos**: `30x30/100 =  900/100 =  9`.
         - 40 kmh vale **16 pontos**: `40x40/100 = 1600/100 = 16`.
         - 50 kmh vale **25 pontos**: `50x50/100 = 2500/100 = 25`.
         - 60 kmh vale **36 pontos**: `60x60/100 = 3600/100 = 36`.
@@ -77,7 +79,7 @@ Quesitos de pontuação:
         - Com 25 quedas, a dupla perderá todos os pontos (`25x4% = 100%`).
         - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
           será de **3520 pontos** (`4400x80%`).
-    - A apresentação é encerrado sumariamente na 25a queda.
+    - A apresentação é encerrada sumariamente na 25a queda.
 
 -------------------------------------------------------------------------------
 
