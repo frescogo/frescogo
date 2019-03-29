@@ -29,7 +29,7 @@ void PT_All (void) {
 
     memset(G.bests, 0, 2*2*HITS_BESTS*sizeof(s8));
 
-    u32 pace = 0;
+    u32 pace[2] = {0,0};
 
     for (int i=0 ; i<S.hit ; i++) {
     //for (int i=0 ; i<600 ; i++) {
@@ -49,7 +49,8 @@ void PT_All (void) {
             {
                 G.hits++;
                 G.ps[1-(i%2)] += pt;
-                pace += kmh;
+                pace[0] += kmh;
+                pace[1] += kmh*kmh;
 
                 // bests
                 s8* vec = G.bests[ 1-(i%2) ][ dt>0 ];
@@ -69,7 +70,8 @@ void PT_All (void) {
     }
     G.time *= 10;
 
-    G.pace = pace/G.hits;
+    G.pace[0] = pace[0]/G.hits;
+    G.pace[1] = sqrt(pace[1]/G.hits);
 
     PT_Bests_Apply();
 

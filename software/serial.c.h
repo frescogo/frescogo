@@ -51,7 +51,9 @@ void Serial_Score (void) {
     sprintf_P(STR, PSTR("%10S: "), F("Ritmo"));
     Serial.print(STR);
     if (G.time > 5000) {
-        Serial.println((int)G.pace);
+        Serial.print((int)G.pace[0]);
+        Serial.print(F("/"));
+        Serial.println((int)G.pace[1]);
     } else {
         Serial.println("---");
     }

@@ -100,7 +100,7 @@ typedef struct {
     u32 ps[2];                      // sum(kmh*kmh)
     u16 hits;
     u8  servs;
-    s8  pace;                       // kmh
+    s8  pace[2];                    // kmh/kmh2
     u16 total;
 } Game;
 static Game G;
