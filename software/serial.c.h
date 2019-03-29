@@ -64,12 +64,15 @@ void Serial_Score (void) {
         Serial.print(STR);
         Serial.println(G.ps[i]/100);
         for (int j=0; j<2; j++) {
+            int sum = 0;
             Serial.print(F(" [ "));
             for (int k=0; k<HITS_BESTS; k++) {
+                sum += G.bests[i][j][k];
                 sprintf_P(STR, PSTR("%3d "), (int)G.bests[i][j][k]);
                 Serial.print(STR);
             }
-            Serial.println(F("]"));
+            Serial.print(F("] => "));
+            Serial.println(sum/HITS_BESTS);
         }
         Serial.println();
     }
