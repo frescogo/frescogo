@@ -4,12 +4,12 @@ import numpy as np
 
 plt.rc('figure', figsize=(8, 6))
 
-G = exec(open("../Jogos/x.py").read())
+G = exec(open("x.py").read())
 
 def f (dt):
     return 32*750/dt
 def speeds (L):
-    return list(map(f,L))
+    return L #list(map(f,L))
 
 '''
 def quad (v):
@@ -76,8 +76,8 @@ def atleta (i):
     plt.hist(speeds(GAME[i]['left']), color=['blue'], histtype='step')
     plt.hist(speeds(GAME[i]['right']), color=['red'], histtype='step')
     plt.axvline(GAME[i]['ritmo'][0], color='k', linestyle='dashed', linewidth=1)
-    plt.axvline(GAME[i]['ritmo'][1], color='k', linestyle='dashed', linewidth=1)
-    plt.axvline(GAME[i]['ritmo'][2], color='k', linestyle='dashed', linewidth=1)
+    plt.axvline(GAME[i]['ritmo'][1], color='blue', linestyle='dashed', linewidth=1)
+    plt.axvline(GAME[i]['ritmo'][2], color='red', linestyle='dashed', linewidth=1)
 
 atleta(0)
 atleta(1)

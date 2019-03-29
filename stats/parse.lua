@@ -85,8 +85,8 @@ local hits = { {}, {} }
             hits[idx][#hits[idx]+1] = vel
         end
     end
-    ritmos[1][1] = math.sqrt(ritmos[1][1]/#hits[1])
-    ritmos[2][1] = math.sqrt(ritmos[2][1]/#hits[2])
+    ritmos[1][1] = math.floor(math.sqrt(ritmos[1][1]/#hits[1]))
+    ritmos[2][1] = math.floor(math.sqrt(ritmos[2][1]/#hits[2]))
 assert(tonumber(golpes) == (#hits[1]+#hits[2]))
 
 assert(#seqs == quedas+1)
