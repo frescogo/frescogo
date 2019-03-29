@@ -26,13 +26,15 @@ stats = 'Media:    ' + "{:5d}".format(GAME['pontos'][1]) + '    \n' + \
         'FINAL:    ' + "{:5d}".format(GAME['pontos'][0]) + '    '
 plt.text(0.99, 0.95, stats, va='top', ha='right', transform=f1.transAxes, family='monospace', size=8)
 
-stats = 'Quedas: ' + str(GAME['quedas']) + '\n' + \
-        'Golpes: ' + str(GAME['golpes']) + '\n' + \
-        'Ritmo:  ' + str(GAME['ritmo'][0]) + '/' + str(GAME['ritmo'][1])
+stats = 'Golpes: ' + str(GAME['golpes'])                                 + '\n' + \
+        'Ritmo:  ' + str(GAME['ritmo'][0]) + '/' + str(GAME['ritmo'][1]) + '\n' + \
+        'Quedas: ' + str(GAME['quedas'])
 plt.text(0.01, 0.95, stats, va='top', ha='left', transform=f1.transAxes, family='monospace', size=8)
 
-plt.title(GAME[0]['nome'] + ' / ' + GAME[1]['nome'] + '\n(' + 
-          str(GAME['distancia']) + 'cm / ' + str(GAME['tempo']) + 's)')
+plt.title(GAME[0]['nome'] + ' / ' + GAME[1]['nome'] + ' / ' +
+          str(GAME['distancia']) + 'cm / ' + str(GAME['tempo']) + 's / ' +
+          GAME['timestamp'])
+
 plt.xlabel('Velocidade (km/h)')
 plt.xlim(xmax=100)
 plt.ylabel('Golpes')
