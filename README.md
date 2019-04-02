@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 1.1)
+# FrescoGO! (versão 1.3)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para competições de
 Frescobol.
@@ -130,15 +130,23 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
      Tempo: 13290ms (-166s)             <-- tempo passado e restante
     Quedas: 1                           <-- número de quedas
     Golpes: 19                          <-- quantidade de golpes
-     Ritmo: 45                          <-- ritmo em km/h
+     Ritmo: 45/47                       <-- ritmo em km/h (média simples/quadrática)
+      Juiz: Arnaldo                     <-- nome do juiz
 
 João: 1284                              <-- total do atleta à esquerda
- [  29  29  27  21   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
- [  77  75  75  61  44   0   0 ]        <-- 7 golpes de direita  mais fortes
+ [  29  29  27  21   0   0   0 ] => 15  <-- 7 golpes de esquerda mais fortes => média simples
+ [  77  75  75  61  44   0   0 ] => 47  <-- 7 golpes de direita  mais fortes => média simples
 
 Maria: 856                              <-- total do atleta à direita
  [   0   0   0   0   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
  [  67  55  54  49  38  34  33 ]        <-- 7 golpes de direita  mais fortes
+
+(CONF: 750cm / 30s / pot=1 / equ=1 / cont=4)    <-- configurações
+        \-- distância entre os ateltas
+                \-- tempo de apresentação
+                      \-- pontuação de potência ligada (0=desligada, 1=ligada)
+                              \-- pontuação de equilíbrio ligada
+                                      \-- percentual perdido por queda
 ```
 
 - Relatório (ao final da apresentação)
@@ -146,18 +154,18 @@ Maria: 856                              <-- total do atleta à direita
 ```
 -- Sequencia  1 ----------------        <-- Início da primeira sequência.
             ****                        <-- Maria efetuou o primeiro golpe.
-     800            (33 / 1089)         <-- João golpeou 800ms depois.
-             440    (61 / 3721)             A velocidade atingida foi de 33 kmh,
-     820            (32 / 1024)             somando 1089 pontos para Maria
-             350    (77 / 5929)             (10 pontos após a divisão por 100).
-     790            (34 / 1156)
+     800            ( 33 / 1089)        <-- João golpeou 800ms depois.
+             440    ( 61 / 3721)            A velocidade atingida foi de 33 kmh,
+     820            ( 32 / 1024)            somando 1089 pontos para Maria
+             350    ( 77 / 5929)            (10 pontos após a divisão por 100).
+     790            ( 34 / 1156)
      ...
-             930 !  (29 /  841)         <-- João golpeou de esquerda (!).
-     550            (49 / 2401)         <-- Maria golpeou 550ms depois.
-             610    (44 / 1936)             A velocidade atingida foi de 44 kmh,
-     820            (32 / 1024)             somando 1936 pontos para João
-             360    (75 / 5625)             (19 pontos após a divisão por 100).
-     700            (38 / 1444)
+             930 !  ( 29 /  841)        <-- João golpeou de esquerda (!).
+     550            ( 49 / 2401)        <-- Maria golpeou 550ms depois.
+             610    ( 44 / 1936)            A velocidade atingida foi de 44 kmh,
+     820            ( 32 / 1024)            somando 1936 pontos para João
+             360    ( 75 / 5625)            (19 pontos após a divisão por 100).
+     700            ( 38 / 1444)
              370
    -----   -----                        <-- Queda.
      256     195                        <-- Soma acumulada por João e por Maria
@@ -266,12 +274,20 @@ FINAL:       6665                       <-- Pontuação final da dupla
         - `distancia CMS`
             - altera a distância das apresentações para `CMS`, que deve ser um
               número em centímetros
+        - `potencia NUM`
+            - liga ou desliga a pontuação de potência (`0=desligada`, `1=ligada`)
+        - `equilibrio NUM`
+            - liga ou desliga a pontuação de equlíbrio (`0=desligada`, `1=ligada`)
+        - `continuidade PCT`
+            - altera o percentual de perda por queda de bola para `PCT`
         - `esquerda NOME`
             - altera o nome do atleta à esquerda para `NOME`, que deve ter até
               15 caracteres
         - `direita NOME`
             - altera o nome do atleta à direita para `NOME`, que deve ter até
               15 caracteres
+        - `juiz NOME`
+            - altera o nome do juiz para `NOME`, que deve ter até 15 caracteres
 
 ![Android App](app.jpg "Android App")
 ![Conexão USB](connected.jpg "Conexão USB")
