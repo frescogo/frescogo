@@ -1,7 +1,11 @@
-SRC = ...
-
 local m = require 'lpeg'
 local P, S, C, R, Ct, Cc = m.P, m.S, m.C, m.R, m.Ct, m.Cc
+
+local INP, out = ...
+local ts = (((1-P'/')^0 * '/')^0 * 'serial_' * C((1-P'.')^1) * '.txt'):match(INP)
+local OUT = out .. '/serial_' .. ts .. '.py'
+
+-------------------------------------------------------------------------------
 
 local SPC  = S'\t\n\r '
 local X    = SPC ^ 0
@@ -11,8 +15,8 @@ local SEQ = Ct(
     P'-- Sequencia ' * X * NUMS * X * P'-'^1 * P'\r\n'      *
     (P'    ****' * Cc(true) + P'            ****' * Cc(false))  * X *
     Ct( (P'!'^-1 *X* NUMS *X* P'!'^-1 *X*
-        P'(' * C(NUMS) *X* P'/' *X* NUMS * P')' * X)^1 )    * X *
-    P'!'^-1 *X* NUMS *X* P'!'^-1                            * X *
+        P'(' * C(NUMS) *X* P'/' *X* NUMS * P')' * X)^0 )    * X *
+    (P'!'^-1 *X* NUMS *X* P'!'^-1)^-1                       * X *
     P'-----   -----' * X * NUMS * X * NUMS                  * X *
     P(0))
 
@@ -27,7 +31,7 @@ local patt =
     C(NUMS) * 's' * ')'                     * X *   -- 180s
     P'-'^0                                  * X *
     P'TOTAL:'  * X * C(NUMS)                * X *   -- 3701 pontos
-    P'Tempo:'  * X * C(NUMS) * 'ms (-0s)'   * X *   -- 180650 (-0s)
+    P'Tempo:'  * X * C(NUMS) * 'ms (-' * NUMS * 's)'   * X *   -- 180650 (-0s)
     P'Quedas:' * X * C(NUMS)                * X *   -- 6 quedas
     P'Golpes:' * X * C(NUMS)                * X *   -- 286 golpes
     P'Ritmo:'  * X * C(NUMS) *'/'* C(NUMS)  * X *   -- 45/45 kmh
@@ -46,6 +50,8 @@ local patt =
     P'Equilibrio:' *X* C(NUMS) *X* '(-)' *X*
     P'Quedas:'     *X* C(NUMS) *X* '(-)' *X*
     P'FINAL:'      *X* C(NUMS) *X*
+--[[
+]]
     P(0)
              
 local esquerda, direita, distancia, tempo, total, _, quedas, golpes,
@@ -53,7 +59,17 @@ local esquerda, direita, distancia, tempo, total, _, quedas, golpes,
       seqs,
       _vol0, _esq0, _dir0, _tot0,
       _vol1, _esq1, _dir1, _tot1,
-      _media, _equilibrio, _quedas, _final = patt:match(assert(io.open(SRC)):read'*a')
+      _media, _equilibrio, _quedas, _final = patt:match(assert(io.open(INP)):read'*a')
+
+--[[
+print(esquerda, dir1, seqs)
+for i,seq in ipairs(seqs) do
+    print(i,seq)
+end
+error'ok'
+]]
+
+-------------------------------------------------------------------------------
 
 assert(total==_final and p0==_tot0 and p1==_tot1)
 
@@ -90,16 +106,6 @@ local hits = { {}, {} }
 assert(tonumber(golpes) == (#hits[1]+#hits[2]))
 
 assert(#seqs == quedas+1)
-print(esquerda, direita)
-
-for i,seq in ipairs(seqs) do
-    print('SEQ', i)
-    local isesq, all = table.unpack(seq)
-    print(isesq, all)
-    for _,v in ipairs(all) do
-        print('',v)
-    end
-end
 
 function player (i)
     local ret = "{\n"
@@ -114,8 +120,7 @@ function player (i)
     return ret
 end
 
-local ts = string.sub(SRC, 8, string.len(SRC)-4)
-local out = assert(io.open('x.py','w'))
+local out = assert(io.open(OUT,'w'))
 out:write("GAME = {\n")
 out:write("\t'timestamp' : '"..ts.."',\n")
 out:write("\t'distancia' : "..distancia..",\n")

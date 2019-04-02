@@ -1,22 +1,15 @@
+import sys
+import os
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+inp = sys.argv[1]
+out = sys.argv[2] + '/' + os.path.splitext(os.path.basename(inp))[0] + '.png'
+
+exec(open(inp).read())
+
 plt.rc('figure', figsize=(8, 6))
-
-G = exec(open("x.py").read())
-
-def f (dt):
-    return 32*750/dt
-def speeds (L):
-    return L #list(map(f,L))
-
-'''
-def quad (v):
-    return v*v
-def qmean(L):
-   return math.sqrt(sum(map(quad,L)) / float(len(L)))
-'''
 
 f1 = plt.subplot(3, 1, 1)
 
@@ -38,21 +31,17 @@ plt.title(GAME[0]['nome'] + ' / ' + GAME[1]['nome'] + ' / ' +
 plt.xlabel('Velocidade (km/h)')
 plt.xlim(xmax=100)
 plt.ylabel('Golpes')
-plt.ylim(ymax=80)
+plt.ylim(ymax=50)
 plt.grid(axis='y')
-plt.hist(speeds(GAME[0]['hits']+GAME[1]['hits']), color=['gray'], label='xxx')
-plt.hist(speeds(GAME[0]['hits']), color=['blue'], histtype='step')
-plt.hist(speeds(GAME[1]['hits']), color=['red'],  histtype='step')
+plt.hist(GAME[0]['hits']+GAME[1]['hits'], bins=20, color=['gray'], label='xxx')
+plt.hist(GAME[0]['hits'], bins=20, color=['red'],  histtype='step')
+plt.hist(GAME[1]['hits'], bins=20, color=['blue'], histtype='step')
 plt.axvline(GAME['ritmo'][0], color='k', linestyle='dashed', linewidth=1)
 plt.axvline(GAME['ritmo'][1], color='k', linestyle='dashed', linewidth=1)
 #plt.legend()
 
 def atleta (i):
     f = plt.subplot(3, 1, i+2)
-
-    #vol = qmean(speeds(GAME[i]['hits']))
-    #esq = np.array(speeds(GAME[i]['left'])).mean()
-    #dir = np.array(speeds(GAME[i]['right'])).mean()
 
     stats = 'Volume:   ' + "{:5d}".format(GAME[i]['pontos'][1]) + '    \n' + \
             'Esquerda: ' + "{:5d}".format(GAME[i]['pontos'][2]) + '    \n' + \
@@ -70,17 +59,17 @@ def atleta (i):
     plt.xlabel('Velocidade (km/h)')
     plt.xlim(xmax=100)
     plt.ylabel('Golpes')
-    plt.ylim(ymax=40)
+    plt.ylim(ymax=50)
     plt.grid(axis='y')
-    plt.hist(speeds(GAME[i]['hits']), color=['gray'])
-    plt.hist(speeds(GAME[i]['left']), color=['blue'], histtype='step')
-    plt.hist(speeds(GAME[i]['right']), color=['red'], histtype='step')
-    plt.axvline(GAME[i]['ritmo'][0], color='k', linestyle='dashed', linewidth=1)
+    plt.hist(GAME[i]['hits'],  bins=20, color=['gray'])
+    plt.hist(GAME[i]['left'],  bins=20, color=['blue'], histtype='step')
+    plt.hist(GAME[i]['right'], bins=20, color=['red'],  histtype='step')
+    plt.axvline(GAME[i]['ritmo'][0], color='k',    linestyle='dashed', linewidth=1)
     plt.axvline(GAME[i]['ritmo'][1], color='blue', linestyle='dashed', linewidth=1)
-    plt.axvline(GAME[i]['ritmo'][2], color='red', linestyle='dashed', linewidth=1)
+    plt.axvline(GAME[i]['ritmo'][2], color='red',  linestyle='dashed', linewidth=1)
 
 atleta(0)
 atleta(1)
 
 plt.tight_layout(pad=1, w_pad=1, h_pad=1)
-plt.savefig('foo.png')
+plt.savefig(out)
