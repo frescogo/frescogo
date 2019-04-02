@@ -15,7 +15,7 @@ local SEQ = Ct(
     P'-- Sequencia ' * X * NUMS * X * P'-'^1 * P'\r\n'      *
     (P'    ****' * Cc(true) + P'            ****' * Cc(false))  * X *
     Ct( (P'!'^-1 *X* NUMS *X* P'!'^-1 *X*
-        P'(' * C(NUMS) *X* P'/' *X* NUMS * P')' * X)^0 )    * X *
+        P'(' *X* C(NUMS) *X* P'/' *X* NUMS * P')' * X)^0 )  * X *
     (P'!'^-1 *X* NUMS *X* P'!'^-1)^-1                       * X *
     P'-----   -----' * X * NUMS * X * NUMS                  * X *
     P(0))
@@ -23,26 +23,29 @@ local SEQ = Ct(
 local patt =
     P'relatorio'^-1                         * X *
     P'-'^1                                  * X *
-    C((1-SPC)^0)                            * X *   -- Joao
+    C((1-P' /')^0)                          * X *   -- Joao
     P'/'                                    * X *
-    C((1-SPC)^0)                            * X *   -- Maria
-    P'(' * C(NUMS) * 'cm'                   * X *   -- 750cm
-    P'-'                                    * X *
-    C(NUMS) * 's' * ')'                     * X *   -- 180s
+    C((1-S'\r\n')^0)                        * X *   -- Maria
     P'-'^0                                  * X *
     P'TOTAL:'  * X * C(NUMS)                * X *   -- 3701 pontos
     P'Tempo:'  * X * C(NUMS) * 'ms (-' * NUMS * 's)'   * X *   -- 180650 (-0s)
     P'Quedas:' * X * C(NUMS)                * X *   -- 6 quedas
     P'Golpes:' * X * C(NUMS)                * X *   -- 286 golpes
     P'Ritmo:'  * X * C(NUMS) *'/'* C(NUMS)  * X *   -- 45/45 kmh
+    P'Juiz:'   * X * C((1-S'\r\n')^0)       * X *   -- Arnaldo
     (1-NUMS)^1 * C(NUMS)                    * X *   -- Joao: 5500
     P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
     P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
     (1-NUMS)^1 * C(NUMS)                    * X *   -- Maria: 4427
     P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
     P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
+    P'(CONF: ' * C(NUMS) * 'cm / ' *                -- 750cm
+                 C(NUMS) * 's / pot=' *             -- 180s
+                 C(NUMS) * ' / equ='  *             -- pot=0/1
+                 C(NUMS) * ' / cont=' *             -- equ=0/1
+                 C(NUMS) * ')'              * X *   -- cont=4%
     Ct(SEQ^1)                               * X *
-    P'--------------------------------'     * X *
+    P'----------------------------'         * X *
     P'Atleta    Vol     Esq     Dir   Total' * X*
     (1-NUMS)^0 * C(NUMS) *X* '+' *X* C(NUMS) *X* '+' *X* C(NUMS) *X* '=' *X* C(NUMS) * X *
     (1-NUMS)^0 * C(NUMS) *X* '+' *X* C(NUMS) *X* '+' *X* C(NUMS) *X* '=' *X* C(NUMS) * X *
@@ -54,15 +57,16 @@ local patt =
 ]]
     P(0)
              
-local esquerda, direita, distancia, tempo, total, _, quedas, golpes,
-      ritmo1, ritmo2, p0, esqs0,esq0,dirs0,dir0, p1, esqs1,esq1,dirs1,dir1,
+local esquerda, direita, total, _, quedas, golpes, ritmo1, ritmo2, _,
+      p0, esqs0,esq0,dirs0,dir0, p1, esqs1,esq1,dirs1,dir1,
+      distancia, tempo, potencia, equilibrio, continuidade,
       seqs,
       _vol0, _esq0, _dir0, _tot0,
       _vol1, _esq1, _dir1, _tot1,
       _media, _equilibrio, _quedas, _final = patt:match(assert(io.open(INP)):read'*a')
 
 --[[
-print(esquerda, dir1, seqs)
+print(esquerda, direita, total, ritmo2, dir1, distancia, continuidade, seqs)
 for i,seq in ipairs(seqs) do
     print(i,seq)
 end
@@ -123,8 +127,13 @@ end
 local out = assert(io.open(OUT,'w'))
 out:write("GAME = {\n")
 out:write("\t'timestamp' : '"..ts.."',\n")
-out:write("\t'distancia' : "..distancia..",\n")
-out:write("\t'tempo'     : "..tempo..",\n")
+out:write("\t'conf'      : {\n")
+out:write("\t\t'distancia'    : "..distancia..",\n")
+out:write("\t\t'tempo'        : "..tempo..",\n")
+out:write("\t\t'potencia'     : "..potencia..",\n")
+out:write("\t\t'equilibrio'   : "..equilibrio..",\n")
+out:write("\t\t'continuidade' : "..continuidade..",\n")
+out:write("\t},\n")
 out:write("\t'pontos'    : (".._final..",".._media..",".._equilibrio..",".._quedas.."),\n")
 out:write("\t'ritmo'     : ("..ritmo1..","..ritmo2.."),\n")
 out:write("\t'golpes'    : "..golpes..",\n")

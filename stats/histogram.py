@@ -25,7 +25,11 @@ stats = 'Golpes: ' + str(GAME['golpes'])                                 + '\n' 
 plt.text(0.01, 0.95, stats, va='top', ha='left', transform=f1.transAxes, family='monospace', size=8)
 
 plt.title(GAME[0]['nome'] + ' / ' + GAME[1]['nome'] + ' / ' +
-          str(GAME['distancia']) + 'cm / ' + str(GAME['tempo']) + 's / ' +
+          str(GAME['conf']['distancia'])    + 'cm / ' +
+          str(GAME['conf']['tempo'])        + 's / pot=' +
+          str(GAME['conf']['potencia'])     + ' / equ=' +
+          str(GAME['conf']['equilibrio'])   + ' / cont=' +
+          str(GAME['conf']['continuidade']) + ' / ' +
           GAME['timestamp'])
 
 plt.xlabel('Velocidade (km/h)')
