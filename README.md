@@ -45,7 +45,7 @@ Quesitos de pontuação:
     - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
       dividida por 100 e somada ao total do atleta. Não há velocidade mínima.
       Exemplos:
-        - 30 kmh vale ** 9 pontos**: `30x30/100 =  900/100 =  9`.
+        - 30 kmh vale **9 pontos**:  `30x30/100 =  900/100 =  9`.
         - 40 kmh vale **16 pontos**: `40x40/100 = 1600/100 = 16`.
         - 50 kmh vale **25 pontos**: `50x50/100 = 2500/100 = 25`.
         - 60 kmh vale **36 pontos**: `60x60/100 = 3600/100 = 36`.
