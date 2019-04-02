@@ -11,7 +11,7 @@ void Serial_Hit (char* name, u32 kmh, bool is_back) {
 
 void Serial_Score (void) {
     Serial.println();
-    Serial.println(F("--------------------------------"));
+    Serial.println(F("----------------------------"));
     sprintf_P(STR, PSTR("%10s"), S.names[0]);
     Serial.print(STR);
     Serial.print(F(" / "));
@@ -19,13 +19,7 @@ void Serial_Score (void) {
     Serial.print(STR);
     Serial.println();
 
-    Serial.print(F("    ("));
-    Serial.print(S.distance);
-    Serial.print(F("cm - "));
-    Serial.print(S.timeout/1000);
-    Serial.println(F("s)"));
-
-    Serial.println(F("--------------------------------"));
+    Serial.println(F("----------------------------"));
     Serial.println();
 
     sprintf_P(STR, PSTR("%10S: "), F("TOTAL"));
@@ -58,6 +52,10 @@ void Serial_Score (void) {
         Serial.println("---");
     }
 
+    sprintf_P(STR, PSTR("%10S: "), F("Juiz"));
+    Serial.print(STR);
+    Serial.println(S.juiz);
+
     Serial.println();
     for (int i=0; i<2; i++) {
         sprintf_P(STR, PSTR("%10s: "), S.names[i]);
@@ -76,6 +74,18 @@ void Serial_Score (void) {
         }
         Serial.println();
     }
+
+    Serial.print(F("(CONF: "));
+    Serial.print(S.distancia);
+    Serial.print(F("cm / "));
+    Serial.print(S.timeout/1000);
+    Serial.print(F("s / pot="));
+    Serial.print((int)S.potencia);
+    Serial.print(F(" / equ="));
+    Serial.print((int)S.equilibrio);
+    Serial.print(F(" / cont="));
+    Serial.print((int)S.continuidade);
+    Serial.println(F(")\n"));
 }
 
 void Serial_Log (void) {
@@ -138,21 +148,24 @@ void Serial_Log (void) {
             if (i%2 == 0) {
                 Serial.print(F("        "));
             }
-            sprintf_P(STR, PSTR("(%2d / %4d)"), kmh, pt);
+            sprintf_P(STR, PSTR("(%3d / %4d)"), kmh, pt);
             Serial.print(STR);
         }
         Serial.println();
         delay(10);
     }
-    Serial.println();
+    //Serial.println();
 
     u32 bests[2][2] = { {0,0}, {0,0} };
     for (int i=0; i<2; i++) {
         for (int j=0; j<2; j++) {
             u32 sum = 0;
             for (int k=0; k<HITS_BESTS; k++) {
-                u32 pt = G.bests[i][j][k];
-                sum += pt*pt*4;
+                u32 v = G.bests[i][j][k];
+                if (!S.potencia && v==0) {
+                    v = 40;
+                }
+                sum += v*v*4;
             }
             bests[i][j] = sum;
         }
@@ -161,7 +174,7 @@ void Serial_Log (void) {
     u32 p0 = ps[0] + bests[0][0] + bests[0][1];
     u32 p1 = ps[1] + bests[1][0] + bests[1][1];
 
-    Serial.println(F("--------------------------------"));
+    Serial.println(F("----------------------------"));
     Serial.println();
     Serial.println(F("    Atleta    Vol     Esq     Dir   Total"));
     sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld"),
@@ -173,7 +186,7 @@ void Serial_Log (void) {
     Serial.println();
 
     u32 avg   = (p0 + p1) / 2;
-    u32 total = min(avg, min(p0,p1)*11/10);
+    u32 total = (S.equilibrio ? min(avg, min(p0,p1)*11/10) : avg);
 /*
     sprintf_P(STR, PSTR("MED: %ld | MIN+10%%: %ld | MIN: %ld"),
                     (p0 + p1) / 2 / 100,
@@ -181,11 +194,11 @@ void Serial_Log (void) {
                      total / 100);
     Serial.println(STR);
 */
-    int pct = 100 - min(100, Falls()*FALLS_PCT);
+    int pct = 100 - min(100, Falls()*S.continuidade);
     //sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
     sprintf_P(STR, PSTR("Media:      %5ld"), avg/100);
     Serial.println(STR);
-    sprintf_P(STR, PSTR("Equilibrio: %5ld (-)"), (avg/100)-(total/100));
+    sprintf_P(STR, PSTR("Equilibrio: %5ld (-)"), (S.equilibrio ? (avg/100)-(total/100) : 0));
     Serial.println(STR);
     sprintf_P(STR, PSTR("Quedas:     %5ld (-)"), total/100-total*pct/10000);
     Serial.println(STR);
@@ -233,16 +246,32 @@ _COMPLETE:
     } else if (strncmp_P(CMD, PSTR("tempo "), 6) == 0) {
         S.timeout = ((u32)atoi(&CMD[6])) * 1000;
     } else if (strncmp_P(CMD, PSTR("distancia "), 5) == 0) {
-        S.distance = atoi(&CMD[10]);
-    } else if (strncmp_P(CMD, PSTR("esquerda "), 4) == 0) {
+        S.distancia = atoi(&CMD[10]);
+    } else if (strncmp_P(CMD, PSTR("potencia sim"), 12) == 0) {
+        S.potencia = 1;
+    } else if (strncmp_P(CMD, PSTR("potencia nao"), 12) == 0) {
+        S.potencia = 0;
+    } else if (strncmp_P(CMD, PSTR("equilibrio sim"), 14) == 0) {
+        S.equilibrio = 1;
+    } else if (strncmp_P(CMD, PSTR("equilibrio nao"), 14) == 0) {
+        S.equilibrio = 0;
+    } else if (strncmp_P(CMD, PSTR("continuidade "), 13) == 0) {
+        S.continuidade = atoi(&CMD[13]);
+    } else if (strncmp_P(CMD, PSTR("esquerda "), 9) == 0) {
         if (strlen(&CMD[9]) < 15) {
             strcpy(S.names[0], &CMD[9]);
         } else {
             goto ERR;
         }
-    } else if (strncmp_P(CMD, PSTR("direita "), 4) == 0) {
+    } else if (strncmp_P(CMD, PSTR("direita "), 8) == 0) {
         if (strlen(&CMD[8]) < 15) {
             strcpy(S.names[1], &CMD[8]);
+        } else {
+            goto ERR;
+        }
+    } else if (strncmp_P(CMD, PSTR("juiz "), 5) == 0) {
+        if (strlen(&CMD[5]) < 15) {
+            strcpy(S.juiz, &CMD[5]);
         } else {
             goto ERR;
         }

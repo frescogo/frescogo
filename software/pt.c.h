@@ -14,6 +14,9 @@ void PT_Bests_Apply (void) {
         for (int j=0; j<2; j++) {
             for (int k=0; k<HITS_BESTS; k++) {
                 u32 v = G.bests[i][j][k];
+                if (!S.potencia && v==0) {
+                    v = 40;
+                }
                 G.ps[i] += v*v*4;
             }
         }
@@ -76,7 +79,7 @@ void PT_All (void) {
     PT_Bests_Apply();
 
     u32 avg   = (G.ps[0] + G.ps[1]) / 2;
-    u32 total = min(avg, min(G.ps[0],G.ps[1])*11/10);
-    int pct   = 100 - min(100, Falls()*FALLS_PCT);
+    u32 total = (S.equilibrio ? min(avg, min(G.ps[0],G.ps[1])*11/10) : avg);
+    int pct   = 100 - min(100, Falls()*S.continuidade);
     G.total = total * pct/10000;
 }

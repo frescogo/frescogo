@@ -46,9 +46,15 @@ static pollserial pserial;
 
 #endif
 
+#if 0
 #define PIN_LEFT  4
 #define PIN_RIGHT 2
 #define PIN_CFG   3
+#else
+#define PIN_LEFT  3
+#define PIN_RIGHT 4
+#define PIN_CFG   2
+#endif
 
 #ifdef ARDUINO_AVR_NANO
 #define PIN_TONE 11
@@ -56,9 +62,7 @@ static pollserial pserial;
 
 static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
-#define FALLS_PCT       4
-
-#define HITS_MAX        700
+#define HITS_MAX        600
 #define HITS_BESTS      7
 
 #define HIT_BACK_DT     180         // minimum time to hold for back
@@ -81,9 +85,13 @@ static bool IS_BACK;
 static char STR[64];
 
 typedef struct {
+    char juiz[NAME_MAX+1];      // = "Juiz"
     char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" };
     u32  timeout;               // = 180 * ((u32)1000);
-    int  distance;              // = 700;
+    u16  distancia;             // = 700;
+    s8   potencia;              // = sim/nao
+    s8   equilibrio;            // = sim/nao
+    u8   continuidade;          // = 4%
 
     u16  hit;
     s8   dts[HITS_MAX];         // cs (ms*10)
@@ -227,7 +235,7 @@ void EEPROM_Load (void) {
         s8 dt = S.dts[i];
         dt = (dt > 0) ? dt : -dt;
 
-        u32 kmh_ = ((u32)36) * S.distance / (dt*10);
+        u32 kmh_ = ((u32)36) * S.distancia / (dt*10);
                    // prevents overflow
         G.kmhs[i] = min(kmh_, HIT_KMH_MAX);
     }
@@ -240,10 +248,14 @@ void EEPROM_Save (void) {
 }
 
 void EEPROM_Default (void) {
+    strcpy(S.juiz,     "?");
     strcpy(S.names[0], "Atleta ESQ");
     strcpy(S.names[1], "Atleta DIR");
-    S.distance = 750;
-    S.timeout  = 180 * ((u32)1000);
+    S.distancia    = 750;
+    S.timeout      = 180 * ((u32)1000);
+    S.potencia     = 1;
+    S.equilibrio   = 1;
+    S.continuidade = 4;
 }
 
 void setup (void) {
@@ -423,7 +435,7 @@ void loop (void)
             dt = min(dt/10, 127); // we don't have space for dt>1270ms,so we'll
                                   // just assume it since its already slow
 
-            u32 kmh_ = ((u32)36) * S.distance / (dt*10);
+            u32 kmh_ = ((u32)36) * S.distancia / (dt*10);
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
 
