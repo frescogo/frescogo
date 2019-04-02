@@ -14,8 +14,8 @@ Golpes de esquerda e direita são distinguidos pelo tempo de pressionamento do
 botão.
 -->
 Com base em uma distância previamente estabelecida e o tempo decorrido entre
-dois golpes consecutivos, o aparelho calcula a velocidade atingida pela bola a
-cada momento.
+dois golpes consecutivos, o aparelho calcula a velocidade média atingida pela
+bola a cada troca.
 O botão do meio sinaliza início de sequência, queda de bola, fim de
 apresentação, etc.
 Há uma entrada USB para alimentação e um saída para som.
@@ -45,7 +45,7 @@ Quesitos de pontuação:
     - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
       dividida por 100 e somada ao total do atleta. Não há velocidade mínima.
       Exemplos:
-        - 30 kmh vale **9 pontos**:  `30x30/100 =  900/100 =  9`.
+        - 30 kmh vale **09 pontos**:  `30x30/100 =  900/100 =  9`.
         - 40 kmh vale **16 pontos**: `40x40/100 = 1600/100 = 16`.
         - 50 kmh vale **25 pontos**: `50x50/100 = 2500/100 = 25`.
         - 60 kmh vale **36 pontos**: `60x60/100 = 3600/100 = 36`.
