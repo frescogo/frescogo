@@ -74,11 +74,11 @@ Quesitos de pontuação:
           A pontuação de equilíbrio será o menor entre os dois valores
           (`4500 vs 4400`): **4400 pontos**.
 - **Continuidade:**
-    - Cada queda subtrai 4% da pontuação final da dupla.
-      Exemplos:
-        - Com 25 quedas, a dupla perderá todos os pontos (`25x4% = 100%`).
-        - Com 5 quedas e 4400 pontos após o equilíbrio, a pontuação final
-          será de **3520 pontos** (`4400x80%`).
+    - Cada queda subtrai 3% da pontuação final da dupla.
+      Exemplo:
+        - Com 5 quedas, a dupla perderá 15% dos pontos, ou seja, se ela pontuou
+          4400 após o equilíbrio, a pontuação final será de **3740 pontos**
+          (`4400x85%`).
     - A apresentação é encerrada sumariamente na 25a queda.
 
 -------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ Maria: 856                              <-- total do atleta à direita
  [   0   0   0   0   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
  [  67  55  54  49  38  34  33 ]        <-- 7 golpes de direita  mais fortes
 
-(CONF: 750cm / 30s / pot=1 / equ=1 / cont=4)    <-- configurações
+(CONF: 750cm / 30s / pot=1 / equ=1 / cont=3)    <-- configurações
         \-- distância entre os ateltas
                 \-- tempo de apresentação
                       \-- pontuação de potência ligada (0=desligada, 1=ligada)

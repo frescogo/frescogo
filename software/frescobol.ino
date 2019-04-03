@@ -91,7 +91,7 @@ typedef struct {
     u16  distancia;             // = 700;
     s8   potencia;              // = sim/nao
     s8   equilibrio;            // = sim/nao
-    u8   continuidade;          // = 4%
+    u8   continuidade;          // = 3%
 
     u16  hit;
     s8   dts[HITS_MAX];         // cs (ms*10)
@@ -255,7 +255,7 @@ void EEPROM_Default (void) {
     S.timeout      = 180 * ((u32)1000);
     S.potencia     = 1;
     S.equilibrio   = 1;
-    S.continuidade = 4;
+    S.continuidade = 3;
 }
 
 void setup (void) {
