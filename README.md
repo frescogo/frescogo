@@ -18,7 +18,8 @@ dois golpes consecutivos, o aparelho calcula a velocidade média atingida pela
 bola a cada troca.
 O botão do meio sinaliza início de sequência, queda de bola, fim de
 apresentação, etc.
-Também há uma entrada USB para alimentação e um saída para som.
+Também há uma entrada USB para visualização do placar e um saída para som para
+sinalizar os golpes.
 
 ![Foto do marcador](device.jpg "Foto do Aparelho")
 
@@ -60,8 +61,10 @@ Quesitos de pontuação:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
           mais **100 pontos** por aquele golpe (`25x4=100`), além dos 25 pontos
           já somados no quesito de volume.
+<!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
+-->
 - **Equilíbrio:**
     - A pontuação da dupla será a média de pontos entre os dois atletas.
     - Se o atleta que pontou menos estiver abaixo de 90% dessa média, então a
@@ -123,7 +126,6 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
 ```
 --------------------------------
       João / Maria                      <-- nome dos atletas
-    (750cm - 180s)                      <-- distância e tempo de apresentação
 --------------------------------
 
      TOTAL: 904                         <-- total de pontos
@@ -274,12 +276,13 @@ FINAL:       6665                       <-- Pontuação final da dupla
         - `distancia CMS`
             - altera a distância das apresentações para `CMS`, que deve ser um
               número em centímetros
-        - `potencia NUM`
-            - liga ou desliga a pontuação de potência (`0=desligada`, `1=ligada`)
-        - `equilibrio NUM`
-            - liga ou desliga a pontuação de equlíbrio (`0=desligada`, `1=ligada`)
+        - `potencia SIM/NAO`
+            - liga ou desliga a pontuação de potência (`nao=desligada`, `sim=ligada`)
+        - `equilibrio SIM/NAO`
+            - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
         - `continuidade PCT`
-            - altera o percentual de perda por queda de bola para `PCT`
+            - altera o percentual de perda por queda de bola para `PCT`, que
+              deve ser um número
         - `esquerda NOME`
             - altera o nome do atleta à esquerda para `NOME`, que deve ter até
               15 caracteres
@@ -343,7 +346,7 @@ FINAL:       6665                       <-- Pontuação final da dupla
         frescobol.
     - **Licença de uso**:
         Além do custo ser menor, não há nenhuma restrição legal sobre o uso
-        do aparelho, software ou regra.
+        do aparelho, software ou regra por terceiros.
     - **Infraestrutura**:
         Além do aparelho, é necessário apenas um celular com um software
         gratuito (para obter o placar das apresentações) e uma caixa de som
