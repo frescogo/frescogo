@@ -232,6 +232,7 @@ FINAL:       6665                       <-- Pontuação final da dupla
 
 - Instalação (apenas uma vez):
     - Instalar o app "Serial USB Terminal" (by Kai Morich).
+        - <https://play.google.com/store/apps/details?id=de.kai_morich.serial_usb_terminal>
 - Configuração (apenas uma vez):
     - Tocar nas três barras paralelas no canto superior esquerdo e selecionar
       "Settings".
