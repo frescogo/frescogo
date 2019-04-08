@@ -1,7 +1,5 @@
-void Serial_Hit (char* name, u32 kmh, bool is_back) {
+void Serial_Hit (u32 kmh, bool is_back) {
     Serial.print(F("> "));
-    Serial.print(name);
-    Serial.print(F(": "));
     Serial.print(kmh);
     if (is_back) {
         Serial.print(F(" !"));
@@ -75,17 +73,15 @@ void Serial_Score (void) {
         Serial.println();
     }
 
-    Serial.print(F("(CONF: "));
-    Serial.print(S.distancia);
-    Serial.print(F("cm / "));
-    Serial.print(S.timeout/1000);
-    Serial.print(F("s / pot="));
-    Serial.print((int)S.potencia);
-    Serial.print(F(" / equ="));
-    Serial.print((int)S.equilibrio);
-    Serial.print(F(" / cont="));
-    Serial.print((int)S.continuidade);
-    Serial.println(F(")\n"));
+    sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
+                MAJOR, MINOR,
+                S.distancia,
+                (int)(S.timeout/1000),
+                (int)S.potencia,
+                (int)S.equilibrio,
+                (int)S.continuidade,
+                (int)S.maxima);
+    Serial.println(STR);
 }
 
 void Serial_Log (void) {
@@ -162,7 +158,7 @@ void Serial_Log (void) {
             u32 sum = 0;
             for (int k=0; k<HITS_BESTS; k++) {
                 u32 v = G.bests[i][j][k];
-                if (!S.potencia && v==0) {
+                if (!S.potencia) {
                     v = 40;
                 }
                 sum += v*v*4;
@@ -247,6 +243,10 @@ _COMPLETE:
         S.timeout = ((u32)atoi(&CMD[6])) * 1000;
     } else if (strncmp_P(CMD, PSTR("distancia "), 5) == 0) {
         S.distancia = atoi(&CMD[10]);
+    } else if (strncmp_P(CMD, PSTR("velocidades sim"), 15) == 0) {
+        S.velocidades = 1;
+    } else if (strncmp_P(CMD, PSTR("velocidades nao"), 15) == 0) {
+        S.velocidades = 0;
     } else if (strncmp_P(CMD, PSTR("potencia sim"), 12) == 0) {
         S.potencia = 1;
     } else if (strncmp_P(CMD, PSTR("potencia nao"), 12) == 0) {
@@ -255,6 +255,8 @@ _COMPLETE:
         S.equilibrio = 1;
     } else if (strncmp_P(CMD, PSTR("equilibrio nao"), 14) == 0) {
         S.equilibrio = 0;
+    } else if (strncmp_P(CMD, PSTR("maxima "), 7) == 0) {
+        S.maxima = atoi(&CMD[7]);
     } else if (strncmp_P(CMD, PSTR("continuidade "), 13) == 0) {
         S.continuidade = atoi(&CMD[13]);
     } else if (strncmp_P(CMD, PSTR("esquerda "), 9) == 0) {

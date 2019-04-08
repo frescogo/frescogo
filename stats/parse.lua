@@ -65,6 +65,7 @@ local esquerda, direita, total, _, quedas, golpes, ritmo1, ritmo2, _,
       _vol1, _esq1, _dir1, _tot1,
       _media, _equilibrio, _quedas, _final = patt:match(assert(io.open(INP)):read'*a')
 
+print(esquerda, direita, total, quedas, ritmo1)
 --[[
 print(esquerda, direita, total, ritmo2, dir1, distancia, continuidade, seqs)
 for i,seq in ipairs(seqs) do

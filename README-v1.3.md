@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 1.4)
+# FrescoGO! (versão 1.3)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para competições de
 Frescobol.
@@ -261,8 +261,6 @@ FINAL:       6665                       <-- Pontuação final da dupla
             - exibe o placar da apresentação
         - `relatorio`
             - exibe o relatório completo da apresentação
-        - `velocidades SIM/NAO`
-            - exibe (ou não) a velocidade de cada golpe
     - Ação:
         - `reiniciar`
             - reinicia a apresentação imediatamente
@@ -279,14 +277,8 @@ FINAL:       6665                       <-- Pontuação final da dupla
         - `distancia CMS`
             - altera a distância das apresentações para `CMS`, que deve ser um
               número em centímetros
-        - `maxima VEL`
-            - altera a velocidade máxima a ser considerada para `VEL`, que deve
-              ser um número em kmh (bolas acima de `VEL` serão consideradas
-              como `VEL`)
         - `potencia SIM/NAO`
             - liga ou desliga a pontuação de potência (`nao=desligada`, `sim=ligada`)
-            - caso desligada, a apresentação já iniciará com as 7 bolas de
-              esquerda e direita premarcadas a 50kmh (e nunca serão modificadas)
         - `equilibrio SIM/NAO`
             - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
         - `continuidade PCT`

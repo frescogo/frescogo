@@ -1,5 +1,5 @@
 #define MAJOR 1
-#define MINOR 3
+#define MINOR 4
 
 //#define DEBUG
 //#define TV_ON
@@ -46,7 +46,7 @@ static pollserial pserial;
 
 #endif
 
-#if 0
+#if 1
 #define PIN_LEFT  4
 #define PIN_RIGHT 2
 #define PIN_CFG   3
@@ -80,18 +80,23 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define NAME_MAX        20
 
+#define POT_VEL         50
+#define MAX_VEL         85
+
 static int  STATE;
 static bool IS_BACK;
-static char STR[64];
+static char STR[100];
 
 typedef struct {
     char juiz[NAME_MAX+1];      // = "Juiz"
-    char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" };
-    u32  timeout;               // = 180 * ((u32)1000);
-    u16  distancia;             // = 700;
+    char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" }
+    u32  timeout;               // = 180 * ((u32)1000) ms
+    u16  distancia;             // = 700 cm
     s8   potencia;              // = sim/nao
     s8   equilibrio;            // = sim/nao
     u8   continuidade;          // = 3%
+    s8   velocidades;           // = sim/nao
+    u8   maxima;                // = 85 kmh
 
     u16  hit;
     s8   dts[HITS_MAX];         // cs (ms*10)
@@ -238,6 +243,7 @@ void EEPROM_Load (void) {
         u32 kmh_ = ((u32)36) * S.distancia / (dt*10);
                    // prevents overflow
         G.kmhs[i] = min(kmh_, HIT_KMH_MAX);
+        G.kmhs[i] = min(G.kmhs[i], S.maxima);
     }
 }
 
@@ -253,9 +259,11 @@ void EEPROM_Default (void) {
     strcpy(S.names[1], "Atleta DIR");
     S.distancia    = 750;
     S.timeout      = 180 * ((u32)1000);
-    S.potencia     = 1;
+    S.potencia     = 0;
     S.equilibrio   = 1;
     S.continuidade = 3;
+    S.velocidades  = 1;
+    S.maxima       = MAX_VEL;
 }
 
 void setup (void) {
@@ -387,9 +395,10 @@ void loop (void)
 
         IS_BACK = false;
 
-#ifdef DEBUG
-        Serial.println(F("> saque"));
-#endif
+        if (S.velocidades) {
+            Serial.println(F("> saque"));
+        }
+
         PT_All();
         TV_All("---", 0, 0, 0);
         delay(HIT_MIN_DT);
@@ -438,6 +447,7 @@ void loop (void)
             u32 kmh_ = ((u32)36) * S.distancia / (dt*10);
                        // prevents overflow
             s8 kmh = min(kmh_, HIT_KMH_MAX);
+            kmh = min(kmh_, S.maxima);
 
             u8 al_now = 0;
             if (G.time > al_nxt) {
@@ -448,14 +458,14 @@ void loop (void)
                 Sound(kmh);
             }
 
-#ifdef DEBUG
-            if (nxt != got) {
-                Serial_Hit(S.names[got],   kmh, IS_BACK);
-                Serial_Hit(S.names[1-got], kmh, false);
-            } else {
-                Serial_Hit(S.names[1-got], kmh, IS_BACK);
+            if (S.velocidades) {
+                if (nxt != got) {
+                    Serial_Hit(kmh, IS_BACK);
+                    Serial_Hit(kmh, false);
+                } else {
+                    Serial_Hit(kmh, IS_BACK);
+                }
             }
-#endif
 
             if (IS_BACK) {
                 S.dts[S.hit] = -dt;

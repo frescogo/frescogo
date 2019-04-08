@@ -14,8 +14,8 @@ void PT_Bests_Apply (void) {
         for (int j=0; j<2; j++) {
             for (int k=0; k<HITS_BESTS; k++) {
                 u32 v = G.bests[i][j][k];
-                if (!S.potencia && v==0) {
-                    v = 40;
+                if (!S.potencia) {
+                    v = POT_VEL;
                 }
                 G.ps[i] += v*v*4;
             }
