@@ -26,7 +26,7 @@ sinalizar os golpes.
 - Links do projeto:
     - Site: <https://github.com/frescogo/frescogo>
     - E-mail: <go.frescobol@gmail.com>
-    - Vídeo: <https://youtu.be/bAGGg3mtUSY>
+    - Vídeos: <https://www.youtube.com/channel/UCrc_Ds56Bh77CFKXldIU-9g>
 
 **O projeto eletrônico, o software e a regra são de domínio público, podendo
 ser usados, copiados e modificados livremente.**
@@ -143,12 +143,14 @@ Maria: 856                              <-- total do atleta à direita
  [   0   0   0   0   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
  [  67  55  54  49  38  34  33 ]        <-- 7 golpes de direita  mais fortes
 
-(CONF: 750cm / 30s / pot=1 / equ=1 / cont=3)    <-- configurações
-        \-- distância entre os ateltas
-                \-- tempo de apresentação
-                      \-- pontuação de potência ligada (0=desligada, 1=ligada)
-                              \-- pontuação de equilíbrio ligada
-                                      \-- percentual perdido por queda
+(CONF: v1.4 / 750cm / 30s / pot=1 / equ=1 / cont=3 / max=85)    <-- configurações
+        \-- versão do software
+               \-- distância entre os ateltas
+                       \-- tempo máximo de apresentação
+                             \-- pontuação de potência (0=desligada, 1=ligada)
+                                     \-- pontuação de equilíbrio
+                                             \-- percentual perdido por queda
+                                                     \-- velocidade máxima a detectar
 ```
 
 - Relatório (ao final da apresentação)
@@ -231,24 +233,24 @@ FINAL:       6665                       <-- Pontuação final da dupla
 ### Aplicativo Android
 
 - Instalação (apenas uma vez):
-    - Instalar o app "Serial USB Terminal" (by Kai Morich).
+    - Instalar o app `Serial USB Terminal` (by Kai Morich).
         - <https://play.google.com/store/apps/details?id=de.kai_morich.serial_usb_terminal>
 - Configuração (apenas uma vez):
     - Tocar nas três barras paralelas no canto superior esquerdo e selecionar
-      "Settings".
-    - Trocar "Baud rate" para `9600`.
-    - Trocar "Font size" para `10`.
-    - Trocar "Font style" para `Monospace`.
-    - Desabilitar "Show timestamps".
-    - Trocar "Buffer size" para `Unlimited`.
-    - Habilitar "Clear input on send".
-    - Habilitar "Keep screen on when connected".
+      `Settings`.
+    - Trocar `Baud rate` para `9600`.
+    - Trocar `Font size` para `10`.
+    - Trocar `Font style` para `Monospace`.
+    - Desabilitar `Show timestamps`.
+    - Trocar `Buffer size` para `Unlimited`.
+    - Habilitar `Clear input on send`.
+    - Habilitar `Keep screen on when connected`.
 - Conexão (sempre que abrir o aplicativo):
     - Conectar o aparelho ao celular via cabo USB.
     - Tocar no ícone com dois cabos desconectados no centro superior direito da
       tela.
         - O ícone deve mudar para um com cabos conectados.
-        - A área central do app deve exibir "Connected to..." e o placar da
+        - A área central do app deve exibir `Connected to...` e o placar da
           última apresentação.
 
 <!--
@@ -265,7 +267,7 @@ FINAL:       6665                       <-- Pontuação final da dupla
         - `relatorio`
             - exibe o relatório completo da apresentação
         - `velocidades SIM/NAO`
-            - exibe (ou não) a velocidade de cada golpe
+            - exibe (ou não) a velocidade de cada golpe em tempo real
     - Ação:
         - `reiniciar`
             - reinicia a apresentação imediatamente
