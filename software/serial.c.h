@@ -148,7 +148,7 @@ void Serial_Log (void) {
             Serial.print(STR);
         }
         Serial.println();
-        delay(10);
+        delay(50);
     }
     //Serial.println();
 
