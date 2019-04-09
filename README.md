@@ -21,7 +21,7 @@ apresentação, etc.
 Também há uma entrada USB para visualização do placar e um saída para som para
 sinalizar os golpes.
 
-![Foto do marcador](device.jpg "Foto do Aparelho")
+![Foto do marcador](images/device.jpg "Foto do Aparelho")
 
 - Links do projeto:
     - Site: <https://github.com/frescogo/frescogo>
@@ -197,7 +197,7 @@ FINAL:       6665                       <-- Pontuação final da dupla
     - É necessário um adaptador micro USB para USB
 - Aparelho (PS2/AUX) -> Som (PS2/AUX)
 
-![Ligação dos Cabos](all.jpg "Ligação dos Cabos")
+![Ligação dos Cabos](images/all.jpg "Ligação dos Cabos")
 
 ### Aparelho marcador:
 
@@ -237,8 +237,11 @@ FINAL:       6665                       <-- Pontuação final da dupla
     - Tocar nas três barras paralelas no canto superior esquerdo e selecionar
       "Settings".
     - Trocar "Baud rate" para `9600`.
+    - Trocar "Font size" para `10`.
+    - Trocar "Font style" para `Monospace`.
     - Desabilitar "Show timestamps".
-    - Trocar "Buffer size" para `50 kB`.
+    - Trocar "Buffer size" para `Unlimited`.
+    - Habilitar "Clear input on send".
     - Habilitar "Keep screen on when connected".
 - Conexão (sempre que abrir o aplicativo):
     - Conectar o aparelho ao celular via cabo USB.
@@ -301,8 +304,13 @@ FINAL:       6665                       <-- Pontuação final da dupla
         - `juiz NOME`
             - altera o nome do juiz para `NOME`, que deve ter até 15 caracteres
 
-![Android App](app.jpg "Android App")
-![Conexão USB](connected.jpg "Conexão USB")
+![Android App](images/app.jpg "Android App")
+![Conexão USB](images/connected.jpg "Conexão USB")
+![Configurações](images/app1.jpg "Configurações 1/5")
+![Configurações](images/app2.jpg "Configurações 2/5")
+![Configurações](images/app3.jpg "Configurações 3/5")
+![Configurações](images/app4.jpg "Configurações 4/5")
+![Configurações](images/app5.jpg "Configurações 5/5")
 
 -------------------------------------------------------------------------------
 
