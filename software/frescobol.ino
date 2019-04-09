@@ -504,7 +504,7 @@ void loop (void)
                 {
                     if (IS_BACK) {
                         tone(PIN_TONE, NOTE_C4, 30);
-                    } else {
+                    } else if (S.equilibrio) {
                         // desequilibrio
                         u32 p0  = G.ps[0];
                         u32 p1  = G.ps[1];
