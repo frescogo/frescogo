@@ -2,8 +2,8 @@
 
 # FrescoGO! (versão 1.5)
 
-*FrescoGO!* é um marcador eletrônico semi-automático para competições de
-Frescobol.
+*FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
+competições de Frescobol.
 
 O aparelho marcador contém dois botões de marcação: um para o atleta à esquerda
 e um para o atleta à direita.
@@ -27,6 +27,7 @@ sinalizar os golpes.
     - Site: <https://github.com/frescogo/frescogo>
     - E-mail: <go.frescobol@gmail.com>
     - Vídeos: <https://www.youtube.com/channel/UCrc_Ds56Bh77CFKXldIU-9g>
+    - Licença: <https://creativecommons.org/publicdomain/mark/1.0/deed.pt_BR>
 
 **O projeto eletrônico, o software e a regra são de domínio público, podendo
 ser usados, copiados e modificados livremente.**
@@ -318,6 +319,17 @@ FINAL:       6665                       <-- Pontuação final da dupla
 
 ## Perguntas e Respostas
 
+- Qual é o objetivo desse projeto?
+    - Oferecer uma maneira objetiva, simples e barata de avaliar apresentações
+      de frescobol.
+    - Estar disponível no maior número de arenas de frescobol que for possível.
+    - Auxiliar no desenvolvimento técnico de atletas, incitar a formação de
+      novos atletas e contribuir para o crescimento do Frescobol competitivo.
+
+- Como eu consigo um aparelho desses?
+    - Entre em contato conosco por e-mail:
+        - <go.frescobol@gmail.com>
+
 - Esse aparelho é um radar? Como o aparelho mede a velocidade da bola?
     - O aparelho não é um radar e mede a velocidade de maneira aproximada:
         - Os atletas devem estar a uma distância fixa predeterminada.
@@ -384,3 +396,22 @@ FINAL:       6665                       <-- Pontuação final da dupla
         Os atletas podem verificar se a pontuação final foi justa.
         As apresentações podem ser medidas por um aparelho igual durante as
         apresentaçõs ou podem ser gravados para medição posterior pelo vídeo.
+
+- Eu posso usar o marcador em competições? Quanto custa? A quem devo pedir
+  permissão?
+    - Não há nenhuma restrição de uso.
+    - Não há custos.
+    - Não é necessário pedir autorização.
+      Não é nem mesmo necessário mencionar o nome do sistema ou autores.
+
+- Como eu posso contribuir?
+    - Adotando o sistema no dia a dia da sua arena.
+        - Principalmente com jogadores iniciantes.
+    - Promovendo competições.
+    - Produzindo vídeos.
+    - **Enviando os relatórios dos jogos para nós.**
+
+<!--
+- Como eu posso contribuir financeiramente?
+    -
+-->
