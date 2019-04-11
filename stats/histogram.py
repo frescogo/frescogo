@@ -54,9 +54,10 @@ def atleta (i):
     plt.text(1, 0.95, stats, va='top', ha='right', transform=f.transAxes, family='monospace', size=8)
 
     stats = 'Golpes:   ' + "{:3d}".format(GAME[i]['golpes'])   + '\n' + \
-            'Volume:   ' + "{:3d}".format(GAME[i]['ritmo'][0]) + '\n' + \
-            'Esquerda: ' + "{:3d}".format(GAME[i]['ritmo'][1]) + '\n' + \
-            'Direita:  ' + "{:3d}".format(GAME[i]['ritmo'][2])
+            'Volume:   ' + "{:3d}".format(GAME[i]['ritmo'][0]) + '\n'
+    if GAME['conf']['potencia'] == 1:
+        stats += 'Esquerda: ' + "{:3d}".format(GAME[i]['ritmo'][1]) + '\n' + \
+                 'Direita:  ' + "{:3d}".format(GAME[i]['ritmo'][2])
     plt.text(0.01, 0.95, stats, va='top', ha='left', transform=f.transAxes, family='monospace', size=8)
 
     plt.title(GAME[i]['nome'])
@@ -65,12 +66,13 @@ def atleta (i):
     plt.ylabel('Golpes')
     plt.ylim(ymax=50)
     plt.grid(axis='y')
-    plt.hist(GAME[i]['hits'],  bins=20, color=['gray'])
-    plt.hist(GAME[i]['left'],  bins=20, color=['blue'], histtype='step')
-    plt.hist(GAME[i]['right'], bins=20, color=['red'],  histtype='step')
-    plt.axvline(GAME[i]['ritmo'][0], color='k',    linestyle='dashed', linewidth=1)
-    plt.axvline(GAME[i]['ritmo'][1], color='blue', linestyle='dashed', linewidth=1)
-    plt.axvline(GAME[i]['ritmo'][2], color='red',  linestyle='dashed', linewidth=1)
+    plt.hist(GAME[i]['hits'], bins=20, color=['gray'])
+    plt.axvline(GAME[i]['ritmo'][0], color='k', linestyle='dashed', linewidth=1)
+    if GAME['conf']['potencia'] == 1:
+        plt.hist(GAME[i]['left'],  bins=20, color=['blue'], histtype='step')
+        plt.hist(GAME[i]['right'], bins=20, color=['red'],  histtype='step')
+        plt.axvline(GAME[i]['ritmo'][1], color='blue', linestyle='dashed', linewidth=1)
+        plt.axvline(GAME[i]['ritmo'][2], color='red',  linestyle='dashed', linewidth=1)
 
 atleta(0)
 atleta(1)
