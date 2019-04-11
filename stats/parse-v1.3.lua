@@ -39,13 +39,11 @@ local patt =
     (1-NUMS)^1 * C(NUMS)                    * X *   -- Maria: 4427
     P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
     P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
-    P'(CONF: v' * C(NUMS) * '.' * C(NUMS) * ' / ' * -- v1.5
-                  C(NUMS) * 'cm / '    *            -- 750cm
-                  C(NUMS) * 's / pot=' *            -- 180s
-                  C(NUMS) * ' / equ='  *            -- pot=0/1
-                  C(NUMS) * ' / cont=' *            -- equ=0/1
-                  C(NUMS) * ' / max='  *            -- cont=4%
-                  C(NUMS) * ')'              * X *  -- max=85
+    P'(CONF: ' * C(NUMS) * 'cm / ' *                -- 750cm
+                 C(NUMS) * 's / pot=' *             -- 180s
+                 C(NUMS) * ' / equ='  *             -- pot=0/1
+                 C(NUMS) * ' / cont=' *             -- equ=0/1
+                 C(NUMS) * ')'              * X *   -- cont=4%
     Ct(SEQ^1)                               * X *
     P'----------------------------'         * X *
     P'Atleta    Vol     Esq     Dir   Total' * X*
@@ -61,7 +59,7 @@ local patt =
              
 local esquerda, direita, total, _, quedas, golpes, ritmo1, ritmo2, _,
       p0, esqs0,esq0,dirs0,dir0, p1, esqs1,esq1,dirs1,dir1,
-      _, _, distancia, tempo, potencia, equilibrio, continuidade, _,
+      distancia, tempo, potencia, equilibrio, continuidade,
       seqs,
       _vol0, _esq0, _dir0, _tot0,
       _vol1, _esq1, _dir1, _tot1,
