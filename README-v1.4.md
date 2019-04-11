@@ -1,6 +1,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 1.5)
+TODO:
+    - FAQ
+        - posso usar em campeonato
+            - sim, sem aviso, sem autorizacao
+                - licenca livre
+        - secao de licenca
+    - configurar sensibilidade do back
+
+# FrescoGO! (versão 1.4)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para competições de
 Frescobol.

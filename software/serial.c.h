@@ -159,7 +159,7 @@ void Serial_Log (void) {
             for (int k=0; k<HITS_BESTS; k++) {
                 u32 v = G.bests[i][j][k];
                 if (!S.potencia) {
-                    v = 40;
+                    v = POT_VEL;
                 }
                 sum += v*v*4;
             }
