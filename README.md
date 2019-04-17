@@ -143,17 +143,17 @@ João: 1284                              <-- total do atleta à esquerda
  [  77  75  75  61  44   0   0 ] => 47  <-- 7 golpes de direita  mais fortes => média simples
 
 Maria: 856                              <-- total do atleta à direita
- [   0   0   0   0   0   0   0 ]        <-- 7 golpes de esquerda mais fortes
- [  67  55  54  49  38  34  33 ]        <-- 7 golpes de direita  mais fortes
+ [   0   0   0   0   0   0   0 ] =>  0  <-- 7 golpes de esquerda mais fortes
+ [  67  55  54  49  38  34  33 ] => 47  <-- 7 golpes de direita  mais fortes
 
-(CONF: v1.4 / 750cm / 30s / pot=1 / equ=1 / cont=3 / max=85)    <-- configurações
+(CONF: v1.6 / 750cm / 180s / pot=1 / equ=1 / cont=3 / max=85)   <-- configurações
         \-- versão do software
                \-- distância entre os ateltas
                        \-- tempo máximo de apresentação
-                             \-- pontuação de potência (0=desligada, 1=ligada)
-                                     \-- pontuação de equilíbrio
-                                             \-- percentual perdido por queda
-                                                     \-- velocidade máxima a detectar
+                              \-- pontuação de potência (0=desligada, 1=ligada)
+                                      \-- pontuação de equilíbrio
+                                              \-- percentual perdido por queda
+                                                      \-- velocidade máxima a detectar
 ```
 
 - Relatório (ao final da apresentação)
@@ -325,8 +325,8 @@ FINAL:       6665                       <-- Pontuação final da dupla
     - Oferecer uma maneira objetiva, simples e barata de avaliar apresentações
       de frescobol.
     - Estar disponível no maior número de arenas de frescobol que for possível.
-    - Auxiliar no desenvolvimento técnico de atletas, incitar a formação de
-      novos atletas e contribuir para o crescimento do Frescobol competitivo.
+    - Auxiliar no desenvolvimento técnico de atletas, estimular a formação de
+      novos atletas e contribuir para o crescimento do Frescobol de competição.
 
 - Como eu consigo um aparelho desses?
     - Entre em contato conosco por e-mail:
