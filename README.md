@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 1.5)
+# FrescoGO! (versão 1.6)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
 competições de Frescobol.
@@ -62,10 +62,12 @@ Quesitos de pontuação:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
           mais **100 pontos** por aquele golpe (`25x3=75`), além dos 25 pontos
           já somados no quesito de volume.
+
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
 -->
+
 - **Equilíbrio:**
     - A pontuação da dupla será a média de pontos entre os dois atletas.
     - Se o atleta que pontou menos estiver abaixo de 90% dessa média, então a

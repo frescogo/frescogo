@@ -1,7 +1,7 @@
 v1.6
 ----
 
-- O bônus de potência diminui de `x4` para `x3`.
+- O bônus de potência diminuiu de `x4` para `x3`.
 
 v1.5
 ----
