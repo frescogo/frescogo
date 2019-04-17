@@ -17,7 +17,7 @@ void PT_Bests_Apply (void) {
                 if (!S.potencia) {
                     v = POT_VEL;
                 }
-                G.ps[i] += v*v*4;
+                G.ps[i] += v*v*POT_BONUS;
             }
         }
     }

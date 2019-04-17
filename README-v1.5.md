@@ -57,10 +57,10 @@ Quesitos de pontuação:
 - **Potência:**
     - Cada um dos 7 golpes mais velozes de direita e de esquerda de cada
       atleta são contabilizados conforme a regra acima e ainda são
-      multiplicados por 3 antes de serem somados ao total do atleta.
+      multiplicados por 4 antes de serem somados ao total do atleta.
       Exemplo:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
-          mais **100 pontos** por aquele golpe (`25x3=75`), além dos 25 pontos
+          mais **100 pontos** por aquele golpe (`25x4=100`), além dos 25 pontos
           já somados no quesito de volume.
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a

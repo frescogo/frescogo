@@ -161,7 +161,7 @@ void Serial_Log (void) {
                 if (!S.potencia) {
                     v = POT_VEL;
                 }
-                sum += v*v*4;
+                sum += v*v*POT_BONUS;
             }
             bests[i][j] = sum;
         }

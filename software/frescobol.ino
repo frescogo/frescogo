@@ -1,5 +1,5 @@
 #define MAJOR 1
-#define MINOR 5
+#define MINOR 6
 
 //#define DEBUG
 //#define TV_ON
@@ -80,6 +80,7 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define NAME_MAX        20
 
+#define POT_BONUS       3
 #define POT_VEL         50
 #define MAX_VEL         85
 
