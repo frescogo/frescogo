@@ -60,7 +60,7 @@ Quesitos de pontuação:
       multiplicados por 3 antes de serem somados ao total do atleta.
       Exemplo:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
-          mais **100 pontos** por aquele golpe (`25x3=75`), além dos 25 pontos
+          mais **75 pontos** por aquele golpe (`25x3=75`), além dos 25 pontos
           já somados no quesito de volume.
 
 <!--
