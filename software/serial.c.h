@@ -73,13 +73,14 @@ void Serial_Score (void) {
         Serial.println();
     }
 
-    sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
+    //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
+    sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / max=%d)"),
                 MAJOR, MINOR,
                 S.distancia,
                 (int)(S.timeout/1000),
                 (int)S.potencia,
                 (int)S.equilibrio,
-                (int)S.continuidade,
+                //(int)S.continuidade,
                 (int)S.maxima);
     Serial.println(STR);
 }
@@ -190,7 +191,7 @@ void Serial_Log (void) {
                      total / 100);
     Serial.println(STR);
 */
-    int pct = 100 - min(100, Falls()*S.continuidade);
+    int pct = 100 - min(99, Falls()*REF_TIMEOUT*REF_FALLS/S.timeout/100);
     //sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
     sprintf_P(STR, PSTR("Media:      %5ld"), avg/100);
     Serial.println(STR);
@@ -257,8 +258,10 @@ _COMPLETE:
         S.equilibrio = 0;
     } else if (strncmp_P(CMD, PSTR("maxima "), 7) == 0) {
         S.maxima = atoi(&CMD[7]);
+/*
     } else if (strncmp_P(CMD, PSTR("continuidade "), 13) == 0) {
         S.continuidade = atoi(&CMD[13]);
+*/
     } else if (strncmp_P(CMD, PSTR("esquerda "), 9) == 0) {
         if (strlen(&CMD[9]) < 15) {
             strcpy(S.names[0], &CMD[9]);

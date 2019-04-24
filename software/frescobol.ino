@@ -1,5 +1,5 @@
 #define MAJOR 1
-#define MINOR 6
+#define MINOR 7
 
 //#define DEBUG
 //#define TV_ON
@@ -62,8 +62,12 @@ static pollserial pserial;
 
 static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
+#define REF_TIMEOUT     180         // 3 mins
+#define REF_BESTS       7
+#define REF_FALLS       300         // 3.00%
+
 #define HITS_MAX        600
-#define HITS_BESTS      7
+#define HITS_BESTS_MAX  20
 
 #define HIT_BACK_DT     180         // minimum time to hold for back
 #define HIT_MIN_DT      235         // minimum time between two hits (125kmh)
@@ -82,7 +86,6 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define POT_BONUS       3
 #define POT_VEL         50
-#define MAX_VEL         85
 
 static int  STATE;
 static bool IS_BACK;
@@ -95,7 +98,7 @@ typedef struct {
     u16  distancia;             // = 700 cm
     s8   potencia;              // = sim/nao
     s8   equilibrio;            // = sim/nao
-    u8   continuidade;          // = 3%
+    //u8   continuidade;          // = 3%
     s8   velocidades;           // = sim/nao
     u8   maxima;                // = 85 kmh
 
@@ -106,15 +109,15 @@ static Save S;
 
 typedef struct {
     // needed on EEPROM_Load
-    u8  kmhs[HITS_MAX];            // kmh (max 125km/h)
+    u8  kmhs[HITS_MAX];              // kmh (max 125km/h)
 
     // calculated when required
-    s8  bests[2][2][HITS_BESTS];    // kmh (max 125kmh/h)
-    u32 time;                       // ms (total time)
-    u32 ps[2];                      // sum(kmh*kmh)
+    s8  bests[2][2][HITS_BESTS_MAX]; // kmh (max 125kmh/h)
+    u32 time;                        // ms (total time)
+    u32 ps[2];                       // sum(kmh*kmh)
     u16 hits;
     u8  servs;
-    s8  pace[2];                    // kmh/kmh2
+    s8  pace[2];                     // kmh/kmh2
     u16 total;
 } Game;
 static Game G;
@@ -259,12 +262,12 @@ void EEPROM_Default (void) {
     strcpy(S.names[0], "Atleta ESQ");
     strcpy(S.names[1], "Atleta DIR");
     S.distancia    = 750;
-    S.timeout      = 180 * ((u32)1000);
+    S.timeout      = REF_TIMEOUT * ((u32)1000);
     S.potencia     = 0;
     S.equilibrio   = 1;
-    S.continuidade = 3;
+    //S.continuidade = 3;
     S.velocidades  = 1;
-    S.maxima       = MAX_VEL;
+    S.maxima       = 85;
 }
 
 void setup (void) {
@@ -546,10 +549,12 @@ _FALL:
         Serial_Score();
         EEPROM_Save();
 
+/*
         if (Falls() >= 25) {
             S.dts[S.hit++] = HIT_SERV;  // simulate timeout after service
             goto _TIMEOUT;
         }
+*/
     }
 
 _TIMEOUT:

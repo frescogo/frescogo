@@ -1,3 +1,11 @@
+v1.7
+----
+
+- Percentual de quedas fixo em 3% para jogo de 3 minutos.
+- Percentual de quedas e número de golpes de potência sempre proporcionais
+  aos valores de referência para 3 minutos.
+- Não há mais limite de quedas (eram 25).
+
 v1.6
 ----
 

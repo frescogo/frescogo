@@ -1,3 +1,5 @@
+#define HITS_BESTS (S.timeout*REF_BESTS/REF_TIMEOUT)
+
 int PT_Bests (s8* bests, int* min_, int* max_) {
     *min_ = bests[HITS_BESTS-1];
     *max_ = bests[0];
@@ -80,6 +82,6 @@ void PT_All (void) {
 
     u32 avg   = (G.ps[0] + G.ps[1]) / 2;
     u32 total = (S.equilibrio ? min(avg, min(G.ps[0],G.ps[1])*11/10) : avg);
-    int pct   = 100 - min(100, Falls()*S.continuidade);
+    int pct   = 100 - min(99, Falls()*REF_TIMEOUT*REF_FALLS/S.timeout/100);
     G.total = total * pct/10000;
 }

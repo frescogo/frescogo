@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 1.7)
+# FrescoGO! (versão 1.6)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
 competições de Frescobol.
@@ -85,9 +85,7 @@ Quesitos de pontuação:
         - Com 5 quedas, a dupla perderá 15% dos pontos, ou seja, se ela pontuou
           4400 após o equilíbrio, a pontuação final será de **3740 pontos**
           (`4400x85%`).
-<!--
     - A apresentação é encerrada sumariamente na 25a queda.
--->
 
 -------------------------------------------------------------------------------
 
@@ -148,13 +146,14 @@ Maria: 856                              <-- total do atleta à direita
  [   0   0   0   0   0   0   0 ] =>  0  <-- 7 golpes de esquerda mais fortes
  [  67  55  54  49  38  34  33 ] => 47  <-- 7 golpes de direita  mais fortes
 
-(CONF: v1.6 / 750cm / 180s / pot=1 / equ=1 / max=85)   <-- configurações
+(CONF: v1.6 / 750cm / 180s / pot=1 / equ=1 / cont=3 / max=85)   <-- configurações
         \-- versão do software
                \-- distância entre os ateltas
                        \-- tempo máximo de apresentação
                               \-- pontuação de potência (0=desligada, 1=ligada)
                                       \-- pontuação de equilíbrio
-                                              \-- velocidade máxima a detectar
+                                              \-- percentual perdido por queda
+                                                      \-- velocidade máxima a detectar
 ```
 
 - Relatório (ao final da apresentação)
@@ -298,11 +297,9 @@ FINAL:       6665                       <-- Pontuação final da dupla
               esquerda e direita premarcadas a 50kmh (e nunca serão modificadas)
         - `equilibrio SIM/NAO`
             - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
-<!--
         - `continuidade PCT`
             - altera o percentual de perda por queda de bola para `PCT`, que
               deve ser um número
--->
         - `esquerda NOME`
             - altera o nome do atleta à esquerda para `NOME`, que deve ter até
               15 caracteres
