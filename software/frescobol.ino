@@ -68,6 +68,7 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define HITS_MAX        600
 #define HITS_BESTS_MAX  20
+#define HITS_BESTS      (min(HITS_BESTS_MAX, (S.timeout*REF_BESTS/REF_TIMEOUT/1000)))
 
 #define HIT_BACK_DT     180         // minimum time to hold for back
 #define HIT_MIN_DT      235         // minimum time between two hits (125kmh)

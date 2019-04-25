@@ -1,5 +1,3 @@
-#define HITS_BESTS (S.timeout*REF_BESTS/REF_TIMEOUT)
-
 int PT_Bests (s8* bests, int* min_, int* max_) {
     *min_ = bests[HITS_BESTS-1];
     *max_ = bests[0];
