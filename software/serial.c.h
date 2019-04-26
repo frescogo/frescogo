@@ -74,12 +74,13 @@ void Serial_Score (void) {
     }
 
     //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-    sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / max=%d)"),
+    sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
                 MAJOR, MINOR,
                 S.distancia,
                 (int)(S.timeout/1000),
                 (int)S.potencia,
                 (int)S.equilibrio,
+                (int)CONT_PCT,
                 //(int)S.continuidade,
                 (int)S.maxima);
     Serial.println(STR);
@@ -191,15 +192,15 @@ void Serial_Log (void) {
                      total / 100);
     Serial.println(STR);
 */
-    int pct = 100 - min(99, Falls()*REF_TIMEOUT*REF_FALLS/S.timeout/100);
+    u32 pct = min(990, Falls()*CONT_PCT);
     //sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
     sprintf_P(STR, PSTR("Media:      %5ld"), avg/100);
     Serial.println(STR);
     sprintf_P(STR, PSTR("Equilibrio: %5ld (-)"), (S.equilibrio ? (avg/100)-(total/100) : 0));
     Serial.println(STR);
-    sprintf_P(STR, PSTR("Quedas:     %5ld (-)"), total/100-total*pct/10000);
+    sprintf_P(STR, PSTR("Quedas:     %5ld (-)"), total*pct/100000);
     Serial.println(STR);
-    sprintf_P(STR, PSTR("FINAL:      %5ld"), total*pct/10000);
+    sprintf_P(STR, PSTR("FINAL:      %5ld"), total*(1000-pct)/100000);
     Serial.println(STR);
 }
 

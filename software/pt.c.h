@@ -30,7 +30,7 @@ void PT_All (void) {
     G.hits  = 0;
     G.servs = 0;
 
-    memset(G.bests, 0, 2*2*HITS_BESTS*sizeof(s8));
+    memset(G.bests, 0, 2*2*HITS_BESTS_MAX*sizeof(s8));
 
     u32 pace[2] = {0,0};
 
@@ -78,8 +78,8 @@ void PT_All (void) {
 
     PT_Bests_Apply();
 
+    u32 pct   = min(990, Falls()*CONT_PCT);
     u32 avg   = (G.ps[0] + G.ps[1]) / 2;
     u32 total = (S.equilibrio ? min(avg, min(G.ps[0],G.ps[1])*11/10) : avg);
-    int pct   = 100 - min(99, Falls()*REF_TIMEOUT*REF_FALLS/S.timeout/100);
-    G.total = total * pct/10000;
+    G.total   = total * (1000-pct) / 100000;
 }

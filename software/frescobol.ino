@@ -64,7 +64,7 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define REF_TIMEOUT     180         // 3 mins
 #define REF_BESTS       7
-#define REF_FALLS       300         // 3.00%
+#define REF_FALLS       30          // 3.0%
 
 #define HITS_MAX        600
 #define HITS_BESTS_MAX  20
@@ -87,6 +87,8 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define POT_BONUS       3
 #define POT_VEL         50
+
+#define CONT_PCT        (((u32)REF_TIMEOUT)*REF_FALLS/(S.timeout/1000))
 
 static int  STATE;
 static bool IS_BACK;
