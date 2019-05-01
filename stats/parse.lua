@@ -1,3 +1,5 @@
+--lua5.3 parse.lua <file> /tmp
+
 local m = require 'lpeg'
 local P, S, C, R, Ct, Cc = m.P, m.S, m.C, m.R, m.Ct, m.Cc
 
@@ -67,7 +69,7 @@ local esquerda, direita, total, _, quedas, golpes, ritmo1, ritmo2, _,
       _vol1, _esq1, _dir1, _tot1,
       _media, _equilibrio, _quedas, _final = patt:match(assert(io.open(INP)):read'*a')
 
-print(esquerda, direita, total, quedas, ritmo1)
+print(esquerda, direita, _final, quedas, ritmo1)
 --[[
 print(esquerda, direita, total, ritmo2, dir1, distancia, continuidade, seqs)
 for i,seq in ipairs(seqs) do
@@ -78,7 +80,7 @@ error'ok'
 
 -------------------------------------------------------------------------------
 
-assert(total==_final and p0==_tot0 and p1==_tot1)
+--assert(total==_final and p0==_tot0 and p1==_tot1)
 
 local nomes  = { esquerda, direita }
 local pontos = { {_tot0,_vol0,_esq0,_dir0}, {_tot1,_vol1,_esq1,_dir1} }
