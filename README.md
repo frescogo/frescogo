@@ -117,7 +117,7 @@ Quesitos de pontuação:
 - O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
 - Um som agudo é emitido a cada 1 minuto e também quando faltam 30, 10, e 5
   segundos para a apresentação terminar.
-- A apresentação termina após 3 minutos cronometrados ou após a 25a queda.
+- A apresentação termina após 3 minutos cronometrados. <!-- ou após a 25a queda.-->
   Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
   golpes.

@@ -1,5 +1,5 @@
-v1.7
-----
+v1.7 (abr/19)
+-------------
 
 - Percentual de quedas fixo em 3% para jogo de 3 minutos.
 - Percentual de quedas e número de golpes de potência sempre proporcionais
