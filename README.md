@@ -55,8 +55,8 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Potência:**
-    - Cada um dos 7 golpes mais velozes de direita e de esquerda de cada
-      atleta são contabilizados conforme a regra acima e ainda são
+    - Cada um dos 7 golpes mais velozes de **direita** e de **esquerda** de
+      cada atleta são contabilizados conforme a regra acima e ainda são
       multiplicados por 3 antes de serem somados ao total do atleta.
       Exemplo:
         - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
