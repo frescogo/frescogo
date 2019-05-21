@@ -114,7 +114,7 @@ local hits = { {}, {} }
     ritmos[2][1] = math.floor(math.sqrt(ritmos[2][1]/#hits[2]))
 assert(tonumber(golpes) == (#hits[1]+#hits[2]))
 
-assert(#seqs == quedas+1)
+assert((#seqs==quedas+1) or (#seqs==tonumber(quedas)))
 
 function player (i)
     local ret = "{\n"
