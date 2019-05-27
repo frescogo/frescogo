@@ -89,10 +89,13 @@ void Serial_Score (void) {
                 //(int)S.continuidade,
                 (int)S.maxima);
     Serial.println(STR);
-    Serial.println();
 }
 
 void Serial_Log (void) {
+    Serial.println();
+    Serial.println(F("-----------------------------------------------"));
+    Serial.println();
+
     int ball  = 0;
     u32 ps[2] = {0,0};
     for (int i=0 ; i<S.hit ; i++) {
