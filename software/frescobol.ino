@@ -1,5 +1,6 @@
-#define MAJOR 1
-#define MINOR 7
+#define MAJOR    1
+#define MINOR    7
+#define REVISION 3
 
 //#define DEBUG
 //#define TV_ON
@@ -311,6 +312,8 @@ void loop (void)
     Serial.print(MAJOR);
     Serial.print(".");
     Serial.print(MINOR);
+    Serial.print(".");
+    Serial.print(REVISION);
     Serial.println(F(") ="));
     STATE = STATE_IDLE;
     PT_All();

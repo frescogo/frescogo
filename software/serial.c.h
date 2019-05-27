@@ -9,58 +9,59 @@ void Serial_Hit (u32 kmh, bool is_back) {
 
 void Serial_Score (void) {
     Serial.println();
-    Serial.println(F("----------------------------"));
-    sprintf_P(STR, PSTR("%10s"), S.names[0]);
+    Serial.println(F("-----------------------------------------------"));
+    sprintf_P(STR, PSTR("%22s"), S.names[0]);
     Serial.print(STR);
     Serial.print(F(" / "));
     sprintf_P(STR, PSTR("%s"), S.names[1]);
     Serial.print(STR);
     Serial.println();
 
-    Serial.println(F("----------------------------"));
+    Serial.println(F("-----------------------------------------------"));
     Serial.println();
 
-    sprintf_P(STR, PSTR("%10S: "), F("TOTAL"));
-    Serial.print(STR);
-    Serial.println(G.total);
+    Serial.print(F("TOTAL ........ "));
+    Serial.print(G.total);
+    Serial.println(F(" pts"));
 
-    sprintf_P(STR, PSTR("%10S: "), F("Tempo"));
-    Serial.print(STR);
+    Serial.print(F("Tempo ........ "));
     Serial.print(G.time);
     Serial.print(F("ms"));
     Serial.print(F(" (-"));
     Serial.print(G.time > S.timeout ? 0 : (S.timeout-G.time)/1000);
     Serial.println(F("s)"));
 
-    sprintf_P(STR, PSTR("%10S: "), F("Quedas"));
-    Serial.print(STR);
+    Serial.print(F("Quedas ....... "));
     Serial.println(Falls());
 
-    sprintf_P(STR, PSTR("%10S: "), F("Golpes"));
-    Serial.print(STR);
+    Serial.print(F("Golpes ....... "));
     Serial.println(G.hits);
 
-    sprintf_P(STR, PSTR("%10S: "), F("Ritmo"));
-    Serial.print(STR);
+    Serial.print(F("Ritmo ........ "));
     if (G.time > 5000) {
         Serial.print((int)G.pace[0]);
         Serial.print(F("/"));
         Serial.println((int)G.pace[1]);
+        Serial.println(F(" kmh"));
     } else {
-        Serial.println("---");
+        Serial.println(F("---"));
     }
 
-    sprintf_P(STR, PSTR("%10S: "), F("Juiz"));
-    Serial.print(STR);
+    Serial.print(F("Juiz ......... "));
     Serial.println(S.juiz);
 
-    Serial.println();
     for (int i=0; i<2; i++) {
+        Serial.println();
+        Serial.println(F("-----------------------------------------------"));
+        Serial.println();
+
         sprintf_P(STR, PSTR("%10s: "), S.names[i]);
         Serial.print(STR);
-        Serial.println(G.ps[i]/100);
+        Serial.print(G.ps[i]/100);
+        Serial.println(F(" pts"));
         for (int j=0; j<2; j++) {
             int sum = 0;
+            Serial.print( (j==1) ? F(" dir ") : F(" esq ") );
             Serial.print(F(" [ "));
             for (int k=0; k<HITS_BESTS; k++) {
                 sum += G.bests[i][j][k];
@@ -68,14 +69,18 @@ void Serial_Score (void) {
                 Serial.print(STR);
             }
             Serial.print(F("] => "));
-            Serial.println(sum/HITS_BESTS);
+            Serial.print(sum/HITS_BESTS);
+            Serial.println(F(" kmh"));
         }
-        Serial.println();
     }
 
+    Serial.println();
+    Serial.println(F("-----------------------------------------------"));
+    Serial.println();
+
     //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-    sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-                MAJOR, MINOR,
+    sprintf_P(STR, PSTR("(CONF: v%d.%d.%d / %dcm / %ds / pot=%d / equ=%d /\n       cont=%d / max=%d)"),
+                MAJOR, MINOR, REVISION,
                 S.distancia,
                 (int)(S.timeout/1000),
                 (int)S.potencia,
@@ -84,6 +89,7 @@ void Serial_Score (void) {
                 //(int)S.continuidade,
                 (int)S.maxima);
     Serial.println(STR);
+    Serial.println();
 }
 
 void Serial_Log (void) {
@@ -172,15 +178,19 @@ void Serial_Log (void) {
     u32 p0 = ps[0] + bests[0][0] + bests[0][1];
     u32 p1 = ps[1] + bests[1][0] + bests[1][1];
 
-    Serial.println(F("----------------------------"));
+    Serial.println(F("-----------------------------------------------"));
     Serial.println();
+
     Serial.println(F("    Atleta    Vol     Esq     Dir   Total"));
-    sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld"),
+    sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld pts"),
         S.names[0], ps[0]/100, bests[0][0]/100, bests[0][1]/100, p0/100);
     Serial.println(STR);
-    sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld"),
+    sprintf_P(STR, PSTR("%10s: %5ld + %5ld + %5ld = %5ld pts"),
         S.names[1], ps[1]/100, bests[1][0]/100, bests[1][1]/100, p1/100);
     Serial.println(STR);
+
+    Serial.println();
+    Serial.println(F("-----------------------------------------------"));
     Serial.println();
 
     u32 avg   = (p0 + p1) / 2;
@@ -192,16 +202,19 @@ void Serial_Log (void) {
                      total / 100);
     Serial.println(STR);
 */
+
     u32 pct = min(990, Falls()*CONT_PCT);
     //sprintf_P(STR, PSTR(">>> %ld x %d%% = %ld"), total/100, pct, total*pct/10000);
-    sprintf_P(STR, PSTR("Media:      %5ld"), avg/100);
+    sprintf_P(STR, PSTR("Media ........ %5ld"), avg/100);
+    Serial.print(STR);
+    Serial.println(F(" pts"));
+    sprintf_P(STR, PSTR("Equilibrio ... %5ld (-)"), (S.equilibrio ? (avg/100)-(total/100) : 0));
     Serial.println(STR);
-    sprintf_P(STR, PSTR("Equilibrio: %5ld (-)"), (S.equilibrio ? (avg/100)-(total/100) : 0));
+    sprintf_P(STR, PSTR("Quedas ....... %5ld (-)"), total*pct/100000);
     Serial.println(STR);
-    sprintf_P(STR, PSTR("Quedas:     %5ld (-)"), total*pct/100000);
-    Serial.println(STR);
-    sprintf_P(STR, PSTR("FINAL:      %5ld"), total*(1000-pct)/100000);
-    Serial.println(STR);
+    sprintf_P(STR, PSTR("TOTAL ........ %5ld"), total*(1000-pct)/100000);
+    Serial.print(STR);
+    Serial.println(F(" pts"));
 }
 
 int Serial_Check (void) {
