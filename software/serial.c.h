@@ -41,7 +41,7 @@ void Serial_Score (void) {
     if (G.time > 5000) {
         Serial.print((int)G.pace[0]);
         Serial.print(F("/"));
-        Serial.println((int)G.pace[1]);
+        Serial.print((int)G.pace[1]);
         Serial.println(F(" kmh"));
     } else {
         Serial.println(F("---"));
