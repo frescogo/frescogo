@@ -55,15 +55,16 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Potência:**
-    - O 7o golpe mais veloz de **direita** e de **esquerda** de cada atleta é
-      contabilizado conforme a regra acima e ainda é multiplicado por 21.
+    - O 7o golpe mais veloz de **direita** e de **esquerda** (*forehand* e
+      *backhand*) de cada atleta é contabilizado conforme a regra acima e ainda
+      é multiplicado por 21.
       Exemplo:
-        - Os golpes mais velozes de um atleta foram os seguintes:
+        - Os golpes mais velozes de um dos atleta foram os seguintes:
             - De direita:  `87`, `81`, `78`, `77`, `75`, `73`, **`70`**, `70`, `69`, ...
             - De esquerda: `70`, `62`, `62`, `57`, `55`, `53`, **`50`**, `49`, `47`, ...
-        - A 7a bola de direita  foi a `70` kmh, somando `49x20` = **1029 pontos**.
-        - A 7a bola de esquerda foi a `50` kmh, somando `25x20` = **525 pontos**.
-        - Esse atleta vai então somar **1480 pontos** de potëncia.
+        - A 7a bola de direita  foi a 70 kmh, somando `49x20` = **1029 pontos**.
+        - A 7a bola de esquerda foi a 50 kmh, somando `25x20` = **525 pontos**.
+        - Esse atleta vai então somar **1480 pontos** de potência.
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
