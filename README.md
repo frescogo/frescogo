@@ -62,8 +62,10 @@ Quesitos de pontuação:
         - Os golpes mais velozes de um dos atleta foram os seguintes:
             - De direita:  `87`, `81`, `78`, `77`, `75`, `73`, **`70`**, `70`, `69`, ...
             - De esquerda: `70`, `62`, `62`, `57`, `55`, `53`, **`50`**, `49`, `47`, ...
-        - A 7a bola de direita  foi a 70 kmh, somando `49x20` = **1029 pontos**.
-        - A 7a bola de esquerda foi a 50 kmh, somando `25x20` = **525 pontos**.
+        - O 7o golpe mais veloz de direita  foi a 70 kmh,
+          somando `49x20` = **1029 pontos**.
+        - O 7o golpe mais veloz de esquerda foi a 50 kmh,
+          somando `25x20` = **525 pontos**.
         - Esse atleta vai então somar **1480 pontos** de potência.
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
@@ -374,8 +376,19 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
 - Por quê as velocidades são elevadas ao quadrado?
     - Para bonificar os golpes mais potentes.
       Quanto maior a velocidade, maior ainda será o quadrado dela.
-      Uma bola a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
+      Um golpe a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
       praticamente o dobro (25 vs 49 pontos, após a divisão por 100).
+
+- Qual é o objetivo do quesito Potência?
+    - Ao bonificar o 7o golpe mais veloz tanto de esquerda quanto de direita,
+      a regra incentiva que o atleta ataque acima do seu limite.
+      Os 7 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
+      uma apresentação de 3 minutos (20% considerando esquerda e direita).
+    - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
+      de considerar apenas o 7o)?
+        - Para minimizar a imprecisão da marcação do juiz.
+          É possível que o juiz acelere a marcação de alguns golpes, mas é
+          pouco provável que isso afete sensivelmente a 7a bola mais veloz.
 
 - Tem como o juiz "roubar"?
     - Ao atrasar a marcação de um golpe "A", consequentemente o golpe "B"
