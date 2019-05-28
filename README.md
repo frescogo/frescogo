@@ -314,11 +314,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
               esquerda e direita premarcadas a 50kmh (e nunca serão modificadas)
         - `equilibrio SIM/NAO`
             - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
-<!--
-        - `continuidade PCT`
-            - altera o percentual de perda por queda de bola para `PCT`, que
-              deve ser um número
--->
         - `esquerda NOME`
             - altera o nome do atleta à esquerda para `NOME`, que deve ter até
               15 caracteres
@@ -335,6 +330,12 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
 ![Configurações](images/app3.jpg "Configurações 3/5")
 ![Configurações](images/app4.jpg "Configurações 4/5")
 ![Configurações](images/app5.jpg "Configurações 5/5")
+
+<!--
+        - `continuidade PCT`
+            - altera o percentual de perda por queda de bola para `PCT`, que
+              deve ser um número
+-->
 
 -------------------------------------------------------------------------------
 
