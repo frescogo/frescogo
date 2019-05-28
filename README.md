@@ -1,5 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
+<!--
+$ pandoc README.md -H deeplists.tex -o frescogo.pdf
+-->
+
 # FrescoGO! (versão 1.8)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
@@ -288,6 +292,9 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - exibe o relatório completo da apresentação
         - `velocidades SIM/NAO`
             - exibe (ou não) a velocidade de cada golpe em tempo real
+            - Exemplo:
+                - `velocidades nao`
+                - desabilita a exibição da velocidade dos golpes
     - Ação:
         - `reiniciar`
             - reinicia a apresentação imediatamente
@@ -301,27 +308,51 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
         - `tempo SEGS`
             - altera o tempo total das apresentações para `SEGS`, que deve ser
               um número em segundos
+            - Exemplo:
+                - `tempo 300`
+                - altera o tempo de apresentação para 5 minutos
         - `distancia CMS`
             - altera a distância das apresentações para `CMS`, que deve ser um
               número em centímetros
+            - Exemplo:
+                - `distancia 800`
+                - altera a distância para 8 metros
         - `maxima VEL`
             - altera a velocidade máxima a ser considerada para `VEL`, que deve
               ser um número em kmh (bolas acima de `VEL` serão consideradas
               como `VEL`)
+            - Exemplo:
+                - `maxima 90`
+                - bolas acima de 90 kmh serão interpretadas como 90 kmh
         - `potencia SIM/NAO`
             - liga ou desliga a pontuação de potência (`nao=desligada`, `sim=ligada`)
             - caso desligada, a apresentação já iniciará com as 7 bolas de
               esquerda e direita premarcadas a 50kmh (e nunca serão modificadas)
+            - Exemplo:
+                - `potencia sim`
+                - habilita a pontuação de potência
         - `equilibrio SIM/NAO`
             - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
+            - Exemplo:
+                - `equilibrio nao`
+                - desabilita a pontuação de equilibrio
         - `esquerda NOME`
             - altera o nome do atleta à esquerda para `NOME`, que deve ter até
               15 caracteres
+            - Exemplo:
+                - `esquerda Maria`
+                - altera o nome do atleta à esquerda para *Maria*
         - `direita NOME`
             - altera o nome do atleta à direita para `NOME`, que deve ter até
               15 caracteres
+            - Exemplo:
+                - `direita Joao`
+                - altera o nome do atleta à direita para *Joao*
         - `juiz NOME`
             - altera o nome do juiz para `NOME`, que deve ter até 15 caracteres
+            - Exemplo:
+                - `direita Arnaldo`
+                - altera o nome do juiz para *Arnaldo*
 
 ![Android App](images/app.jpg "Android App")
 ![Conexão USB](images/connected.jpg "Conexão USB")
