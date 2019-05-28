@@ -294,7 +294,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - exibe (ou não) a velocidade de cada golpe em tempo real
             - Exemplo:
                 - `velocidades nao`
-                - desabilita a exibição da velocidade dos golpes
+                - desabilita a exibição dos golpes em tempo real
     - Ação:
         - `reiniciar`
             - reinicia a apresentação imediatamente
@@ -303,7 +303,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
         - `desfazer`
             - desconsidera por inteiro a sequência anterior
         - `restaurar`
-            - restaura configuração de fábrica
+            - restaura a configuração de fábrica
     - Configuração:
         - `tempo SEGS`
             - altera o tempo total das apresentações para `SEGS`, que deve ser
@@ -351,7 +351,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
         - `juiz NOME`
             - altera o nome do juiz para `NOME`, que deve ter até 15 caracteres
             - Exemplo:
-                - `direita Arnaldo`
+                - `juiz Arnaldo`
                 - altera o nome do juiz para *Arnaldo*
 
 ![Android App](images/app.jpg "Android App")
