@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 1.8)
+# FrescoGO! (versão 1.7)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
 competições de Frescobol.
@@ -55,15 +55,14 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Potência:**
-    - O 7o golpe mais veloz de **direita** e de **esquerda** de cada atleta é
-      contabilizado conforme a regra acima e ainda é multiplicado por 21.
+    - Cada um dos 7 golpes mais velozes de **direita** e de **esquerda** de
+      cada atleta são contabilizados conforme a regra acima e ainda são
+      multiplicados por 3 antes de serem somados ao total do atleta.
       Exemplo:
-        - Os golpes mais velozes de um atleta foram os seguintes:
-            - De direita:  `87`, `81`, `78`, `77`, 75`, `73`, **`70`**, `70`, `69`, ...
-            - De esquerda: `70`, `62`, `62`, `57`, `55`, `53`, **`50`**, `49`, `47`, ...
-        - A 7a bola de direita  foi a `70` kmh, somando `49x20` = **1029 pontos**.
-        - A 7a bola de esquerda foi a `50` kmh, somando `25x20` = **525 pontos**.
-        - Esse atleta vai então somar **1480 pontos** de potëncia.
+        - Se um desses golpes mais velozes foi a 50 kmh, o atleta vai somar
+          mais **75 pontos** por aquele golpe (`25x3=75`), além dos 25 pontos
+          já somados no quesito de volume.
+
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
@@ -130,42 +129,32 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
 - Placar (a cada sequência)
 
 ```
------------------------------------------------
-                  Joao / Maria                  <-- nome dos atletas
------------------------------------------------
+--------------------------------
+      João / Maria                      <-- nome dos atletas
+--------------------------------
 
-TOTAL ........ 604 pts                          <-- total de pontos
-Tempo ........ 19630ms (-160s)                  <-- tempo passado e restante
-Quedas ....... 5                                <-- número de quedas
-Golpes ....... 28                               <-- quantidade de golpes
-Ritmo ........ 46/48 kmh                        <-- ritmo em km/h (média simples/quadrática)
-Juiz ......... Arnaldo                          <-- nome do juiz
+     TOTAL: 904                         <-- total de pontos
+     Tempo: 13290ms (-166s)             <-- tempo passado e restante
+    Quedas: 1                           <-- número de quedas
+    Golpes: 19                          <-- quantidade de golpes
+     Ritmo: 45/47                       <-- ritmo em km/h (média simples/quadrática)
+      Juiz: Arnaldo                     <-- nome do juiz
 
------------------------------------------------
+João: 1284                              <-- total do atleta à esquerda
+ [  29  29  27  21   0   0   0 ] => 15  <-- 7 golpes de esquerda mais fortes => média simples
+ [  77  75  75  61  44   0   0 ] => 47  <-- 7 golpes de direita  mais fortes => média simples
 
-    Joao: 1024 pts                              <-- total do atleta à esquerda
- esq  [  39  36  36  36  34  33  31 ] => 35 kmh <-- 7 golpes de esquerda mais fortes => média simples
- dir  [  65  56  55  54  52  51  50 ] => 54 kmh <-- 7 golpes de direita  mais fortes => média simples
+Maria: 856                              <-- total do atleta à direita
+ [   0   0   0   0   0   0   0 ] =>  0  <-- 7 golpes de esquerda mais fortes
+ [  67  55  54  49  38  34  33 ] => 47  <-- 7 golpes de direita  mais fortes
 
------------------------------------------------
-
-   Maria: 646 pts                               <-- total do atleta à direita
- esq  [  67   0   0   0   0   0   0 ] => 9 kmh  <-- 7 golpes de esquerda mais fortes => média simples
- dir  [  71  67  65  64  64  57  36 ] => 60 km  <-- 7 golpes de direita  mais fortes => média simples
-
------------------------------------------------
-
-(CONF: v1.8.0 / 750cm / 180s / pot=1 / equ=1 /  <-- configurações
-       cont=30 / max=85)
+(CONF: v1.6 / 750cm / 180s / pot=1 / equ=1 / max=85)   <-- configurações
         \-- versão do software
-                 \-- distância entre os ateltas
-                         \-- tempo máximo de apresentação
-                                \-- pontuação de potência (0=desligada, 1=ligada)
-                                        \-- pontuação de equilíbrio
-        \-- desconto por queda (30 = 3.0%)
-                  \-- velocidade máxima a detectar
-
------------------------------------------------
+               \-- distância entre os ateltas
+                       \-- tempo máximo de apresentação
+                              \-- pontuação de potência (0=desligada, 1=ligada)
+                                      \-- pontuação de equilíbrio
+                                              \-- velocidade máxima a detectar
 ```
 
 - Relatório (ao final da apresentação)
@@ -192,18 +181,16 @@ Juiz ......... Arnaldo                          <-- nome do juiz
 -- Sequencia XX ----------------        <-- Outras sequências...
 ...
 
------------------------------------------------
+--------------------------------        <-- Fim da apresentação.
 
-    Atleta    Vol     Esq     Dir   Total       <-- Volume e Potência (esq/dir)
-Atleta ESQ:   297 +   201 +   525 =  1024 pts   <-- Pontuação de João
-Atleta DIR:   374 +     0 +   272 =   646 pts   <-- Pontuação de Maria
+Atleta    Vol     Esq     Dir   Total   <-- Volume e Potência (esq/dir)
+  João:  5452 +   763 +  1723 =  7939   <-- Pontuação de João
+ Maria:  6020 +   760 +  1943 =  8724   <-- Pontuação de Maria
 
------------------------------------------------
-
-Media ........   835 pts                        <-- Média entre os dois
-Equilibrio ...   124 (-)                        <-- Desconto de equilíbrio
-Quedas .......   106 (-)                        <-- Desconto de quedas
-TOTAL ........   604 pts                        <-- Pontuação final da dupla
+Média:       8332                       <-- Média entre os dois
+Equilibrio:     0 (-)                   <-- Desconto de equilíbrio
+Quedas:      1667 (-)                   <-- Desconto de quedas
+FINAL:       6665                       <-- Pontuação final da dupla
 ```
 
 -------------------------------------------------------------------------------

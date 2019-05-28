@@ -1,6 +1,6 @@
 #define MAJOR    1
-#define MINOR    7
-#define REVISION 3
+#define MINOR    8
+#define REVISION 0
 
 //#define DEBUG
 //#define TV_ON
@@ -87,7 +87,7 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 #define NAME_MAX        20
 
 #define POT_BONUS       3
-#define POT_VEL         50
+#define POT_VEL         40
 
 #define CONT_PCT        (((u32)REF_TIMEOUT)*REF_FALLS/(S.timeout/1000))
 

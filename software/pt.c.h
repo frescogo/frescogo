@@ -12,13 +12,13 @@ int PT_Bests (s8* bests, int* min_, int* max_) {
 void PT_Bests_Apply (void) {
     for (int i=0; i<2; i++) {
         for (int j=0; j<2; j++) {
-            for (int k=0; k<HITS_BESTS; k++) {
-                u32 v = G.bests[i][j][k];
+            //for (int k=0; k<HITS_BESTS; k++) {
+                u32 v = G.bests[i][j][HITS_BESTS-1];
                 if (!S.potencia) {
                     v = POT_VEL;
                 }
-                G.ps[i] += v*v*POT_BONUS;
-            }
+                G.ps[i] += v*v*POT_BONUS*HITS_BESTS;
+            //}
         }
     }
 }

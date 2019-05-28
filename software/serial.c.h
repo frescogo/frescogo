@@ -167,13 +167,13 @@ void Serial_Log (void) {
     for (int i=0; i<2; i++) {
         for (int j=0; j<2; j++) {
             u32 sum = 0;
-            for (int k=0; k<HITS_BESTS; k++) {
-                u32 v = G.bests[i][j][k];
+            //for (int k=0; k<HITS_BESTS; k++) {
+                u32 v = G.bests[i][j][HITS_BESTS-1];
                 if (!S.potencia) {
                     v = POT_VEL;
                 }
-                sum += v*v*POT_BONUS;
-            }
+                sum += v*v*POT_BONUS*HITS_BESTS;
+            //}
             bests[i][j] = sum;
         }
     }
