@@ -166,15 +166,16 @@ void Serial_Log (void) {
     u32 bests[2][2] = { {0,0}, {0,0} };
     for (int i=0; i<2; i++) {
         for (int j=0; j<2; j++) {
-            u32 sum = 0;
-            //for (int k=0; k<HITS_BESTS; k++) {
-                u32 v = G.bests[i][j][HITS_BESTS-1];
+            int sum = 0;
+            for (int k=0; k<HITS_BESTS; k++) {
+                s8 v = G.bests[i][j][k];
                 if (!S.potencia) {
                     v = POT_VEL;
                 }
-                sum += v*v*POT_BONUS*HITS_BESTS;
-            //}
-            bests[i][j] = sum;
+                sum += v;
+            }
+            int avg = sum / HITS_BESTS;
+            bests[i][j] = avg*avg * POT_BONUS * HITS_BESTS;
         }
     }
 
