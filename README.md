@@ -67,12 +67,12 @@ Quesitos de pontuação:
             - De direita:  **`87`, `85`, `83`, `82`, `75`, `75`, `73`**, `70`, `69`, ...
             - De esquerda: **`52`, `50`, `50`, `49`, `44`, `35`, ` 0`,** ` 0`, ` 0`, ...
         - A média dos 7 golpes mais velozes de direita foi de 80 kmh
-          (`(87+85+83+82+75+75)/7 = 80`),
+          (`(87+85+83+82+75+75+73)/7 = 80`),
           somando `64x21` = **1344 pontos**.
         - A média dos 7 golpes mais velozes de esquerda foi de 40 kmh
-          (`(52+50+50+49+44+35+ 0)/7 = 40`),
+          (`(52+50+50+49+44+35+0)/7 = 40`),
           somando `16x21` = **336 pontos**.
-        - Esse atleta vai então obter **1680 pontos** de potência que ainda
+        - Esse atleta vai então obter **1680 pontos** de *Potência* que ainda
           serão somados com os seus pontos de *Volume*.
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
