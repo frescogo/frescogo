@@ -243,7 +243,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
     - Pressione o botão do meio por um segundo, até escutar um som.
     - Resposta: três sons cada vez mais graves por meio segundo.
 - Fim da apresentação:
-    - Automático, quando o tempo do cronômetro expirar ou após a 25a queda.
+    - Automático, quando o tempo do cronômetro expirar. <!-- ou após a 25a queda. -->
     - Resposta: um som grave por dois segundos.
 - Desfazer última sequência:
     - Pressione o botão do meio e em seguida o da esquerda por 5 segundos.
