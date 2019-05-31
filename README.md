@@ -78,7 +78,7 @@ Quesitos de pontuação:
 
 - **Equilíbrio:**
     - A pontuação da dupla será a média de pontos entre os dois atletas.
-    - Se o atleta que pontou menos estiver abaixo de 90% dessa média, então a
+    - Se o atleta que pontuou menos estiver abaixo de 90% dessa média, então a
       pontuação da dupla será o menor valor.
     - Mais precisamente, a pontuação será o menor valor entre a média dos dois
       e 110% do que pontuou menos:
