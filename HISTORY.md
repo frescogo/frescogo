@@ -1,9 +1,8 @@
 v1.8 (mai/19)
 -------------
 
-- A regra de potência agora considera o 7o golpe mais rápido, em vez de
-  considerar todos os 7.
-    - A potência desligada padrão passa de `50` para `40` kmh.
+- A regra de potência agora considera a média dos 7 golpe mais rápidos, em vez
+  de considerar cada um individualmente.
 
 v1.7 (abr/19)
 -------------

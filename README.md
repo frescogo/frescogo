@@ -59,18 +59,21 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Potência:**
-    - O 7o golpe mais veloz de **direita** e de **esquerda** (*forehand* e
-      *backhand*) de cada atleta é contabilizado conforme a regra acima e ainda
-      é multiplicado por 21.
+    - As médias dos 7 golpes mais velozes de **direita** e de **esquerda**
+      (*forehand* e *backhand*) de cada atleta são contabilizados conforme a
+      fórmula de *Volume* e ainda são multiplicados por 21.
       Exemplo:
         - Os golpes mais velozes de um dos atleta foram os seguintes:
-            - De direita:  `87`, `81`, `78`, `77`, `75`, `73`, **`70`**, `70`, `69`, ...
-            - De esquerda: `70`, `62`, `62`, `57`, `55`, `53`, **`50`**, `49`, `47`, ...
-        - O 7o golpe mais veloz de direita  foi a 70 kmh,
-          somando `49x20` = **1029 pontos**.
-        - O 7o golpe mais veloz de esquerda foi a 50 kmh,
-          somando `25x20` = **525 pontos**.
-        - Esse atleta vai então somar **1480 pontos** de potência.
+            - De direita:  **`87`, `85`, `83`, `82`, `75`, `75`, `73`**, `70`, `69`, ...
+            - De esquerda: **`52`, `50`, `50`, `49`, `44`, `35`, ` 0`,** ` 0`, ` 0`, ...
+        - A média dos 7 golpes mais velozes de direita foi de 80 kmh
+          (`(87+85+83+82+75+75+73)/7 = 80`),
+          somando `64x21` = **1344 pontos**.
+        - A média dos 7 golpes mais velozes de esquerda foi de 40 kmh
+          (`(52+50+50+49+44+35+0)/7 = 40`),
+          somando `16x21` = **336 pontos**.
+        - Esse atleta vai então obter **1680 pontos** de *Potência* que ainda
+          serão somados com os seus pontos de *Volume*.
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
@@ -412,15 +415,17 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
       praticamente o dobro (25 vs 49 pontos, após a divisão por 100).
 
 - Qual é o objetivo do quesito Potência?
-    - Ao bonificar o 7o golpe mais veloz tanto de esquerda quanto de direita,
-      a regra incentiva que o atleta ataque acima do seu limite.
+    - Ao bonificar os 7 golpes mais velozes tanto de esquerda quanto de
+      direita, a regra incentiva que o atleta ataque acima do seu limite.
       Os 7 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
       uma apresentação de 3 minutos (20% considerando esquerda e direita).
+<!--
     - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
       de considerar apenas o 7o)?
         - Para minimizar a imprecisão da marcação do juiz.
           É possível que o juiz acelere a marcação de alguns golpes, mas é
           pouco provável que isso afete sensivelmente a 7a bola mais veloz.
+-->
 
 - Tem como o juiz "roubar"?
     - Ao atrasar a marcação de um golpe "A", consequentemente o golpe "B"
