@@ -261,6 +261,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
 - Instalação (apenas uma vez):
     - Instalar o app `Serial USB Terminal` (by Kai Morich).
         - <https://play.google.com/store/apps/details?id=de.kai_morich.serial_usb_terminal>
+
 - Configuração (apenas uma vez):
     - Tocar nas três barras paralelas no canto superior esquerdo e selecionar
       `Settings`.
@@ -271,6 +272,15 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
     - Trocar `Buffer size` para `Unlimited`.
     - Habilitar `Clear input on send`.
     - Habilitar `Keep screen on when connected`.
+
+![Android App](images/app.jpg "Android App")
+![Conexão USB](images/connected.jpg "Conexão USB")
+![Configurações](images/app1.jpg "Configurações 1/5")
+![Configurações](images/app2.jpg "Configurações 2/5")
+![Configurações](images/app3.jpg "Configurações 3/5")
+![Configurações](images/app4.jpg "Configurações 4/5")
+![Configurações](images/app5.jpg "Configurações 5/5")
+
 - Conexão (sempre que abrir o aplicativo):
     - Conectar o aparelho ao celular via cabo USB.
     - Tocar no ícone com dois cabos desconectados no centro superior direito da
@@ -381,14 +391,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Selecione `files`
             - Selecione o arquivo a ser anexado, ex.:  `serial_20190602_160522.txt`
             - Selecione `Enviar`
-
-![Android App](images/app.jpg "Android App")
-![Conexão USB](images/connected.jpg "Conexão USB")
-![Configurações](images/app1.jpg "Configurações 1/5")
-![Configurações](images/app2.jpg "Configurações 2/5")
-![Configurações](images/app3.jpg "Configurações 3/5")
-![Configurações](images/app4.jpg "Configurações 4/5")
-![Configurações](images/app5.jpg "Configurações 5/5")
+                - Confirme
 
 <!--
         - `continuidade PCT`
