@@ -368,7 +368,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
 
 - Envio de relatórios:
     <a name="envio-de-relatorios"></a>
-    <a class="anchor" href="#envio-de-relatorios"></a>
     - No aplicativo `Serial USB Terminal`:
         - Aguarde o término da apresentação
         - Aperte na lata de lixo no canto superior direito para apagar a tela
