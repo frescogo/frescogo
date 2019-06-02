@@ -96,9 +96,7 @@ Quesitos de pontuação:
         - Com 5 quedas, a dupla perderá 15% dos pontos, ou seja, se ela pontuou
           4400 após o equilíbrio, a pontuação final será de **3740 pontos**
           (`4400x85%`).
-<!--
-    - A apresentação é encerrada sumariamente na 25a queda.
--->
+    - A apresentação é encerrada sumariamente na 18a queda.
 
 -------------------------------------------------------------------------------
 
@@ -128,7 +126,7 @@ Quesitos de pontuação:
 - O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
 - Um som agudo é emitido a cada 1 minuto e também quando faltam 30, 10, e 5
   segundos para a apresentação terminar.
-- A apresentação termina após 3 minutos cronometrados. <!-- ou após a 25a queda.-->
+- A apresentação termina após 3 minutos cronometrados ou após a 18a queda.
   Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
   golpes.
@@ -166,14 +164,15 @@ Juiz ......... Arnaldo                          <-- nome do juiz
 -----------------------------------------------
 
 (CONF: v1.8.0 / 750cm / 180s / pot=1 / equ=1 /  <-- configurações
-       cont=30 / max=85)
+       cont=30 / fim=18 / max=85)
         \-- versão do software
                  \-- distância entre os ateltas
                          \-- tempo máximo de apresentação
                                 \-- pontuação de potência (0=desligada, 1=ligada)
                                         \-- pontuação de equilíbrio
         \-- desconto por queda (30 = 3.0%)
-                  \-- velocidade máxima a detectar
+                  \-- número máximo de quedas
+                           \-- velocidade máxima a detectar
 
 -----------------------------------------------
 ```

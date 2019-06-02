@@ -3,6 +3,7 @@ v1.8 (mai/19)
 
 - A regra de potência agora considera a média dos 7 golpe mais rápidos, em vez
   de considerar cada um individualmente.
+- Após a 18a queda, a apresentação é encerrada sumariamente.
 
 v1.7 (abr/19)
 -------------

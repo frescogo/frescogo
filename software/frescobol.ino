@@ -1,6 +1,6 @@
 #define MAJOR    1
 #define MINOR    8
-#define REVISION 1
+#define REVISION 2
 
 //#define DEBUG
 //#define TV_ON
@@ -65,7 +65,8 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 
 #define REF_TIMEOUT     180         // 3 mins
 #define REF_BESTS       7
-#define REF_FALLS       30          // 3.0%
+#define REF_CONT        30          // 3.0%
+#define REF_ABORT       10          // 10s per fall
 
 #define HITS_MAX        600
 #define HITS_BESTS_MAX  20
@@ -89,7 +90,8 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 #define POT_BONUS       3
 #define POT_VEL         50
 
-#define CONT_PCT        (((u32)REF_TIMEOUT)*REF_FALLS/(S.timeout/1000))
+#define CONT_PCT        (((u32)REF_TIMEOUT)*REF_CONT/(S.timeout/1000))
+#define ABORT_FALLS     (S.timeout / REF_ABORT / 1000)
 
 static int  STATE;
 static bool IS_BACK;
@@ -555,12 +557,10 @@ _FALL:
         Serial_Score();
         EEPROM_Save();
 
-/*
-        if (Falls() >= 25) {
+        if (Falls() >= ABORT_FALLS) {
             S.dts[S.hit++] = HIT_SERV;  // simulate timeout after service
             goto _TIMEOUT;
         }
-*/
     }
 
 _TIMEOUT:

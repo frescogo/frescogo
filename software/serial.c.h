@@ -79,14 +79,14 @@ void Serial_Score (void) {
     Serial.println();
 
     //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-    sprintf_P(STR, PSTR("(CONF: v%d.%d.%d / %dcm / %ds / pot=%d / equ=%d /\n       cont=%d / max=%d)"),
+    sprintf_P(STR, PSTR("(CONF: v%d.%d.%d / %dcm / %ds / pot=%d / equ=%d /\n       cont=%d / fim=%d / max=%d)"),
                 MAJOR, MINOR, REVISION,
                 S.distancia,
                 (int)(S.timeout/1000),
                 (int)S.potencia,
                 (int)S.equilibrio,
                 (int)CONT_PCT,
-                //(int)S.continuidade,
+                (int)ABORT_FALLS,
                 (int)S.maxima);
     Serial.println(STR);
 }
