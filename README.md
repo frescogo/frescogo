@@ -367,6 +367,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
                 - altera o nome do juiz para *Arnaldo*
 
 - Envio de relatórios:
+    <a name="envio-de-relatorios"/>
     - No aplicativo `Serial USB Terminal`:
         - Aguarde o término da apresentação
         - Aperte na lata de lixo no canto superior direito para apagar a tela
