@@ -230,7 +230,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
 ### Aparelho marcador:
 
 - Nova apresentação:
-    - Pressione o botão do meio e em seguida o da direita por 5 segundos.
+    - Pressione o botão do meio e em seguida o da direita por 3 segundos.
     - Resposta: um som médio de dois segundos.
 - Início de sequência:
     - Pressione o botão do meio por um segundo, até escutar um som.
@@ -248,11 +248,11 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
     - Automático, quando o tempo do cronômetro expirar. <!-- ou após a 25a queda. -->
     - Resposta: um som grave por dois segundos.
 - Desfazer última sequência:
-    - Pressione o botão do meio e em seguida o da esquerda por 5 segundos.
+    - Pressione o botão do meio e em seguida o da esquerda por 3 segundos.
     - Resposta: três sons cada vez mais agudos por meio segundo.
 - Reconfiguração de fábrica:
     - Pressione o botão do meio e em seguida os da esquerda e direita por
-      5 segundos.
+      3 segundos.
     - Resposta: um som médio de dois segundos.
     - **Em princípio, esse procedimento nunca deverá ser necessário.**
 
@@ -355,6 +355,32 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `juiz Arnaldo`
                 - altera o nome do juiz para *Arnaldo*
+
+- Envio de relatórios:
+    - No aplicativo `Serial USB Terminal`:
+        - Aguarde o término da apresentação
+        - Aperte na lata de lixo no canto superior direito para apagar a tela
+        - Digite `relatorio`
+            - Aguarde o término da operação
+        - Aperte nos 3 pontinhos no canto superior direito
+            - Selecione `Save Data`
+                - Vai aparecer uma mensagem tal como `Saved serial_20190602_160522.txt`
+    - No `WhatsApp`:
+        - Selecione o contato a enviar o relatório
+        - Aperte no clipe para anexar um arquivo
+            - Selecione `Documento`
+        - Aperte em `Procurar outros documentos...`
+        - Aperte nos 3 pontinhos no canto superior direito
+            - Selecione `Mostrar armazenamento interno`
+                - (Esse procedimento só é necessário uma vez)
+        - Aperte nas 3 barrinhas no canto superior esquerdo
+            - Selecione o modelo do seu celular, ex.: `Moto E(4)`
+            - Selecione `Android`
+            - Selecione `data`
+            - Selecione `de.kai_morich.serial_usb_terminal`
+            - Selecione `files`
+            - Selecione o arquivo a ser anexado, ex.:  `serial_20190602_160522.txt`
+            - Selecione `Enviar`
 
 ![Android App](images/app.jpg "Android App")
 ![Conexão USB](images/connected.jpg "Conexão USB")
