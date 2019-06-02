@@ -224,13 +224,13 @@ int Await_Input (bool serial) {
             if        (now-old>= 750 && pin_left==HIGH && pin_right==HIGH) {
                 old = now;
                 return IN_GO_FALL;
-            } else if (now-old>=5000 && pin_left==LOW  && pin_right==HIGH) {
+            } else if (now-old>=3000 && pin_left==LOW  && pin_right==HIGH) {
                 old = now;
                 return IN_UNDO;
-            } else if (now-old>=5000 && pin_left==HIGH && pin_right==LOW) {
+            } else if (now-old>=3000 && pin_left==HIGH && pin_right==LOW) {
                 old = now;
                 return IN_RESTART;
-            } else if (now-old>=5000 && pin_left==LOW  && pin_right==LOW) {
+            } else if (now-old>=3000 && pin_left==LOW  && pin_right==LOW) {
                 old = now;
                 return IN_RESET;
             }
