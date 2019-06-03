@@ -96,6 +96,7 @@ Quesitos de pontuação:
         - Com 5 quedas, a dupla perderá 15% dos pontos, ou seja, se ela pontuou
           4400 após o equilíbrio, a pontuação final será de **3740 pontos**
           (`4400x85%`).
+    - Os dois últimos golpes antes da queda também são desconsiderados.
     - A apresentação é encerrada sumariamente na 18a queda.
 
 -------------------------------------------------------------------------------
