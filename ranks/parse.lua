@@ -4,7 +4,7 @@ local m = require 'lpeg'
 local P, S, C, R, Ct, Cc = m.P, m.S, m.C, m.R, m.Ct, m.Cc
 
 local INP = ...
-local ts = (((1-P'/')^0 * '/')^0 * 'serial_' * C((1-P'.')^1) * '.txt'):match(INP)
+local timestamp = (((1-P'/')^0 * '/')^0 * 'serial_' * C((1-P'.')^1) * '.txt'):match(INP)
 
 -------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ local patt =
     C((1-S'\r\n')^0)                        * X *   -- Maria
     P'(750cm - 180s)'^-1                    * X *
     P'-'^0                                  * X *
-    P'TOTAL'  *X* (P':'+P'.'^1) *X* P(NUMS) * P' pts'^-1 * X *   -- 3701 pontos
+    P'TOTAL'  *X* (P':'+P'.'^1) *X* C(NUMS) * P' pts'^-1 * X *   -- 3701 pontos
     P'Tempo'  *X* (P':'+P'.'^1) *X* P(NUMS) * 'ms (-' * NUMS * 's)'   * X *   -- 180650 (-0s)
     P'Quedas' *X* (P':'+P'.'^1) *X* C(NUMS) * X *   -- 6 quedas
     P'Golpes' *X* (P':'+P'.'^1) *X* P(NUMS) * X *   -- 286 golpes
@@ -51,14 +51,14 @@ local patt =
                       P(NUMS) * ' / max='  *X*            -- cont=4%
                       P(NUMS) * ')'
     +
-        P'(CONF: ' * Cc'1' * Cc'?' * Cc'?' *
+        P'(CONF: ' * Cc'0' * Cc'?' * Cc'?' *
                       C(NUMS) * 'cm / '    *            -- 750cm
                       C(NUMS) * 's / pot=' *            -- 180s
                       C(NUMS) * ' / equ='  *            -- pot=0/1
                       C(NUMS) * ' / cont=' *            -- equ=0/1
                       P(NUMS) * ')'
     +
-        Cc'1'*Cc'?'*Cc'?'*Cc'750'*Cc'180'*Cc'1'*Cc'1'
+        Cc'0'*Cc'?'*Cc'?'*Cc'750'*Cc'180'*Cc'1'*Cc'1'
     ) * X *  -- max=85
     (P'---'*P'-'^0)^-1 * X *
     Ct(SEQ^1)                               * X *
@@ -70,14 +70,14 @@ local patt =
 ]]
     P(0)
              
-local k1,k2, quedas,juiz, e1,d1, e2,d2, v1,v2,v3,_d,_t,_p,_e, _, p1,p2
+local k1,k2, total,quedas,juiz, e1,d1, e2,d2, v1,v2,v3,_d,_t,_p,_e, _, p1,p2
         = patt:match(assert(io.open(INP)):read'*a')
 
 --print(k1,k2, quedas,juiz, e1,d1, e2,d2, v1,v2,v3,_d,_t,_p,_e, p1,p2)
 
 assert(_d == '750')
 assert(_t == '180')
-assert(_p == '1')
+assert(_p == '1', timestamp)
 assert(_e == '1')
 
 local version = v1..'.'..v2..'.'..v3
@@ -88,7 +88,7 @@ function pot (t)
     for i=1, 7 do
         sum = sum + t[i]
     end
-    local avg = sum/7
+    local avg = math.floor(sum/7)
     local ret = avg*avg * 21 / 100
     --print(avg,ret)
     return ret
@@ -100,14 +100,21 @@ end
 
 local s1 = p1 + pot(e1) + pot(d1)
 local s2 = p2 + pot(e2) + pot(d2)
-local avg = (s1 + s2) / 2
 local score = min( (s1+s2)/2, min(s1,s2)*1.1 )
+--print(p2, s2)
 
 score = score * (1 - quedas*0.03)
+score = math.floor(score)
+
+if version >= '1.8.1' then
+    --print(score,total)
+    io.stderr:write(timestamp..' '..version..' '..score..' '..total..'\n')
+    assert(score==tonumber(total) or score==tonumber(total)-1)
+end
 
 print([[
 MATCH {
-    timestamp = ']]..ts..[[',
+    timestamp = ']]..timestamp..[[',
     players   = { ']]..k1..[[', ']]..k2..[[' },
     arena     = ']]..arena..[[',
     referee   = ']]..juiz..[[',
