@@ -49,15 +49,16 @@ function MATCH (t)
     print(k2, table.unpack(p2))
 ]]
 
-    assert(t.timestamp > ALL.timestamp)
+    --assert(t.timestamp > ALL.timestamp)
     ALL.timestamp = t.timestamp
     ALL.n         = ALL.n + 1
 
     local xp  = (p1[2] + p2[2]) / 2
     local dif = t.score - xp
+    print(dif)
 
-    p1[2] = math.floor(p1[2] + dif/math.sqrt(p1[1]))
-    p2[2] = math.floor(p2[2] + dif/math.sqrt(p2[1]))
+    p1[2] = p1[2] + dif/math.sqrt(p1[1])
+    p2[2] = p2[2] + dif/math.sqrt(p2[1])
 
     p1[1] = p1[1] + 1
     p2[1] = p2[1] + 1
@@ -71,8 +72,8 @@ function MATCH (t)
 end
 
 --dofile (...)
---[[
-dofile '/tmp/matches.lua'
+--dofile '/tmp/matches.lua'
+for i=1,1 do
 dofile '../Jogos/Bolivar/20190319/matches.lua'
 dofile '../Jogos/Bolivar/20190323/matches.lua'
 dofile '../Jogos/Bolivar/20190325/matches.lua'
@@ -85,7 +86,8 @@ dofile '../Jogos/Bolivar/20190407/matches.lua'
 dofile '../Jogos/Bolivar/20190414/matches.lua'
 dofile '../Jogos/Bolivar/20190501/matches.lua'
 dofile '../Jogos/Bolivar/20190601/matches.lua'
-]]
+end
+--[[
 dofile '../Jogos/ms/m1.lua'
 dofile '../Jogos/ms/m2.lua'
 dofile '../Jogos/ms/m3.lua'
@@ -98,6 +100,28 @@ dofile '../Jogos/ms/m9.lua'
 dofile '../Jogos/ms/m10.lua'
 dofile '../Jogos/ms/m11.lua'
 dofile '../Jogos/ms/m12.lua'
+
+for i=1, 100000 do
+    MATCH {
+        timestamp = '20190601_101146',
+        players   = { 'Marcelo', 'Lucia' },
+        arena     = 'Bolivar',
+        referee   = 'Chico',
+        score     = 3000,
+        version   = '1.8.1',
+    }
+    print(ALL.players.Marcelo[2], ALL.players.Lucia[2])
+    MATCH {
+        timestamp = '20190601_101146',
+        players   = { 'Marcelo', 'Lucia' },
+        arena     = 'Bolivar',
+        referee   = 'Chico',
+        score     = 2000,
+        version   = '1.8.1',
+    }
+    print(ALL.players.Marcelo[2], ALL.players.Lucia[2])
+end
+]]
 
 if false then
 
@@ -124,7 +148,7 @@ else
           string.format('%6s','Rating'))
     print('-------------------------')
     for k, p in pairs(ALL.players) do
-        print(string.format('%-10s',k)    ..'  '.. string.format('%5s',p[1]-1) ..'  '.. string.format('%6s',p[2]))
+        print(string.format('%-10s',k)    ..'  '.. string.format('%5s',p[1]-1) ..'  '.. string.format('%6s',math.floor(p[2])))
     end
 
 end
