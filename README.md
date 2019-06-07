@@ -438,37 +438,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
       as medições em 10%).
         - Fonte: <https://www.stalkerradar.com/stalker-speed-sensor/faq/stalker-speed-sensor-FAQ.shtml>
 
-- Por quê as velocidades são elevadas ao quadrado?
-    - Para bonificar os golpes mais potentes.
-      Quanto maior a velocidade, maior ainda será o quadrado dela.
-      Um golpe a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
-      praticamente o dobro (25 vs 49 pontos, após a divisão por 100).
-
-- Qual é o objetivo do quesito Potência?
-    - Ao bonificar os 7 golpes mais velozes tanto de esquerda quanto de
-      direita, a regra incentiva que o atleta ataque acima do seu limite.
-      Os 7 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
-      uma apresentação de 3 minutos (20% considerando esquerda e direita).
-<!--
-    - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
-      de considerar apenas o 7o)?
-        - Para minimizar a imprecisão da marcação do juiz.
-          É possível que o juiz acelere a marcação de alguns golpes, mas é
-          pouco provável que isso afete sensivelmente a 7a bola mais veloz.
--->
-
-- Tem como o juiz "roubar"?
-    - Ao atrasar a marcação de um golpe "A", consequentemente o golpe "B"
-      seguinte será adiantado.
-      O golpe "A" terá a velocidade reduzida e o golpe "B" terá a velocidade
-      aumentada.
-      Como a regra usa o quadrado das velocidades, esse atraso e adiantamento
-      (se forem sistemáticos) podem afetar a pontuação final.
-
-- Tem como o atleta "roubar" ou "tirar vantagem" da regra?
-    - O atleta pode projetar o corpo para frente e adiantar ao máximo os golpes
-      para aumentar a medição das velocidades.
-
 - Tem alguma vantagem em relação ao radar?
     - **Custo**:
         Os componentes do aparelho somados custam menos de R$50.
@@ -505,12 +474,54 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
 
 - Como eu posso contribuir?
     - Adotando o sistema no dia a dia da sua arena.
-        - Principalmente com jogadores iniciantes.
+        - Principalmente com atletas iniciantes.
     - Promovendo competições.
     - Produzindo vídeos.
-    - **Enviando os relatórios dos jogos para nós.**
+    - **Enviando os relatórios das apresentações para nós.**
 
 <!--
 - Como eu posso contribuir financeiramente?
     -
 -->
+
+-------------------------------------------------------------------------------
+
+- Por quê as velocidades são elevadas ao quadrado?
+    - Para bonificar os golpes mais potentes.
+      Quanto maior a velocidade, maior ainda será o quadrado dela.
+      Um golpe a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
+      praticamente o dobro (25 vs 49 pontos, após a divisão por 100).
+
+- Qual é o objetivo do quesito Potência?
+    - Ao bonificar os 7 golpes mais velozes tanto de esquerda quanto de
+      direita, a regra incentiva que o atleta ataque acima do seu limite.
+      Os 7 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
+      uma apresentação de 3 minutos (20% considerando esquerda e direita).
+<!--
+    - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
+      de considerar apenas o 7o)?
+        - Para minimizar a imprecisão da marcação do juiz.
+          É possível que o juiz acelere a marcação de alguns golpes, mas é
+          pouco provável que isso afete sensivelmente a 7a bola mais veloz.
+-->
+
+- Por quê algumas apresentações já iniciam com uma pontuação que eu não consigo
+  zerar?
+    - Quando a pontuação de Potência está desligada (`potencia nao`), a regra
+      assume um valor fixo de 50 kmh para todos os 7 golpes mais velozes de
+      esquerda e de direita **que já são contabilizados no início da
+      apresentação**.
+    - Isso é feito para evitar os dois modos (ligado e desligado) fiquem com
+      pontuações próximas.
+
+- Tem como o juiz "roubar"?
+    - Ao atrasar a marcação de um golpe "A", consequentemente o golpe "B"
+      seguinte será adiantado.
+      O golpe "A" terá a velocidade reduzida e o golpe "B" terá a velocidade
+      aumentada.
+      Como a regra usa o quadrado das velocidades, esse atraso e adiantamento
+      (se forem sistemáticos) podem afetar a pontuação final.
+
+- Tem como o atleta "roubar" ou "tirar vantagem" da regra?
+    - O atleta pode projetar o corpo para frente e adiantar ao máximo os golpes
+      para aumentar a medição das velocidades.
