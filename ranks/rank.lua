@@ -1,6 +1,23 @@
 -- lua5.3 rank.lua | sort -n -r -k3
 -- lua5.3 rank.lua | sort -n -r -k2 | head -n 9 | sort -n -r -k3
 
+X = {
+    Lira        = true,
+    Antonio     = true,
+    Douglas     = true,
+    Rogerio     = true,
+    Silvio      = true,
+    Tome        = true,
+    Paulinha    = true,
+    Mauricio    = true,
+    Luiz_N      = true,
+    Ira         = true,
+    Eliane      = true,
+    Lucia       = true,
+    Franklin    = true,
+    Sergio      = true,
+}
+
 ALL = {
     n         = 0,
     timestamp = '00000000_000000',
@@ -12,6 +29,9 @@ ALL = {
 
 function MATCH (t)
     local k1, k2 = table.unpack(t.players)
+    if not (X[k1] and X[k2]) then
+        --return
+    end
 
     if not ALL.players[k1] then ALL.players[k1]={1,3000} end
     if not ALL.players[k2] then ALL.players[k2]={1,3000} end
@@ -36,8 +56,8 @@ function MATCH (t)
     local xp  = (p1[2] + p2[2]) / 2
     local dif = t.score - xp
 
-    p1[2] = math.floor(p1[2] + dif/p1[1])
-    p2[2] = math.floor(p2[2] + dif/p2[1])
+    p1[2] = math.floor(p1[2] + dif/math.sqrt(p1[1]))
+    p2[2] = math.floor(p2[2] + dif/math.sqrt(p2[1]))
 
     p1[1] = p1[1] + 1
     p2[1] = p2[1] + 1
