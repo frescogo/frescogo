@@ -1,5 +1,3 @@
---lua5.3 parse.lua <file> /tmp
-
 local m = require 'lpeg'
 local P, S, C, R, Ct, Cc = m.P, m.S, m.C, m.R, m.Ct, m.Cc
 
@@ -29,52 +27,46 @@ local patt =
     P'/'                                    * X *
     C((1-S'\r\n')^0)                        * X *   -- Maria
     P'-'^0                                  * X *
-    P'TOTAL ........ ' * C(NUMS) * ' pts'   * X *   -- 3701 pts
-    P'Tempo ........ ' * C(NUMS) * 'ms (-' * NUMS * 's)'   * X *   -- 180650 (-0s)
-    P'Quedas ....... ' * C(NUMS)            * X *   -- 6 quedas
-    P'Golpes ....... ' * C(NUMS)            * X *   -- 286 golpes
-    P'Ritmo ........ ' * C(NUMS) *'/'* C(NUMS) * ' kmh' * X *   -- 45/45 kmh
-    P'Juiz ......... ' * C((1-S'\r\n')^0)   * X *   -- Arnaldo
-    (1-NUMS)^1 * C(NUMS) * ' pts'           * X *   -- Joao: 5500
-    P'esq  [' * Ct((X * C(NUMS))^1) *X* '] => ' * C(NUMS) * ' kmh' * X *   -- [ ... ]
-    P'dir  [' * Ct((X * C(NUMS))^1) *X* '] => ' * C(NUMS) * ' kmh' * X *   -- [ ... ]
-    (1-NUMS)^1 * C(NUMS) * ' pts'           * X *   -- Maria: 4427
-    P'esq  [' * Ct((X * C(NUMS))^1) *X* '] => ' * C(NUMS) * ' kmh' * X *   -- [ ... ]
-    P'dir  [' * Ct((X * C(NUMS))^1) *X* '] => ' * C(NUMS) * ' kmh' * X *   -- [ ... ]
-    P'-'^0                                  * X *
-    P'(CONF: v' * C(NUMS) * '.' * C(NUMS) * '.' * C(NUMS) * ' / ' * -- v1.5
-                  C(NUMS) * 'cm / '    *            -- 750cm
-                  C(NUMS) * 's / pot=' *            -- 180s
-                  C(NUMS) * ' / equ='  *            -- pot=0/1
-                  C(NUMS) * ' /' * X *              -- equ=0/1
-                            'cont=' *
-                  P(NUMS) * ' / fim='  *            -- cont=4%
-                  C(NUMS) * ' / max='  *            -- fim=18
-                  C(NUMS) * ')'              * X *  -- max=85
-    P'-'^1                                  * X *
+    P'TOTAL:'  * X * C(NUMS)                * X *   -- 3701 pontos
+    P'Tempo:'  * X * C(NUMS) * 'ms (-' * NUMS * 's)'   * X *   -- 180650 (-0s)
+    P'Quedas:' * X * C(NUMS)                * X *   -- 6 quedas
+    P'Golpes:' * X * C(NUMS)                * X *   -- 286 golpes
+    P'Ritmo:'  * X * C(NUMS) *'/'* C(NUMS)  * X *   -- 45/45 kmh
+    P'Juiz:'   * X * C((1-S'\r\n')^0)       * X *   -- Arnaldo
+    (1-NUMS)^1 * C(NUMS)                    * X *   -- Joao: 5500
+    P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
+    P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
+    (1-NUMS)^1 * C(NUMS)                    * X *   -- Maria: 4427
+    P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
+    P'[' * Ct((X * C(NUMS))^1) *X* '] =>' *X* C(NUMS) * X *   -- [ ... ]
+    P'(CONF: v1.6 / ' * C(NUMS) * 'cm / ' *                -- 750cm
+                 C(NUMS) * 's / pot=' *             -- 180s
+                 C(NUMS) * ' / equ='  *             -- pot=0/1
+                 C(NUMS) * ' / cont=' *             -- equ=0/1
+                 C(NUMS) * ' / max='  *             -- cont=3%
+                 C(NUMS) * ')'              * X *   -- max=85
     Ct(SEQ^1)                               * X *
-    P'-'^1                                  * X *
+    P'----------------------------'         * X *
     P'Atleta    Vol     Esq     Dir   Total' * X*
-    (1-NUMS)^0 * C(NUMS) *X* '+' *X* C(NUMS) *X* '+' *X* C(NUMS) *X* '=' *X* C(NUMS) * ' pts' * X *
-    (1-NUMS)^0 * C(NUMS) *X* '+' *X* C(NUMS) *X* '+' *X* C(NUMS) *X* '=' *X* C(NUMS) * ' pts' * X *
-    P'-'^1                                  * X *
-    P'Media ........ ' *X* C(NUMS) * ' pts' *X*
-    P'Equilibrio ... ' *X* C(NUMS) *X* '(-)' *X*
-    P'Quedas ....... ' *X* C(NUMS) *X* '(-)' *X*
-    P'TOTAL ........ ' *X* C(NUMS) * ' pts' *X*
+    (1-NUMS)^0 * C(NUMS) *X* '+' *X* C(NUMS) *X* '+' *X* C(NUMS) *X* '=' *X* C(NUMS) * X *
+    (1-NUMS)^0 * C(NUMS) *X* '+' *X* C(NUMS) *X* '+' *X* C(NUMS) *X* '=' *X* C(NUMS) * X *
+    P'Media:'      *X* C(NUMS) *X*
+    P'Equilibrio:' *X* C(NUMS) *X* '(-)' *X*
+    P'Quedas:'     *X* C(NUMS) *X* '(-)' *X*
+    P'FINAL:'      *X* C(NUMS) *X*
 --[[
 ]]
     P(0)
              
 local esquerda, direita, total, _, quedas, golpes, ritmo1, ritmo2, _,
       p0, esqs0,esq0,dirs0,dir0, p1, esqs1,esq1,dirs1,dir1,
-      _, _, _, distancia, tempo, potencia, equilibrio, continuidade, _,
+      distancia, tempo, potencia, equilibrio, continuidade, _,
       seqs,
       _vol0, _esq0, _dir0, _tot0,
       _vol1, _esq1, _dir1, _tot1,
       _media, _equilibrio, _quedas, _final = patt:match(assert(io.open(INP)):read'*a')
 
-print(esquerda, direita, _final, quedas, ritmo1)
+print(esquerda, direita, total, quedas, ritmo1)
 --[[
 print(esquerda, direita, total, ritmo2, dir1, distancia, continuidade, seqs)
 for i,seq in ipairs(seqs) do
@@ -85,7 +77,7 @@ error'ok'
 
 -------------------------------------------------------------------------------
 
---assert(total==_final and p0==_tot0 and p1==_tot1)
+assert(total==_final and p0==_tot0 and p1==_tot1)
 
 local nomes  = { esquerda, direita }
 local pontos = { {_tot0,_vol0,_esq0,_dir0}, {_tot1,_vol1,_esq1,_dir1} }
@@ -119,7 +111,7 @@ local hits = { {}, {} }
     ritmos[2][1] = math.floor(math.sqrt(ritmos[2][1]/#hits[2]))
 assert(tonumber(golpes) == (#hits[1]+#hits[2]))
 
-assert((#seqs==quedas+1) or (#seqs==tonumber(quedas)))
+assert(#seqs == quedas+1)
 
 function player (i)
     local ret = "{\n"

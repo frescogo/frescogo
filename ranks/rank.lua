@@ -22,10 +22,34 @@ ALL = {
     n         = 0,
     timestamp = '00000000_000000',
     players   = {
-        --Chico   = { 1, 0 },
-        --Antonio = { 1, 0 },
+        --Marcelo = { n=0,  r=3000 },
+        --Lucia   = { n=33, r=4000 },
     },
 }
+
+function VAR (p)
+    -- soma dos quadrados da quantidade de jogos com cada parceiro
+    -- divididos pelo total de parceiros ao cubo
+    -- depois tira a raiz do resultado
+    --      p1^2 + p2^2 + ... + pn^2   |  4^2 + 4^2 + 4^2 + 4^2   4^3
+    --      ------------------------   |  --------------------- = --- = 1 => 1^(1/2) = 1
+    --                n^3              |          4^3             4^3
+    --
+    --                                 |         16^2             256
+    --                                          ------          = --- = 256 => 256^(1/2) = 16
+    --                                            1^3              1
+    --
+    --                                 |  1^2 + 1^2 + ... + 1^2    16     1      1           1
+    --                                 |  --------------------- = ---- = --- => ---^(1/2) = --
+    --                                 |         16^3             16^3   256    256         16
+    local tot = 0
+    local sum = 0
+    for _,n in pairs(p.ms) do
+        sum = sum + n*n
+        tot = tot + 1
+    end
+    return math.sqrt(sum/(tot*tot*tot))
+end
 
 function MATCH (t)
     local k1, k2 = table.unpack(t.players)
@@ -33,11 +57,14 @@ function MATCH (t)
         --return
     end
 
-    if not ALL.players[k1] then ALL.players[k1]={1,3000} end
-    if not ALL.players[k2] then ALL.players[k2]={1,3000} end
+    if not ALL.players[k1] then ALL.players[k1]={k=k1,n=0,r=3000,ms={}} end
+    if not ALL.players[k2] then ALL.players[k2]={k=k2,n=0,r=3000,ms={}} end
 
     local p1 = assert(ALL.players[k1], k1)
     local p2 = assert(ALL.players[k2], k2)
+
+    p1.ms[k2] = (p1.ms[k2] or 0) + 1
+    p2.ms[k1] = (p2.ms[k1] or 0) + 1
 
 --[[
     if k2 == 'Chico' then
@@ -53,15 +80,31 @@ function MATCH (t)
     ALL.timestamp = t.timestamp
     ALL.n         = ALL.n + 1
 
-    local xp  = (p1[2] + p2[2]) / 2
+    local xp  = (p1.r + p2.r) / 2
     local dif = t.score - xp
-    print(dif)
 
-    p1[2] = p1[2] + dif/math.sqrt(p1[1])
-    p2[2] = p2[2] + dif/math.sqrt(p2[1])
+    p1.n = p1.n + 1
+    p2.n = p2.n + 1
 
-    p1[1] = p1[1] + 1
-    p2[1] = p2[1] + 1
+--[[
+    local dx = math.max(p1.n,p2.n) / math.min(p1.n,p2.n)
+    local n1, n2 do
+        if p1.n > p2.n then
+            n1 = p1.n * dx
+            n2 = p2.n / dx
+        else
+            n1 = p1.n / dx
+            n2 = p2.n * dx
+        end
+    end
+    n1 = math.max(1, n1)
+    n2 = math.max(1, n2)
+    --print(dif, p1.n,n1, p2.n,n2) --math.sqrt(p1.n), math.sqrt(p2.n))
+]]
+    local n1, n2 = p1.n, p2.n
+
+    p1.r = p1.r + dif/math.sqrt(n1)
+    p2.r = p2.r + dif/math.sqrt(n2)
 
 --[[
     print('---', t.score, xp)
@@ -73,6 +116,7 @@ end
 
 --dofile (...)
 --dofile '/tmp/matches.lua'
+--[[
 for i=1,1 do
 dofile '../Jogos/Bolivar/20190319/matches.lua'
 dofile '../Jogos/Bolivar/20190323/matches.lua'
@@ -87,7 +131,10 @@ dofile '../Jogos/Bolivar/20190414/matches.lua'
 dofile '../Jogos/Bolivar/20190501/matches.lua'
 dofile '../Jogos/Bolivar/20190601/matches.lua'
 end
---[[
+]]
+
+--[=[
+]=]
 dofile '../Jogos/ms/m1.lua'
 dofile '../Jogos/ms/m2.lua'
 dofile '../Jogos/ms/m3.lua'
@@ -100,28 +147,7 @@ dofile '../Jogos/ms/m9.lua'
 dofile '../Jogos/ms/m10.lua'
 dofile '../Jogos/ms/m11.lua'
 dofile '../Jogos/ms/m12.lua'
-
-for i=1, 100000 do
-    MATCH {
-        timestamp = '20190601_101146',
-        players   = { 'Marcelo', 'Lucia' },
-        arena     = 'Bolivar',
-        referee   = 'Chico',
-        score     = 3000,
-        version   = '1.8.1',
-    }
-    print(ALL.players.Marcelo[2], ALL.players.Lucia[2])
-    MATCH {
-        timestamp = '20190601_101146',
-        players   = { 'Marcelo', 'Lucia' },
-        arena     = 'Bolivar',
-        referee   = 'Chico',
-        score     = 2000,
-        version   = '1.8.1',
-    }
-    print(ALL.players.Marcelo[2], ALL.players.Lucia[2])
-end
-]]
+dofile '../Jogos/ms/m13.lua'
 
 if false then
 
@@ -145,10 +171,14 @@ else
     print(ALL.n)
     print(string.format('%-10s','Atleta') ..'  '..
           string.format('%5s','Jogos')    ..'  '..
+          string.format('%4s','Var')      ..'  '..
           string.format('%6s','Rating'))
-    print('-------------------------')
+    print('-------------------------------')
     for k, p in pairs(ALL.players) do
-        print(string.format('%-10s',k)    ..'  '.. string.format('%5s',p[1]-1) ..'  '.. string.format('%6s',math.floor(p[2])))
+        print(string.format('%-10s', k)         ..'  '..
+              string.format('%5s',   p.n)       ..'  '..
+              string.format('%2.2f', VAR(p))    ..'  '..
+              string.format('%6s',   math.floor(p.r)))
     end
 
 end

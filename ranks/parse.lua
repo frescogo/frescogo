@@ -44,11 +44,12 @@ local patt =
     (P'---'*P'-'^0)^-1 * X *
     (
         P'(CONF: v' * C(NUMS) * '.' * C(NUMS) * ('.' * C(NUMS) + Cc'?') * ' / ' * -- v1.5
-                      C(NUMS) * 'cm / '    *X*            -- 750cm
-                      C(NUMS) * 's / pot=' *X*            -- 180s
-                      C(NUMS) * ' / equ='  *X*            -- pot=0/1
-                      C(NUMS) * ' /' *X* 'cont=' *X*            -- equ=0/1
-                      P(NUMS) * ' / max='  *X*            -- cont=4%
+                      C(NUMS) * 'cm / '    *X*
+                      C(NUMS) * 's / pot=' *X*
+                      C(NUMS) * ' / equ='  *X*
+                      C(NUMS) * ' /' *X* 'cont=' *X*
+                      (P(NUMS) * ' / fim='  *X)^-1*
+                      P(NUMS) * ' / max='  *X*
                       P(NUMS) * ')'
     +
         P'(CONF: ' * Cc'0' * Cc'?' * Cc'?' *
