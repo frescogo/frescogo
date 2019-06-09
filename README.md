@@ -366,6 +366,12 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `juiz Arnaldo`
                 - altera o nome do juiz para *Arnaldo*
+        - `sensibilidade MS`
+            - altera o tempo mínimo para detectar um backhand para `MS`, que
+              deve ser um número em milisegundos
+            - Exemplo:
+                - `sensibilidade 180`
+                - altera a sensibilidade para 180 milisegundos
 
 - Envio de relatórios:
     <a name="envio-de-relatorios"></a>
