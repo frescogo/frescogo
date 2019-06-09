@@ -1,6 +1,6 @@
 #define MAJOR    1
 #define MINOR    8
-#define REVISION 2
+#define REVISION 3
 
 //#define DEBUG
 //#define TV_ON
@@ -72,7 +72,6 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 #define HITS_BESTS_MAX  20
 #define HITS_BESTS      (min(HITS_BESTS_MAX, (S.timeout*REF_BESTS/REF_TIMEOUT/1000)))
 
-#define HIT_BACK_DT     180         // minimum time to hold for back
 #define HIT_MIN_DT      235         // minimum time between two hits (125kmh)
 //#define HIT_KMH_MAX   125         // to fit in s8 (changed to u8, but lets keep 125)
 #define HIT_KMH_MAX     100         // safe value to avoid errors
@@ -107,6 +106,7 @@ typedef struct {
     //u8   continuidade;          // = 3%
     s8   velocidades;           // = sim/nao
     u8   maxima;                // = 85 kmh
+    u16  sensibilidade;         // = 180  (minimum time to hold for back)
 
     u16  hit;
     s8   dts[HITS_MAX];         // cs (ms*10)
@@ -267,13 +267,14 @@ void EEPROM_Default (void) {
     strcpy(S.juiz,     "?");
     strcpy(S.names[0], "Atleta ESQ");
     strcpy(S.names[1], "Atleta DIR");
-    S.distancia    = 750;
-    S.timeout      = REF_TIMEOUT * ((u32)1000);
-    S.potencia     = 0;
-    S.equilibrio   = 1;
+    S.distancia     = 750;
+    S.timeout       = REF_TIMEOUT * ((u32)1000);
+    S.potencia      = 0;
+    S.equilibrio    = 1;
     //S.continuidade = 3;
-    S.velocidades  = 1;
-    S.maxima       = 85;
+    S.velocidades   = 1;
+    S.maxima        = 85;
+    S.sensibilidade = 250;
 }
 
 void setup (void) {
@@ -501,11 +502,11 @@ void loop (void)
                 goto _TIMEOUT;
             }
 
-            // sleep inside hit to reach HIT_BACK_DT
+            // sleep inside hit to reach S.sensibilidade
             {
                 u32 dt_ = millis() - t1;
-                if (HIT_BACK_DT > dt_) {
-                    delay(HIT_BACK_DT-dt_);
+                if (S.sensibilidade > dt_) {
+                    delay(S.sensibilidade-dt_);
                 }
                 if (got == 0) {
                     IS_BACK = (digitalRead(PIN_LEFT)  == LOW);

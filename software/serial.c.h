@@ -79,7 +79,7 @@ void Serial_Score (void) {
     Serial.println();
 
     //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-    sprintf_P(STR, PSTR("(CONF: v%d.%d.%d / %dcm / %ds / pot=%d / equ=%d /\n       cont=%d / fim=%d / max=%d)"),
+    sprintf_P(STR, PSTR("(CONF: v%d.%d.%d / %dcm / %ds / pot=%d / equ=%d /\n       cont=%d / fim=%d / max=%d / sens=%d)"),
                 MAJOR, MINOR, REVISION,
                 S.distancia,
                 (int)(S.timeout/1000),
@@ -87,7 +87,8 @@ void Serial_Score (void) {
                 (int)S.equilibrio,
                 (int)CONT_PCT,
                 (int)ABORT_FALLS,
-                (int)S.maxima);
+                (int)S.maxima,
+                (int)S.sensibilidade);
     Serial.println(STR);
 }
 
@@ -276,6 +277,8 @@ _COMPLETE:
         S.equilibrio = 0;
     } else if (strncmp_P(CMD, PSTR("maxima "), 7) == 0) {
         S.maxima = atoi(&CMD[7]);
+    } else if (strncmp_P(CMD, PSTR("sensibilidade "), 13) == 0) {
+        S.sensibilidade = atoi(&CMD[7]);
 /*
     } else if (strncmp_P(CMD, PSTR("continuidade "), 13) == 0) {
         S.continuidade = atoi(&CMD[13]);
