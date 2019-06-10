@@ -24,9 +24,9 @@ local SEQ = Ct(
 local patt =
     P'relatorio'^-1                         * X *
     P'-'^1                                  * X *
-    C((1-P' /')^0)                          * X *   -- Joao
+    C((1-X*P'/')^0)                         * X *   -- Joao
     P'/'                                    * X *
-    C((1-S'\r\n')^0)                        * X *   -- Maria
+    C((1-P' '^0*S'\r\n')^0)                 * X *   -- Maria
     P'(750cm - 180s)'^-1                    * X *
     P'-'^0                                  * X *
     P'TOTAL'  *X* (P':'+P'.'^1) *X* C(NUMS) * P' pts'^-1 * X *   -- 3701 pontos
