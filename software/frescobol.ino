@@ -1,6 +1,6 @@
 #define MAJOR    1
-#define MINOR    8
-#define REVISION 3
+#define MINOR    9
+#define REVISION 1
 
 //#define DEBUG
 //#define TV_ON
@@ -274,7 +274,7 @@ void EEPROM_Default (void) {
     //S.continuidade = 3;
     S.velocidades   = 1;
     S.maxima        = 85;
-    S.sensibilidade = 250;
+    S.sensibilidade = 220;
 }
 
 void setup (void) {
@@ -330,6 +330,9 @@ void loop (void)
         PT_All();
         if (G.time >= S.timeout) {
             goto _TIMEOUT;          // if reset on ended game
+        }
+        if (Falls() >= ABORT_FALLS) {
+            goto _TIMEOUT;
         }
 
         int got;
@@ -560,7 +563,6 @@ _FALL:
 
         if (Falls() >= ABORT_FALLS) {
             S.dts[S.hit++] = HIT_SERV;  // simulate timeout after service
-            goto _TIMEOUT;
         }
     }
 

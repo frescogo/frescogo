@@ -165,18 +165,20 @@ void Serial_Log (void) {
     //Serial.println();
 
     u32 bests[2][2] = { {0,0}, {0,0} };
-    for (int i=0; i<2; i++) {
-        for (int j=0; j<2; j++) {
-            int sum = 0;
-            for (int k=0; k<HITS_BESTS; k++) {
-                s8 v = G.bests[i][j][k];
-                if (!S.potencia) {
-                    v = POT_VEL;
+    if (S.potencia) {
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<2; j++) {
+                int sum = 0;
+                for (int k=0; k<HITS_BESTS; k++) {
+                    s8 v = G.bests[i][j][k];
+                    if (!S.potencia) {
+                        v = POT_VEL;
+                    }
+                    sum += v;
                 }
-                sum += v;
+                int avg = sum / HITS_BESTS;
+                bests[i][j] = avg*avg * POT_BONUS * HITS_BESTS;
             }
-            int avg = sum / HITS_BESTS;
-            bests[i][j] = avg*avg * POT_BONUS * HITS_BESTS;
         }
     }
 
@@ -278,7 +280,7 @@ _COMPLETE:
     } else if (strncmp_P(CMD, PSTR("maxima "), 7) == 0) {
         S.maxima = atoi(&CMD[7]);
     } else if (strncmp_P(CMD, PSTR("sensibilidade "), 13) == 0) {
-        S.sensibilidade = atoi(&CMD[7]);
+        S.sensibilidade = atoi(&CMD[13]);
 /*
     } else if (strncmp_P(CMD, PSTR("continuidade "), 13) == 0) {
         S.continuidade = atoi(&CMD[13]);

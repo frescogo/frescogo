@@ -1,3 +1,10 @@
+v1.9 (jun/19)
+-------------
+
+- Configuração para sensibilidade da marcação dos backhands.
+- A regra de potência desligada soma 0 pontos (antes assumia 50kmh para todos
+  os golpes).
+
 v1.8 (mai/19)
 -------------
 
