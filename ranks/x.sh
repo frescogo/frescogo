@@ -12,4 +12,5 @@
 #./all.sh ../Jogos/Bolivar/20190501/ > ../Jogos/Bolivar/20190501/matches.lua
 #./all.sh ../Jogos/Bolivar/20190601/ > ../Jogos/Bolivar/20190601/matches.lua
 #./all.sh ../Jogos/Bolivar/20190608/ > ../Jogos/Bolivar/20190608/matches.lua
-./all.sh ../Jogos/Bolivar/20190609/ > ../Jogos/Bolivar/20190609/matches.lua
+#./all.sh ../Jogos/Bolivar/20190609/ > ../Jogos/Bolivar/20190609/matches.lua
+./all.sh ../Jogos/Bolivar/20190611/ > ../Jogos/Bolivar/20190611/matches.lua

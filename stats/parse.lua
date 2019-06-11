@@ -50,7 +50,8 @@ local patt =
                             'cont=' *
                   P(NUMS) * ' / fim='  *            -- cont=4%
                   C(NUMS) * ' / max='  *            -- fim=18
-                  C(NUMS) * ')'              * X *  -- max=85
+                  (P(NUMS) * ' / sens=')^-1 *       -- max=85
+                  C(NUMS) * ')'              * X *  -- sens=220
     P'-'^1                                  * X *
     Ct(SEQ^1)                               * X *
     P'-'^1                                  * X *

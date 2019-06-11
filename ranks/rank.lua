@@ -48,7 +48,8 @@ function VAR (p)
         sum = sum + n*n
         tot = tot + 1
     end
-    return math.sqrt(sum/(tot*tot*tot))
+    local ret = math.sqrt(sum/(tot*tot*tot))
+    return math.floor(ret * 100)
 end
 
 function MATCH (t)
@@ -149,6 +150,7 @@ dofile '../Jogos/ms/m11.lua'
 dofile '../Jogos/ms/m12.lua'
 dofile '../Jogos/ms/m13.lua'
 dofile '../Jogos/ms/m14.lua'
+dofile '../Jogos/ms/m15.lua'
 
 if false then
 
@@ -169,17 +171,25 @@ print([[
 
 else
 
-    print(ALL.n)
+    local T = {}
+    for k, p in pairs(ALL.players) do
+        if p.n >= 10 then
+            T[#T+1] = { k, p.n, VAR(p), math.floor(p.r) }
+        end
+    end
+    table.sort(T, function (v1,v2) return v1[4]>v2[4] end)
+
+    --print(ALL.n)
     print(string.format('%-10s','Atleta') ..'  '..
           string.format('%5s','Jogos')    ..'  '..
-          string.format('%4s','Var')      ..'  '..
-          string.format('%6s','Rating'))
-    print('-------------------------------')
-    for k, p in pairs(ALL.players) do
-        print(string.format('%-10s', k)         ..'  '..
-              string.format('%5s',   p.n)       ..'  '..
-              string.format('%2.2f', VAR(p))    ..'  '..
-              string.format('%6s',   math.floor(p.r)))
+          string.format('%5s','Var')      ..'  '..
+          string.format('%6s','Pontos'))
+    print('--------------------------------')
+    for _, t in pairs(T) do
+        print(string.format('%-10s',t[1]) ..'  '..
+              string.format('%5s',  t[2]) ..'  '..
+              string.format('%5d',  t[3]) ..'  '..
+              string.format('%6s',  t[4]))
     end
 
 end

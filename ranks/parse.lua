@@ -50,6 +50,7 @@ local patt =
                       C(NUMS) * ' /' *X* 'cont=' *X*
                       (P(NUMS) * ' / fim='  *X)^-1*
                       P(NUMS) * ' / max='  *X*
+                      (P(NUMS) * ' / sens='  *X)^-1*
                       P(NUMS) * ')'
     +
         P'(CONF: ' * Cc'0' * Cc'?' * Cc'?' *
