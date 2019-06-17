@@ -135,7 +135,6 @@ end
 ]]
 
 --[=[
-]=]
 dofile '../Jogos/ms/m1.lua'
 dofile '../Jogos/ms/m2.lua'
 dofile '../Jogos/ms/m3.lua'
@@ -151,6 +150,10 @@ dofile '../Jogos/ms/m12.lua'
 dofile '../Jogos/ms/m13.lua'
 dofile '../Jogos/ms/m14.lua'
 dofile '../Jogos/ms/m15.lua'
+dofile '../Jogos/ms/m16.lua'
+]=]
+
+dofile '../Jogos/Rio_das_Ostras/20190616/matches.lua'
 
 if false then
 
@@ -173,20 +176,20 @@ else
 
     local T = {}
     for k, p in pairs(ALL.players) do
-        if p.n >= 10 then
+        --if p.n >= 10 then
             T[#T+1] = { k, p.n, VAR(p), math.floor(p.r) }
-        end
+        --end
     end
     table.sort(T, function (v1,v2) return v1[4]>v2[4] end)
 
     --print(ALL.n)
-    print(string.format('%-10s','Atleta') ..'  '..
+    print(string.format('%-15s','Atleta') ..'  '..
           string.format('%5s','Jogos')    ..'  '..
-          string.format('%5s','Var')      ..'  '..
+          string.format('%5s','Par')      ..'  '..
           string.format('%6s','Pontos'))
-    print('--------------------------------')
+    print('-------------------------------------')
     for _, t in pairs(T) do
-        print(string.format('%-10s',t[1]) ..'  '..
+        print(string.format('%-15s',t[1]) ..'  '..
               string.format('%5s',  t[2]) ..'  '..
               string.format('%5d',  t[3]) ..'  '..
               string.format('%6s',  t[4]))

@@ -86,6 +86,9 @@ local version = v1..'.'..v2..'.'..v3
 local arena = 'Bolivar'
 
 function pot (t)
+    if _p == '0' then
+        return 0
+    end
     local sum = 0
     for i=1, 7 do
         sum = sum + t[i]
@@ -120,7 +123,7 @@ MATCH {
     players   = { ']]..k1..[[', ']]..k2..[[' },
     arena     = ']]..arena..[[',
     referee   = ']]..juiz..[[',
-    score     = ]]..math.floor(score)..[[,
+    score     = ]]..total..[[,
     version   = ']]..version..[[',
 }
 ]])

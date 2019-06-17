@@ -13,4 +13,6 @@
 #./all.sh ../Jogos/Bolivar/20190601/ > ../Jogos/Bolivar/20190601/matches.lua
 #./all.sh ../Jogos/Bolivar/20190608/ > ../Jogos/Bolivar/20190608/matches.lua
 #./all.sh ../Jogos/Bolivar/20190609/ > ../Jogos/Bolivar/20190609/matches.lua
-./all.sh ../Jogos/Bolivar/20190611/ > ../Jogos/Bolivar/20190611/matches.lua
+#./all.sh ../Jogos/Bolivar/20190611/ > ../Jogos/Bolivar/20190611/matches.lua
+#./all.sh ../Jogos/Bolivar/20190613/ > ../Jogos/Bolivar/20190613/matches.lua
+./all.sh ../Jogos/Rio_das_Ostras/20190616/ > ../Jogos/Rio_das_Ostras/20190616/matches.lua
