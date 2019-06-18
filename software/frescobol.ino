@@ -1,6 +1,6 @@
 #define MAJOR    1
 #define MINOR    9
-#define REVISION 1
+#define REVISION 2
 
 //#define DEBUG
 //#define TV_ON
@@ -85,6 +85,7 @@ static const int MAP[2] = { PIN_LEFT, PIN_RIGHT };
 #define STATE_TIMEOUT   2
 
 #define NAME_MAX        20
+#define SENS_MAX        220
 
 #define POT_BONUS       3
 #define POT_VEL         50
@@ -274,7 +275,7 @@ void EEPROM_Default (void) {
     //S.continuidade = 3;
     S.velocidades   = 1;
     S.maxima        = 85;
-    S.sensibilidade = 220;
+    S.sensibilidade = SENS_MAX;
 }
 
 void setup (void) {
@@ -322,12 +323,12 @@ void loop (void)
     PT_All();
     TV_All("GO!", 0, 0, 0);
     Serial_Score();
-    u32 al_nxt = alarm();
 
     while (1)
     {
 // GO
         PT_All();
+        u32 al_nxt = alarm();
         if (G.time >= S.timeout) {
             goto _TIMEOUT;          // if reset on ended game
         }
@@ -466,7 +467,7 @@ void loop (void)
             kmh = min(kmh_, S.maxima);
 
             u8 al_now = 0;
-            if (G.time > al_nxt) {
+            if (G.time+dt*10 > al_nxt) {
                 tone(PIN_TONE, NOTE_C7, 250);
                 al_now = 1;
                 al_nxt = alarm();

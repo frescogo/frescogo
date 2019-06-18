@@ -28,7 +28,7 @@ void Serial_Score (void) {
     Serial.print(G.time);
     Serial.print(F("ms"));
     Serial.print(F(" (-"));
-    Serial.print(G.time > S.timeout ? 0 : (S.timeout-G.time)/1000);
+    Serial.print(G.time > S.timeout ? 0 : (int)ceil((S.timeout-G.time)/(float)1000));
     Serial.println(F("s)"));
 
     Serial.print(F("Quedas ....... "));
@@ -69,7 +69,11 @@ void Serial_Score (void) {
                 Serial.print(STR);
             }
             Serial.print(F("] => "));
-            Serial.print(sum/HITS_BESTS);
+            if (HITS_BESTS == 0) {
+                Serial.print(F("--"));
+            } else {
+                Serial.print(sum/HITS_BESTS);
+            }
             Serial.println(F(" kmh"));
         }
     }
@@ -79,7 +83,7 @@ void Serial_Score (void) {
     Serial.println();
 
     //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-    sprintf_P(STR, PSTR("(CONF: v%d.%d.%d / %dcm / %ds / pot=%d / equ=%d /\n       cont=%d / fim=%d / max=%d / sens=%d)"),
+    sprintf_P(STR, PSTR("(v%d%d%d/%dcm/%ds/pot%d/equ%d/cont%d/fim%d/max%d/sens%d)"),
                 MAJOR, MINOR, REVISION,
                 S.distancia,
                 (int)(S.timeout/1000),
@@ -280,7 +284,7 @@ _COMPLETE:
     } else if (strncmp_P(CMD, PSTR("maxima "), 7) == 0) {
         S.maxima = atoi(&CMD[7]);
     } else if (strncmp_P(CMD, PSTR("sensibilidade "), 13) == 0) {
-        S.sensibilidade = atoi(&CMD[13]);
+        S.sensibilidade = min(SENS_MAX, atoi(&CMD[13]));
 /*
     } else if (strncmp_P(CMD, PSTR("continuidade "), 13) == 0) {
         S.continuidade = atoi(&CMD[13]);
