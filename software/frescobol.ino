@@ -328,7 +328,6 @@ void loop (void)
     {
 // GO
         PT_All();
-        u32 al_nxt = alarm();
         if (G.time >= S.timeout) {
             goto _TIMEOUT;          // if reset on ended game
         }
@@ -467,10 +466,9 @@ void loop (void)
             kmh = min(kmh_, S.maxima);
 
             u8 al_now = 0;
-            if (G.time+dt*10 > al_nxt) {
+            if (G.time+dt*10 > alarm()) {
                 tone(PIN_TONE, NOTE_C7, 250);
                 al_now = 1;
-                al_nxt = alarm();
             } else {
                 Sound(kmh);
             }
