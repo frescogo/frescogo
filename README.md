@@ -4,7 +4,7 @@
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 -->
 
-# FrescoGO! (versão 1.8)
+# FrescoGO! (versão 1.9)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
 competições de Frescobol.
