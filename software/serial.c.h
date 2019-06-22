@@ -82,16 +82,16 @@ void Serial_Score (void) {
     Serial.println(F("-----------------------------------------------"));
     Serial.println();
 
-    //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / pot=%d / equ=%d / cont=%d / max=%d)"),
-    sprintf_P(STR, PSTR("(v%d%d%d/%dcm/%ds/pot%d/equ%d/cont%d/fim%d/max%d/sens%d)"),
+    //sprintf_P(STR, PSTR("(CONF: v%d.%d / %dcm / %ds / max=%d / equ=%d / cont=%d / max=%d)"),
+    sprintf_P(STR, PSTR("(v%d%d%d/%dcm/%ds/max%d,%d/equ%d/cont%d/fim%d/sens%d)"),
                 MAJOR, MINOR, REVISION,
                 S.distancia,
                 (int)(S.timeout/1000),
-                (int)S.potencia,
+                (int)S.maximas,
+                (int)S.maxima,
                 (int)S.equilibrio,
                 (int)CONT_PCT,
                 (int)ABORT_FALLS,
-                (int)S.maxima,
                 (int)S.sensibilidade);
     Serial.println(STR);
 }
@@ -169,13 +169,13 @@ void Serial_Log (void) {
     //Serial.println();
 
     u32 bests[2][2] = { {0,0}, {0,0} };
-    if (S.potencia) {
+    if (S.maximas) {
         for (int i=0; i<2; i++) {
             for (int j=0; j<2; j++) {
                 int sum = 0;
                 for (int k=0; k<HITS_BESTS; k++) {
                     s8 v = G.bests[i][j][k];
-                    if (!S.potencia) {
+                    if (!S.maximas) {
                         v = POT_VEL;
                     }
                     sum += v;
@@ -273,10 +273,10 @@ _COMPLETE:
         S.velocidades = 1;
     } else if (strncmp_P(CMD, PSTR("velocidades nao"), 15) == 0) {
         S.velocidades = 0;
-    } else if (strncmp_P(CMD, PSTR("potencia sim"), 12) == 0) {
-        S.potencia = 1;
-    } else if (strncmp_P(CMD, PSTR("potencia nao"), 12) == 0) {
-        S.potencia = 0;
+    } else if (strncmp_P(CMD, PSTR("maximas sim"), 11) == 0) {
+        S.maximas = 1;
+    } else if (strncmp_P(CMD, PSTR("maximas nao"), 11) == 0) {
+        S.maximas = 0;
     } else if (strncmp_P(CMD, PSTR("equilibrio sim"), 14) == 0) {
         S.equilibrio = 1;
     } else if (strncmp_P(CMD, PSTR("equilibrio nao"), 14) == 0) {

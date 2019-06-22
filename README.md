@@ -4,7 +4,7 @@
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 -->
 
-# FrescoGO! (versão 1.9)
+# FrescoGO! (versão 1.10)
 
 *FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
 competições de Frescobol.
@@ -58,7 +58,7 @@ Quesitos de pontuação:
         - 70 kmh vale **49 pontos**: `70x70/100 = 4900/100 = 49`.
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
-- **Potência:**
+- **Máximas:**
     - As médias dos 7 golpes mais velozes de **direita** e de **esquerda**
       (*forehand* e *backhand*) de cada atleta são contabilizados conforme a
       fórmula de *Volume* e ainda são multiplicados por 21.
@@ -72,7 +72,7 @@ Quesitos de pontuação:
         - A média dos 7 golpes mais velozes de esquerda foi de 40 kmh
           (`(52+50+50+49+44+35+0)/7 = 40`),
           somando `16x21` = **336 pontos**.
-        - Esse atleta vai então obter **1680 pontos** de *Potência* que ainda
+        - Esse atleta vai então obter **1680 pontos** de *Máximas* que ainda
           serão somados com os seus pontos de *Volume*.
 <!--
     - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
@@ -164,16 +164,16 @@ Juiz ......... Arnaldo                          <-- nome do juiz
 
 -----------------------------------------------
 
-(CONF: v1.8.0 / 750cm / 180s / pot=1 / equ=1 /  <-- configurações
-       cont=30 / fim=18 / max=85)
-        \-- versão do software
-                 \-- distância entre os ateltas
-                         \-- tempo máximo de apresentação
-                                \-- pontuação de potência (0=desligada, 1=ligada)
-                                        \-- pontuação de equilíbrio
-        \-- desconto por queda (30 = 3.0%)
-                  \-- número máximo de quedas
-                           \-- velocidade máxima a detectar
+(v1101/750cm/180s/max=1,85/equ1/cont30/fim18/sens220) <-- configurações
+  \-- versão do software
+        \-- distância entre os ateltas
+              \-- tempo máximo de apresentação
+                      \-- pontuação de maximas (0=desligada, 1=ligada)
+                         \-- velocidade máxima a detectar
+                            \-- pontuação de equilíbrio
+                                 \-- desconto por queda (30 = 3.0%)
+                                        \-- número máximo de quedas
+                                              \-- sensibilidade do backhand (220ms)
 
 -----------------------------------------------
 ```
@@ -204,7 +204,7 @@ Juiz ......... Arnaldo                          <-- nome do juiz
 
 -----------------------------------------------
 
-    Atleta    Vol     Esq     Dir   Total       <-- Volume e Potência (esq/dir)
+    Atleta    Vol     Esq     Dir   Total       <-- Volume e Máximas (esq/dir)
 Atleta ESQ:   297 +   201 +   525 =  1024 pts   <-- Pontuação de João
 Atleta DIR:   374 +     0 +   272 =   646 pts   <-- Pontuação de Maria
 
@@ -330,6 +330,11 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `distancia 800`
                 - altera a distância para 8 metros
+        - `maximas SIM/NAO`
+            - liga ou desliga a pontuação de máximas (`nao=desligada`, `sim=ligada`)
+            - Exemplo:
+                - `maximas sim`
+                - habilita a pontuação de máximas
         - `maxima VEL`
             - altera a velocidade máxima a ser considerada para `VEL`, que deve
               ser um número em kmh (bolas acima de `VEL` serão consideradas
@@ -337,13 +342,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `maxima 90`
                 - bolas acima de 90 kmh serão interpretadas como 90 kmh
-        - `potencia SIM/NAO`
-            - liga ou desliga a pontuação de potência (`nao=desligada`, `sim=ligada`)
-            - caso desligada, a apresentação já iniciará com as 7 bolas de
-              esquerda e direita premarcadas a 50kmh (e nunca serão modificadas)
-            - Exemplo:
-                - `potencia sim`
-                - habilita a pontuação de potência
         - `equilibrio SIM/NAO`
             - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
             - Exemplo:
@@ -498,27 +496,27 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
       Um golpe a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
       praticamente o dobro (25 vs 49 pontos, após a divisão por 100).
 
-- Qual é o objetivo do quesito Potência?
+- Qual é o objetivo do quesito Máximas?
     - Ao bonificar os 7 golpes mais velozes tanto de esquerda quanto de
       direita, a regra incentiva que o atleta ataque acima do seu limite.
-      Os 7 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
-      uma apresentação de 3 minutos (20% considerando esquerda e direita).
+      Os 14 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
+      uma apresentação de 3 minutos.
 <!--
     - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
       de considerar apenas o 7o)?
         - Para minimizar a imprecisão da marcação do juiz.
           É possível que o juiz acelere a marcação de alguns golpes, mas é
           pouco provável que isso afete sensivelmente a 7a bola mais veloz.
--->
 
 - Por quê algumas apresentações já iniciam com uma pontuação que eu não consigo
   zerar?
-    - Quando a pontuação de Potência está desligada (`potencia nao`), a regra
+    - Quando a pontuação de Máximas está desligada (`potencia nao`), a regra
       assume um valor fixo de 50 kmh para todos os 7 golpes mais velozes de
       esquerda e de direita **que já são contabilizados no início da
       apresentação**.
     - Isso é feito para evitar os dois modos (ligado e desligado) fiquem com
       pontuações próximas.
+-->
 
 - Tem como o juiz "roubar"?
     - Ao atrasar a marcação de um golpe "A", consequentemente o golpe "B"

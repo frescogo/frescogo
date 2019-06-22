@@ -10,7 +10,7 @@ int PT_Bests (s8* bests, int* min_, int* max_) {
 }
 
 void PT_Bests_Apply (void) {
-    if (! S.potencia) {
+    if (! S.maximas) {
         return;
     }
     for (int i=0; i<2; i++) {
@@ -18,7 +18,7 @@ void PT_Bests_Apply (void) {
             int sum = 0;
             for (int k=0; k<HITS_BESTS; k++) {
                 s8 v = G.bests[i][j][k];
-                if (!S.potencia) {
+                if (!S.maximas) {
                     v = POT_VEL;
                 }
                 sum += v;

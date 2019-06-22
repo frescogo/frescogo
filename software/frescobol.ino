@@ -1,6 +1,6 @@
 #define MAJOR    1
-#define MINOR    9
-#define REVISION 2
+#define MINOR    10
+#define REVISION 1
 
 //#define DEBUG
 //#define TV_ON
@@ -102,7 +102,7 @@ typedef struct {
     char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" }
     u32  timeout;               // = 180 * ((u32)1000) ms
     u16  distancia;             // = 700 cm
-    s8   potencia;              // = sim/nao
+    s8   maximas;               // = sim/nao
     s8   equilibrio;            // = sim/nao
     //u8   continuidade;          // = 3%
     s8   velocidades;           // = sim/nao
@@ -270,7 +270,7 @@ void EEPROM_Default (void) {
     strcpy(S.names[1], "Atleta DIR");
     S.distancia     = 750;
     S.timeout       = REF_TIMEOUT * ((u32)1000);
-    S.potencia      = 0;
+    S.maximas       = 0;
     S.equilibrio    = 1;
     //S.continuidade = 3;
     S.velocidades   = 1;
