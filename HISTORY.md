@@ -1,3 +1,8 @@
+v1.10 (jun/19)
+-------------
+
+- O quesito "Potência" foi renomeado para "Máximas".
+
 v1.9 (jun/19)
 -------------
 
