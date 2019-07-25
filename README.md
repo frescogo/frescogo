@@ -6,7 +6,7 @@ $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 
 # FrescoGO! (versão 1.10)
 
-*FrescoGO!* é um marcador eletrônico semi-automático para treinamento e
+*FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
 
 O aparelho marcador contém dois botões de marcação: um para o atleta à esquerda
@@ -59,13 +59,13 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Máximas:**
-    - As médias dos 7 golpes mais velozes de **direita** e de **esquerda**
-      (*forehand* e *backhand*) de cada atleta são contabilizados conforme a
-      fórmula de *Volume* e ainda são multiplicados por 21.
+    - A média dos 7 golpes mais velozes batidos à **direita** e à **esquerda**
+      do corpo do atleta é contabilizada conforme a fórmula de *Volume* e
+      ainda é multiplicada por `21` antes de ser somada ao seu total.
       Exemplo:
-        - Os golpes mais velozes de um dos atleta foram os seguintes:
-            - De direita:  **`87`, `85`, `83`, `82`, `75`, `75`, `73`**, `70`, `69`, ...
-            - De esquerda: **`52`, `50`, `50`, `49`, `44`, `35`, ` 0`,** ` 0`, ` 0`, ...
+        - Os golpes mais velozes de um dos atletas foram os seguintes:
+            - A sua direita:  **`87`, `85`, `83`, `82`, `75`, `75`, `73`**, `70`, `69`, ...
+            - A sua esquerda: **`52`, `50`, `50`, `49`, `44`, `35`, ` 0`,** ` 0`, ` 0`, ...
         - A média dos 7 golpes mais velozes de direita foi de 80 kmh
           (`(87+85+83+82+75+75+73)/7 = 80`),
           somando `64x21` = **1344 pontos**.
@@ -73,9 +73,13 @@ Quesitos de pontuação:
           (`(52+50+50+49+44+35+0)/7 = 40`),
           somando `16x21` = **336 pontos**.
         - Esse atleta vai então obter **1680 pontos** de *Máximas* que ainda
-          serão somados com os seus pontos de *Volume*.
+          serão somados aos seus pontos de *Volume*.
+    - OBS.: Tipicamente, golpes à direita são executados de *forehand* e golpes
+      à esquerda de *backhand* (considerando um jogador destro). No entanto,
+      qualquer qualidade de golpe é válida, inclusive trocando a raquete de
+      mão.
 <!--
-    - OBS: Em uma apresentação de 3 minutos, 7 golpes correspondem a
+    - OBS.: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
 -->
 
@@ -435,7 +439,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
     - A principal desvantagem é que a medição não é tão precisa pois os atletas
       se movimentam e o juiz inevitavelmente irá atrasar ou adiantar as
       medições.
-    - OBS:
+    - OBS.:
       O radar também não é perfeito, tendo erro estimado entre +1/-2 kmh.
       Além disso, qualquer angulação entre a trajetória da bola e a posição do
       radar afeta negativamente as medições (ex., um ângulo de 25 graus diminui
