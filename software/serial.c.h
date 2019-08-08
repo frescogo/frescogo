@@ -250,7 +250,11 @@ int Serial_Check (void) {
 _COMPLETE:
     i = 0;
 
-    if (strncmp_P(CMD, PSTR("restaurar"), 9) == 0) {
+    if (strncmp_P(CMD, PSTR("modo cel"), 8) == 0) {
+        S.modo = MODE_CEL;
+    } else if (strncmp_P(CMD, PSTR("modo pc"), 7) == 0) {
+        S.modo = MODE_PC;
+    } else if (strncmp_P(CMD, PSTR("restaurar"), 9) == 0) {
         return IN_RESET;
     } else if (strncmp_P(CMD, PSTR("reiniciar"), 9) == 0) {
         return IN_RESTART;
@@ -269,10 +273,6 @@ _COMPLETE:
         S.timeout = ((u32)atoi(&CMD[6])) * 1000;
     } else if (strncmp_P(CMD, PSTR("distancia "), 5) == 0) {
         S.distancia = atoi(&CMD[10]);
-    } else if (strncmp_P(CMD, PSTR("velocidades sim"), 15) == 0) {
-        S.velocidades = 1;
-    } else if (strncmp_P(CMD, PSTR("velocidades nao"), 15) == 0) {
-        S.velocidades = 0;
     } else if (strncmp_P(CMD, PSTR("maximas sim"), 11) == 0) {
         S.maximas = 1;
     } else if (strncmp_P(CMD, PSTR("maximas nao"), 11) == 0) {
@@ -307,36 +307,6 @@ _COMPLETE:
         } else {
             goto ERR;
         }
-#if 0
-    } else if (strncmp_P(CMD, PSTR("+queda"), 6) == 0) {
-        if (S.dts[S.hit] == HIT_MARK) {
-            goto ERR;
-        }
-        while (1) {
-            S.hit += 1;
-            if (S.dts[S.hit]==HIT_MARK or S.dts[S.hit]==HIT_SERV) {
-                break;
-            }
-        }
-    } else if (strncmp_P(CMD, PSTR("-1"), 2) == 0) {
-        if (S.hit > 0) {
-            S.hit -= 1;
-            if (S.dts[S.hit] == HIT_NONE) {
-                S.hit -= 1;
-            }
-        } else {
-            goto ERR;
-        }
-    } else if (strncmp_P(CMD, PSTR("+1"), 2) == 0) {
-        if (S.dts[S.hit] != HIT_MARK) {
-            S.hit += 1;
-            if (S.dts[S.hit] == HIT_SERV) {
-                S.hit += 1;    // skip HIT_NONE
-            }
-        } else {
-            goto ERR;
-        }
-#endif
     } else {
         goto ERR;
     }
@@ -351,7 +321,6 @@ OK:;
     EEPROM_Save();
     PT_All();
     Serial_Score();
-    TV_All("CMD", 0, 0, 0);
 
     return IN_NONE;
 }

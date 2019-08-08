@@ -29,6 +29,22 @@ void PT_Bests_Apply (void) {
     }
 }
 
+int PT_Behind (void) {
+    u32 p0  = G.ps[0];
+    u32 p1  = G.ps[1];
+    u32 avg = (p0 + p1) / 2;
+    u32 m   = min(p0,p1);
+    if (m * 11/10 < avg) {
+        if (p0 < p1) {
+            return 0;   // atleta a esquerda atras
+        } else {
+            return 1;   // atleta a direita  atras
+        }
+    } else {
+        return -1;      // equilibrio
+    }
+}
+
 void PT_All (void) {
     G.ps[0] = 0;
     G.ps[1] = 0;

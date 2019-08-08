@@ -1,5 +1,5 @@
 #define MAJOR    1
-#define MINOR    10
+#define MINOR    11
 #define REVISION 1
 
 //#define DEBUG
@@ -77,14 +77,14 @@ static bool IS_BACK;
 static char STR[100];
 
 typedef struct {
+    u8   modo;                  // = MODE_CEL
+
     char juiz[NAME_MAX+1];      // = "Juiz"
     char names[2][NAME_MAX+1];  // = { "Atleta ESQ", "Atleta DIR" }
     u32  timeout;               // = 180 * ((u32)1000) ms
     u16  distancia;             // = 700 cm
     s8   maximas;               // = sim/nao
     s8   equilibrio;            // = sim/nao
-    //u8   continuidade;          // = 3%
-    s8   velocidades;           // = sim/nao
     u8   maxima;                // = 85 kmh
     u16  sensibilidade;         // = 180  (minimum time to hold for back)
 
@@ -119,20 +119,19 @@ enum {
     IN_RESET
 };
 
+enum {
+    MODE_PC,
+    MODE_CEL
+};
+
 int Falls (void) {
     return G.servs - (STATE==STATE_IDLE ? 0 : 1);
                         // after fall
 }
 
-int  PT_Bests (s8* bests, int* min_, int* max_);
-void PT_All   (void);
 #include "pt.c.h"
-
-void Serial_Hit   (char* name, u32 kmh, bool is_back);
-void Serial_Score (void);
-void Serial_Log   (void);
-int  Serial_Check (void);
 #include "serial.c.h"
+#include "pc.c.h"
 
 void Sound (s8 kmh) {
     if (kmh < 40) {
@@ -241,6 +240,7 @@ void EEPROM_Save (void) {
 }
 
 void EEPROM_Default (void) {
+    S.modo          = MODE_CEL;
     strcpy(S.juiz,     "?");
     strcpy(S.names[0], "Atleta ESQ");
     strcpy(S.names[1], "Atleta DIR");
@@ -248,8 +248,6 @@ void EEPROM_Default (void) {
     S.timeout       = REF_TIMEOUT * ((u32)1000);
     S.maximas       = 0;
     S.equilibrio    = 1;
-    //S.continuidade = 3;
-    S.velocidades   = 1;
     S.maxima        = 85;
     S.sensibilidade = SENS_MAX;
 }
@@ -292,6 +290,10 @@ void loop (void)
     STATE = STATE_IDLE;
     PT_All();
     Serial_Score();
+
+    if (S.modo == MODE_PC) {
+        PC_Restart();
+    }
 
     while (1)
     {
@@ -378,7 +380,7 @@ void loop (void)
 
         IS_BACK = false;
 
-        if (S.velocidades) {
+        if (S.modo == MODE_CEL) {
             Serial.println(F("> saque"));
         }
 
@@ -439,12 +441,25 @@ void loop (void)
                 Sound(kmh);
             }
 
-            if (S.velocidades) {
-                if (nxt != got) {
-                    Serial_Hit(kmh, IS_BACK);
-                    Serial_Hit(kmh, false);
-                } else {
-                    Serial_Hit(kmh, IS_BACK);
+            if (nxt != got) {
+                switch (S.modo) {
+                    case MODE_CEL:
+                        Serial_Hit(kmh, IS_BACK);
+                        Serial_Hit(kmh, false);
+                        break;
+                    case MODE_PC:
+                        PC_Hit(1-got,   IS_BACK, kmh);
+                        PC_Hit(  got, false,   kmh);
+                        break;
+                }
+            } else {
+                switch (S.modo) {
+                    case MODE_CEL:
+                        Serial_Hit(kmh, IS_BACK);
+                        break;
+                    case MODE_PC:
+                        PC_Hit(1-got, IS_BACK, kmh);
+                        break;
                 }
             }
 
@@ -463,6 +478,9 @@ void loop (void)
             nxt = 1 - got;
 
             PT_All();
+            if (S.modo == MODE_PC) {
+                PC_Tick();
+            }
 
 // TIMEOUT
             if (G.time >= S.timeout) {
@@ -491,7 +509,7 @@ void loop (void)
                         u32 avg = (p0 + p1) / 2;
                         u32 m   = min(p0,p1);
                         if (G.time >= 30000) {
-                            if (kmh>60 && m*11/10<avg) {
+                            if (kmh>60 && PT_Behind()!=-1) {
                                 if (p0>p1 && nxt==0 || p1>p0 && nxt==1) {
                                     tone(PIN_TONE, NOTE_C3, 30);
                                 }
@@ -522,6 +540,9 @@ _FALL:
         PT_All();
         Serial.println(F("QUEDA"));
         Serial_Score();
+        if (S.modo == MODE_PC) {
+            PC_Fall();
+        }
         EEPROM_Save();
 
         if (Falls() >= ABORT_FALLS) {
@@ -535,6 +556,9 @@ _TIMEOUT:
     PT_All();
     Serial.println(F("= FIM ="));
     Serial_Score();
+    if (S.modo == MODE_PC) {
+        PC_End();
+    }
     EEPROM_Save();
 
     while (1) {
