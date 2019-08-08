@@ -441,10 +441,10 @@ void loop (void)
             }
 
             if (nxt != got) {
-                MODE(CEL_Hit(kmh, IS_BACK), PC_Hit(1-got,IS_BACK,kmh));
-                MODE(CEL_Hit(kmh, false)  , PC_Hit(  got,false,  kmh));
+                MODE(CEL_Hit(kmh, IS_BACK), PC_Hit(  got,IS_BACK,kmh));
+                MODE(CEL_Hit(kmh, false)  , PC_Hit(1-got,false,  kmh));
             } else {
-                MODE(CEL_Hit(kmh, IS_BACK), PC_Hit(1-got,IS_BACK,kmh));
+                MODE(CEL_Hit(kmh, IS_BACK), PC_Hit(  got,IS_BACK,kmh));
             }
 
             if (IS_BACK) {

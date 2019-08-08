@@ -36,7 +36,7 @@ void PC_Hit (int player, int is_back, int kmh) {
 
 void PC_Tick (void) {
     Serial.println(PC_TICK);            // codigo de tick
-    Serial.println(G.time);             // tempo jogado
+    Serial.println(G.time);             // tempo jogado em ms
     Serial.println(G.total);            // total da dupla
 }
 
