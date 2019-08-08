@@ -1,12 +1,3 @@
-void Serial_Hit (u32 kmh, bool is_back) {
-    Serial.print(F("> "));
-    Serial.print(kmh);
-    if (is_back) {
-        Serial.print(F(" !"));
-    }
-    Serial.println();
-}
-
 void Serial_Score (void) {
     Serial.println();
     Serial.println(F("-----------------------------------------------"));

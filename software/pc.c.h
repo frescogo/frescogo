@@ -48,3 +48,6 @@ void PC_Fall (void) {
 void PC_End (void) {
     Serial.println(PC_END);             // codigo de fim
 }
+
+void PC_Nop (void) {
+}

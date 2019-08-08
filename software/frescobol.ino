@@ -131,6 +131,7 @@ int Falls (void) {
 
 #include "pt.c.h"
 #include "serial.c.h"
+#include "xcel.c.h"
 #include "pc.c.h"
 
 void Sound (s8 kmh) {
@@ -277,23 +278,23 @@ u32 alarm (void) {
     }
 }
 
+#define MODE(xxx,yyy)   \
+    switch (S.modo) {   \
+        case MODE_CEL:  \
+            xxx;        \
+            break;      \
+        case MODE_PC:   \
+            yyy;        \
+            break;      \
+    }
+
 void loop (void)
 {
 // RESTART
-    Serial.print(F("= FrescoGO! (versao "));
-    Serial.print(MAJOR);
-    Serial.print(".");
-    Serial.print(MINOR);
-    Serial.print(".");
-    Serial.print(REVISION);
-    Serial.println(F(") ="));
     STATE = STATE_IDLE;
     PT_All();
-    Serial_Score();
 
-    if (S.modo == MODE_PC) {
-        PC_Restart();
-    }
+    MODE(CEL_Restart(), PC_Restart());
 
     while (1)
     {
@@ -334,7 +335,7 @@ void loop (void)
                 delay(310);
                 EEPROM_Save();
                 PT_All();
-                Serial_Score();
+                MODE(Serial_Score(), PC_Nop());
 
 /* No TIMEOUT outside playing: prevents falls miscount.
             } else if (got == IN_TIMEOUT) {
@@ -345,7 +346,7 @@ void loop (void)
             }
         }
         tone(PIN_TONE, NOTE_C7, 500);
-        Serial_Score();
+        MODE(Serial_Score(), PC_Nop());
 
 // SERVICE
         while (1) {
@@ -380,9 +381,7 @@ void loop (void)
 
         IS_BACK = false;
 
-        if (S.modo == MODE_CEL) {
-            Serial.println(F("> saque"));
-        }
+        MODE(CEL_Service(), PC_Nop());
 
         PT_All();
         delay(HIT_MIN_DT);
@@ -442,25 +441,10 @@ void loop (void)
             }
 
             if (nxt != got) {
-                switch (S.modo) {
-                    case MODE_CEL:
-                        Serial_Hit(kmh, IS_BACK);
-                        Serial_Hit(kmh, false);
-                        break;
-                    case MODE_PC:
-                        PC_Hit(1-got,   IS_BACK, kmh);
-                        PC_Hit(  got, false,   kmh);
-                        break;
-                }
+                MODE(CEL_Hit(kmh, IS_BACK), PC_Hit(1-got,IS_BACK,kmh));
+                MODE(CEL_Hit(kmh, false)  , PC_Hit(  got,false,  kmh));
             } else {
-                switch (S.modo) {
-                    case MODE_CEL:
-                        Serial_Hit(kmh, IS_BACK);
-                        break;
-                    case MODE_PC:
-                        PC_Hit(1-got, IS_BACK, kmh);
-                        break;
-                }
+                MODE(CEL_Hit(kmh, IS_BACK), PC_Hit(1-got,IS_BACK,kmh));
             }
 
             if (IS_BACK) {
@@ -538,11 +522,7 @@ _FALL:
         delay(310);
 
         PT_All();
-        Serial.println(F("QUEDA"));
-        Serial_Score();
-        if (S.modo == MODE_PC) {
-            PC_Fall();
-        }
+        MODE(CEL_Fall(), PC_Fall());
         EEPROM_Save();
 
         if (Falls() >= ABORT_FALLS) {
@@ -554,11 +534,7 @@ _TIMEOUT:
     STATE = STATE_TIMEOUT;
     tone(PIN_TONE, NOTE_C2, 2000);
     PT_All();
-    Serial.println(F("= FIM ="));
-    Serial_Score();
-    if (S.modo == MODE_PC) {
-        PC_End();
-    }
+    MODE(CEL_End(), PC_End());
     EEPROM_Save();
 
     while (1) {
