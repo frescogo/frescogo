@@ -3,7 +3,6 @@
 #define REVISION 1
 
 //#define DEBUG
-//#define TV_ON
 
 #ifdef DEBUG
 #define assert(x) \
@@ -26,26 +25,6 @@
 typedef char  s8;
 typedef short s16;
 typedef unsigned long u32;
-
-#ifdef TV_ON
-
-#include <TVout.h>
-#include <pollserial.h>
-#include <fontALL.h>
-#define Serial      pserial
-#define delay       TV.delay
-#define millis      TV.millis
-#define tone(x,y,z) TV.tone(y,z)
-#define DX  184
-#define DY   64
-#define FX    4
-#define FY    6
-static TVout TV;
-static pollserial pserial;
-
-#else // !TV_ON
-
-#endif
 
 #if 1
 #define PIN_LEFT  4
@@ -148,9 +127,6 @@ int Falls (void) {
 int  PT_Bests (s8* bests, int* min_, int* max_);
 void PT_All   (void);
 #include "pt.c.h"
-
-void TV_All (const char* str, int p, int kmh, int is_back);
-#include "tv.c.h"
 
 void Serial_Hit   (char* name, u32 kmh, bool is_back);
 void Serial_Score (void);
@@ -283,13 +259,7 @@ void setup (void) {
     pinMode(PIN_LEFT,  INPUT_PULLUP);
     pinMode(PIN_RIGHT, INPUT_PULLUP);
 
-#ifdef TV_ON
-    TV.begin(PAL,DX,DY);
-    TV.select_font(font4x6);
-    TV.set_hbi_hook(Serial.begin(9600));
-#else
     Serial.begin(9600);
-#endif
 
     EEPROM_Load();
 }
@@ -321,7 +291,6 @@ void loop (void)
     Serial.println(F(") ="));
     STATE = STATE_IDLE;
     PT_All();
-    TV_All("GO!", 0, 0, 0);
     Serial_Score();
 
     while (1)
@@ -363,7 +332,6 @@ void loop (void)
                 delay(310);
                 EEPROM_Save();
                 PT_All();
-                TV_All("GO!", 0, 0, 0);
                 Serial_Score();
 
 /* No TIMEOUT outside playing: prevents falls miscount.
@@ -375,7 +343,6 @@ void loop (void)
             }
         }
         tone(PIN_TONE, NOTE_C7, 500);
-        TV_All("GO!", 0, 0, 0);
         Serial_Score();
 
 // SERVICE
@@ -416,7 +383,6 @@ void loop (void)
         }
 
         PT_All();
-        TV_All("---", 0, 0, 0);
         delay(HIT_MIN_DT);
 
         int nxt = 1 - got;
@@ -497,7 +463,6 @@ void loop (void)
             nxt = 1 - got;
 
             PT_All();
-            TV_All(NULL, 1-got, kmh, IS_BACK);
 
 // TIMEOUT
             if (G.time >= S.timeout) {
@@ -555,7 +520,6 @@ _FALL:
         delay(310);
 
         PT_All();
-        TV_All("QUEDA", 0, 0, 0);
         Serial.println(F("QUEDA"));
         Serial_Score();
         EEPROM_Save();
@@ -569,7 +533,6 @@ _TIMEOUT:
     STATE = STATE_TIMEOUT;
     tone(PIN_TONE, NOTE_C2, 2000);
     PT_All();
-    TV_All("FIM", 0, 0, 0);
     Serial.println(F("= FIM ="));
     Serial_Score();
     EEPROM_Save();
