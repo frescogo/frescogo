@@ -14,6 +14,7 @@ void PC_Restart (void) {
     Serial.print(S.names[0]);         // atleta a esquerda
     Serial.print(F(";"));
     Serial.print(S.names[1]);         // atleta a direita
+    Serial.print(F(";"));
     Serial.println();
 }
 
@@ -33,6 +34,7 @@ void PC_Player (int I) {
     Serial.print(n);                  // total normais
     Serial.print(F(";"));
     Serial.print(max_);               // maxima normal
+    Serial.print(F(";"));
 }
 
 void PC_Hit (int player, int is_back, int kmh) {
@@ -54,6 +56,7 @@ void PC_Tick (void) {
     Serial.print(G.time/1000);        // tempo jogado em ms
     Serial.print(F(";"));
     Serial.print(G.total);            // total da dupla
+    Serial.print(F(";"));
     Serial.println();
 }
 
@@ -61,11 +64,13 @@ void PC_Fall (void) {
     Serial.print(PC_FALL);            // codigo de queda
     Serial.print(F(";"));
     Serial.print(Falls());            // total de quedas
+    Serial.print(F(";"));
     Serial.println();
 }
 
 void PC_End (void) {
     Serial.print(PC_END);             // codigo de fim
+    Serial.print(F(";"));
     Serial.println();
 }
 
