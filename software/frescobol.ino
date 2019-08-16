@@ -462,9 +462,7 @@ void loop (void)
             nxt = 1 - got;
 
             PT_All();
-            if (S.modo == MODE_PC) {
-                PC_Tick();
-            }
+            MODE(CEL_Nop(), PC_Tick());
 
 // TIMEOUT
             if (G.time >= S.timeout) {

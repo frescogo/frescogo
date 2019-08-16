@@ -31,3 +31,6 @@ void CEL_End (void) {
     Serial.println(F("= FIM ="));
     Serial_Score();
 }
+
+void CEL_Nop (void) {
+}
