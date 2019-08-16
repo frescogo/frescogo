@@ -59,6 +59,8 @@ void PC_Tick (void) {
     Serial.print(F(";"));
     Serial.print(G.hits);             // total de golpes
     Serial.print(F(";"));
+    Serial.print(G.pace[0]);          // media simples
+    Serial.print(F(";"));
     Serial.println();
 }
 
