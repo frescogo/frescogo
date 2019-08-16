@@ -381,7 +381,7 @@ void loop (void)
 
         IS_BACK = false;
 
-        MODE(CEL_Service(), PC_Nop());
+        MODE(CEL_Service(), PC_Hit(1-got,false,0));
 
         PT_All();
         delay(HIT_MIN_DT);
