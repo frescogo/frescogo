@@ -1,3 +1,8 @@
+v1.11 (ago/19)
+-------------
+
+- Suporte ao modo "PC" para exibição de placar em tempo real.
+
 v1.10 (jun/19)
 -------------
 

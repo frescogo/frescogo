@@ -4,7 +4,7 @@
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 -->
 
-# FrescoGO! (versão 1.11)
+# FrescoGO! (versão 1.10)
 
 *FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
@@ -307,6 +307,11 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - exibe o placar da apresentação
         - `relatorio`
             - exibe o relatório completo da apresentação
+        - `velocidades SIM/NAO`
+            - exibe (ou não) a velocidade de cada golpe em tempo real
+            - Exemplo:
+                - `velocidades nao`
+                - desabilita a exibição dos golpes em tempo real
     - Ação:
         - `reiniciar`
             - reinicia a apresentação imediatamente
@@ -316,7 +321,7 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - desconsidera por inteiro a sequência anterior
         - `restaurar`
             - restaura a configuração de fábrica
-    - Configuração da Apresentação:
+    - Configuração:
         - `tempo SEGS`
             - altera o tempo total das apresentações para `SEGS`, que deve ser
               um número em segundos
@@ -358,7 +363,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `direita Joao`
                 - altera o nome do atleta à direita para *Joao*
-    - Configuração do Aparelho:
         - `juiz NOME`
             - altera o nome do juiz para `NOME`, que deve ter até 15 caracteres
             - Exemplo:
@@ -370,11 +374,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `sensibilidade 180`
                 - altera a sensibilidade para 180 milisegundos
-        - `modo MODO`
-            - altera o modo de exibição para `MODO`, que deve ser `cel` ou `pc`
-            - Exemplo:
-                - `modo pc`
-                - altera o modo de exibição para `pc`
 
 - Envio de relatórios:
     <a name="envio-de-relatorios"></a>
