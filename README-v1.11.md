@@ -4,7 +4,7 @@
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 -->
 
-# FrescoGO! (versão 1.12)
+# FrescoGO! (versão 1.11)
 
 *FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
@@ -40,9 +40,10 @@ ser usados, copiados e modificados livremente.**
 
 ## Regra de Pontuação
 
-Configuração considerada:
+Configuração sugerida:
 
-- Tempo: 300s cronometrados (5 minutos)
+- Tempo: 180s cronometrados (3 minutos)
+- Distância: 750cm (7.5 metros)
 
 Quesitos de pontuação:
 
@@ -58,24 +59,25 @@ Quesitos de pontuação:
         - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Máximas:**
-    - A média de pontuação dos `36` golpes mais velozes de cada atleta é
-      multiplicada por `108` e somada ao seu total (`x3` por cada golpe).
-    - São considerados `24` golpes efetuados pelo lado preferencial do atleta
-      ("lado normal") e `12` golpes efetuados pelo lado não preferencial do
-      atleta ("lado revés").
-    - Exemplo:
-        - A média dos `24` golpes mais velozes do lado normal foi de `75 kmh`.
-        - A média dos `12` golpes mais velozes do lado revés  foi de `55 kmh`.
-        - A média dos `36` golpes mais velozes foi então de `68 kmh` com `46`
-          pontos por golpe.
-        - Esse atleta vai então obter **4698 pontos** (`46 x 108`) no quesito
-          de *Máximas* que ainda serão somados aos seus pontos de *Volume*.
-    - OBS.:
-        - Tipicamente, golpes pelo lado normal são efetuados de *forehand* e
-          golpes pelo lado revés de *backhand*. No entanto, qualquer qualidade
-          de golpe é válida, inclusive trocando a raquete de mão.
-        - Os `36` golpes dentre as máximas também são considerados no quesito
-          **Volume** normalmente.
+    - A média dos 7 golpes mais velozes batidos à **direita** e à **esquerda**
+      do corpo do atleta é contabilizada conforme a fórmula de *Volume* e
+      ainda é multiplicada por `21` antes de ser somada ao seu total.
+      Exemplo:
+        - Os golpes mais velozes de um dos atletas foram os seguintes:
+            - A sua direita:  **`87`, `85`, `83`, `82`, `75`, `75`, `73`**, `70`, `69`, ...
+            - A sua esquerda: **`52`, `50`, `50`, `49`, `44`, `35`, ` 0`,** ` 0`, ` 0`, ...
+        - A média dos 7 golpes mais velozes de direita foi de 80 kmh
+          (`(87+85+83+82+75+75+73)/7 = 80`),
+          somando `64x21` = **1344 pontos**.
+        - A média dos 7 golpes mais velozes de esquerda foi de 40 kmh
+          (`(52+50+50+49+44+35+0)/7 = 40`),
+          somando `16x21` = **336 pontos**.
+        - Esse atleta vai então obter **1680 pontos** de *Máximas* que ainda
+          serão somados aos seus pontos de *Volume*.
+    - OBS.: Tipicamente, golpes à direita são executados de *forehand* e golpes
+      à esquerda de *backhand* (considerando um jogador destro). No entanto,
+      qualquer qualidade de golpe é válida, inclusive trocando a raquete de
+      mão.
 <!--
     - OBS.: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
@@ -93,13 +95,13 @@ Quesitos de pontuação:
           A pontuação de equilíbrio será o menor entre os dois valores
           (`4500 vs 4400`): **4400 pontos**.
 - **Continuidade:**
-    - Cada queda subtrai 2% da pontuação final da dupla.
+    - Cada queda subtrai 3% da pontuação final da dupla.
       Exemplo:
-        - Com 5 quedas, a dupla perderá 10% dos pontos, ou seja, se ela pontuou
-          4400 após o equilíbrio, a pontuação final será de **3960 pontos**
-          (`4400x90%`).
+        - Com 5 quedas, a dupla perderá 15% dos pontos, ou seja, se ela pontuou
+          4400 após o equilíbrio, a pontuação final será de **3740 pontos**
+          (`4400x85%`).
     - Os dois últimos golpes antes da queda também são desconsiderados.
-    - A apresentação é encerrada sumariamente na 20a queda.
+    - A apresentação é encerrada sumariamente na 18a queda.
 
 -------------------------------------------------------------------------------
 
@@ -129,7 +131,7 @@ Quesitos de pontuação:
 - O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
 - Um som agudo é emitido a cada 1 minuto e também quando faltam 30, 10, e 5
   segundos para a apresentação terminar.
-- A apresentação termina após 5 minutos cronometrados ou após a 20a queda.
+- A apresentação termina após 3 minutos cronometrados ou após a 18a queda.
   Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
   golpes.
@@ -146,7 +148,7 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
 -----------------------------------------------
 
 TOTAL ........ 604 pts                          <-- total de pontos
-Tempo ........ 19630ms (faltam 280s)            <-- tempo passado e restante
+Tempo ........ 19630ms (-160s)                  <-- tempo passado e restante
 Quedas ....... 5                                <-- número de quedas
 Golpes ....... 28                               <-- quantidade de golpes
 Ritmo ........ 46/48 kmh                        <-- ritmo em km/h (média simples/quadrática)
@@ -155,27 +157,27 @@ Juiz ......... Arnaldo                          <-- nome do juiz
 -----------------------------------------------
 
     Joao: 1024 pts                              <-- total do atleta à esquerda
- esq  [ 39 36 36 36 34 33 31 ... ] => 35 kmh <-- 24 golpes de esquerda mais fortes => média simples
- dir  [ 65 56 55 54 52 51 50 ... ] => 54 kmh <-- 24 golpes de direita  mais fortes => média simples
+ esq  [  39  36  36  36  34  33  31 ] => 35 kmh <-- 7 golpes de esquerda mais fortes => média simples
+ dir  [  65  56  55  54  52  51  50 ] => 54 kmh <-- 7 golpes de direita  mais fortes => média simples
 
 -----------------------------------------------
 
    Maria: 646 pts                               <-- total do atleta à direita
- esq  [ 67  0  0  0  0  0  0 ... ] => 9 kmh  <-- 24 golpes de esquerda mais fortes => média simples
- dir  [ 71 67 65 64 64 57 36 ... ] => 60 km  <-- 24 golpes de direita  mais fortes => média simples
+ esq  [  67   0   0   0   0   0   0 ] => 9 kmh  <-- 7 golpes de esquerda mais fortes => média simples
+ dir  [  71  67  65  64  64  57  36 ] => 60 km  <-- 7 golpes de direita  mais fortes => média simples
 
 -----------------------------------------------
 
-(v1201/750cm/300s/max=1,85,200/equ1/cont20/fim20) <-- configurações
-   \-- versão do software
+(v1101/750cm/180s/max=1,85/equ1/cont30/fim18/sens220) <-- configurações
+  \-- versão do software
         \-- distância entre os ateltas
               \-- tempo máximo de apresentação
-                      \-- quesito de maximas (0=desligado, 1=ligado)
+                      \-- pontuação de maximas (0=desligada, 1=ligada)
                          \-- velocidade máxima a detectar
-                            \-- sensibilidade do revés (200ms)
-                                \-- quesito de equilíbrio (0=desligado, 1=ligado)
-                                      \-- desconto por queda (20 = 2.0%)
-                                             \-- número máximo de quedas
+                            \-- pontuação de equilíbrio
+                                 \-- desconto por queda (30 = 3.0%)
+                                        \-- número máximo de quedas
+                                              \-- sensibilidade do backhand (220ms)
 
 -----------------------------------------------
 ```
@@ -240,9 +242,9 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
     - Resposta: um som agudo de meio segundo.
 - Golpes dos atletas:
     - Pressione o botão da esquerda ou direita quando, respectivamente, o
-      atleta à esquerda ou à direita golpearem a bola. Se o golpe for um revés
-      (lado não preferencial do atleta), o pressionamento deve ser um pouco
-      mais demorado.
+      atleta à esquerda ou à direita golpearem a bola. Se o golpe for um
+      backhand (ou o lado não preferencial do atleta), o pressionamento deve
+      ser um pouco mais demorado.
     - Resposta: depende da velocidade (ver a seção "Fluxo da Apresentação").
 - Queda de bola:
     - Pressione o botão do meio por um segundo, até escutar um som.
@@ -319,8 +321,8 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - altera o tempo total das apresentações para `SEGS`, que deve ser
               um número em segundos
             - Exemplo:
-                - `tempo 180`
-                - altera o tempo de apresentação para 3 minutos
+                - `tempo 300`
+                - altera o tempo de apresentação para 5 minutos
         - `distancia CMS`
             - altera a distância das apresentações para `CMS`, que deve ser um
               número em centímetros
@@ -339,13 +341,6 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `maxima 90`
                 - bolas acima de 90 kmh serão interpretadas como 90 kmh
-        - `reves MS`
-            - altera o tempo mínimo para detectar um revés para `MS`, que deve
-              ser um número em milisegundos
-            - caso o valor seja `0`, os golpes de revés serão desconsiderados
-            - Exemplo:
-                - `reves 200`
-                - altera a sensibilidade do revés para 200 milisegundos
         - `equilibrio SIM/NAO`
             - liga ou desliga a pontuação de equlíbrio (`nao=desligada`, `sim=ligada`)
             - Exemplo:
@@ -369,6 +364,12 @@ TOTAL ........   604 pts                        <-- Pontuação final da dupla
             - Exemplo:
                 - `juiz Arnaldo`
                 - altera o nome do juiz para *Arnaldo*
+        - `sensibilidade MS`
+            - altera o tempo mínimo para detectar um backhand para `MS`, que
+              deve ser um número em milisegundos
+            - Exemplo:
+                - `sensibilidade 180`
+                - altera a sensibilidade para 180 milisegundos
         - `modo MODO`
             - altera o modo de exibição para `MODO`, que deve ser `cel` ou `pc`
             - Exemplo:
