@@ -59,7 +59,7 @@ Quesitos de pontuação:
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Máximas:**
     - A média de pontuação dos `36` golpes mais velozes de cada atleta é
-      multiplicada por `108` e somada ao seu total (`x3` por cada golpe).
+      multiplicada por `72` e somada ao seu total (`x2` por cada golpe).
     - São considerados `24` golpes efetuados pelo lado preferencial do atleta
       ("lado normal") e `12` golpes efetuados pelo lado não preferencial do
       atleta ("lado revés").
@@ -68,7 +68,7 @@ Quesitos de pontuação:
         - A média dos `12` golpes mais velozes do lado revés  foi de `55 kmh`.
         - A média dos `36` golpes mais velozes foi então de `68 kmh` com `46`
           pontos por golpe.
-        - Esse atleta vai então obter **4698 pontos** (`46 x 108`) no quesito
+        - Esse atleta vai então obter **3312 pontos** (`46 x 72`) no quesito
           de *Máximas* que ainda serão somados aos seus pontos de *Volume*.
     - OBS.:
         - Tipicamente, golpes pelo lado normal são efetuados de *forehand* e
