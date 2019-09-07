@@ -155,14 +155,14 @@ Juiz ......... Arnaldo                          <-- nome do juiz
 -----------------------------------------------
 
     Joao: 1024 pts                              <-- total do atleta à esquerda
- esq  [ 39 36 36 36 34 33 31 ... ] => 35 kmh <-- 24 golpes de esquerda mais fortes => média simples
- dir  [ 65 56 55 54 52 51 50 ... ] => 54 kmh <-- 24 golpes de direita  mais fortes => média simples
+ rev  [ 39 36 36 36 34 33 31 ... ] => 35 kmh    <-- 12 golpes de revés mais fortes => média simples
+ nrm  [ 65 56 55 54 52 51 50 ... ] => 54 kmh    <-- 24 golpes normais  mais fortes => média simples
 
 -----------------------------------------------
 
    Maria: 646 pts                               <-- total do atleta à direita
- esq  [ 67  0  0  0  0  0  0 ... ] => 9 kmh  <-- 24 golpes de esquerda mais fortes => média simples
- dir  [ 71 67 65 64 64 57 36 ... ] => 60 km  <-- 24 golpes de direita  mais fortes => média simples
+ rev  [ 67  0  0  0  0  0  0 ... ] =>  5 kmh    <-- 12 golpes de revés mais fortes => média simples
+ nrm  [ 71 67 65 64 64 57 36 ... ] => 60 km     <-- 24 golpes normais  mais fortes => média simples
 
 -----------------------------------------------
 

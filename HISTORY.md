@@ -1,3 +1,17 @@
+v1.12 (set/19)
+-------------
+
+- A regra passa a usar o jogo de 5 minutos (300 segundos) como referência.
+- O quesito de "Máximas" foi remodelado:
+    - 36 golpes mais velozes: 24 normais e 12 revés (eram 11 para ambos).
+    - Multiplicador de `x2` (era `x3`).
+- As Máximas vêm habilitadas, mas sem o revés por padrão.
+- O fator de queda passa a ser `2%` (era `1.8%`).
+- O máximo de quedas passa a ser `20` (era `30`).
+- Placar:
+    - Exibe total de golpes.
+    - Exibe e permite alterar o Juiz.
+
 v1.11 (ago/19)
 -------------
 
