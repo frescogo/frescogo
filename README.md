@@ -59,7 +59,7 @@ Quesitos de pontuação:
         - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
 - **Máximas:**
     - A média de pontuação dos `36` golpes mais velozes de cada atleta é
-      multiplicada por `72` e somada ao seu total (`x2` por cada golpe).
+      multiplicada por `72` e somada ao seu total (bônus `x2` por cada golpe).
     - São considerados `24` golpes efetuados pelo lado preferencial do atleta
       ("lado normal") e `12` golpes efetuados pelo lado não preferencial do
       atleta ("lado revés").
@@ -84,7 +84,7 @@ Quesitos de pontuação:
 - **Equilíbrio:**
     - A pontuação da dupla será a média de pontos entre os dois atletas.
     - Se o atleta que pontuou menos estiver abaixo de 90% dessa média, então a
-      pontuação da dupla será o menor valor.
+      pontuação da dupla será o menor valor entre os atletas.
     - Mais precisamente, a pontuação será o menor valor entre a média dos dois
       e 110% do que pontuou menos:
         - `MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
