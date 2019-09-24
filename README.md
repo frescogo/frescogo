@@ -2,6 +2,7 @@
 
 <!--
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
+$ pandoc README.md -H deeplists.tex -o frescogo.html
 -->
 
 # FrescoGO! (versão 2.0)
@@ -38,25 +39,19 @@ ser usados, copiados e modificados livremente.**
 
 -------------------------------------------------------------------------------
 
-## Regra de Pontuação
+## Regra de Pontuação (para 5 minutos)
 
-Configuração considerada:
-
-- Tempo: 300s cronometrados (5 minutos)
-
-Quesitos de pontuação:
-
-- **Atleta:**
+- **Golpes:**
     - Cada atleta é avaliado individualmente pelos seguintes quesitos:
         - **Volume:**
             - Média quadrática da velocidade de todos os seus golpes.
                 - (A média usa as velocidades elevadas ao quadrado.)
         - **Máximas - Normal:**
-            - Média simples da velocidade dos `24` golpes mais fortes pelo seu
-              lado preferencial ("lado normal").
+            - Média simples da velocidade dos `24` golpes mais fortes efetuados
+              pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
-            - Média simples da velocidade dos `12` golpes mais fortes pelo seu
-              lado preferencial ("lado normal").
+            - Média simples da velocidade dos `12` golpes mais fortes efetuados
+              pelo seu lado não preferencial ("lado revés").
     - O total do atleta é a média ponderada dos três quesitos:
         - `ATLETA = (7x Volume + 2x Normal + 1x Revez) / 10`
 - **Equilíbrio:**
@@ -65,12 +60,18 @@ Quesitos de pontuação:
       pontuação da dupla será baseada no menor valor.
     - O total da dupla é o menor valor entre a média dos dois e `110%` do que
       pontuou menos:
-        - `EQUILIBRIO = MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
+        - `EQUILIBRIO = MIN( (ATLETA1+ATLETA2)/2, MIN(ATLETA1,ATLETA2)x1.1 )`
 - **Continuidade:**
     - A apresentação é encerrada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são desconsiderados.
     - Cada queda subtrai `2%` da pontuação de equilíbrio da dupla:
         - `TOTAL = EQUILIBRIO x (100 - 2x QUEDAS) / 100`
+
+```
+    ATLETA     = (7x Volume + 2x Normal + 1x Revez) / 10
+    EQUILIBRIO = MIN( (ATLETA1+ATLETA2)/2, MIN(ATLETA1,ATLETA2)x1.1 )
+    TOTAL      = EQUILIBRIO x (100 - 2x QUEDAS) / 100
+```
 
 <!--
 - 
