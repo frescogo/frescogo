@@ -70,7 +70,7 @@ Quesitos de pontuação:
     - A apresentação é encerrada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são desconsiderados.
     - Cada queda subtrai `2%` da pontuação de equilíbrio da dupla:
-        - `TOTAL = EQUILIBRIO x (100 - 2xQUEDAS) / 100`
+        - `TOTAL = EQUILIBRIO x (100 - 2x QUEDAS) / 100`
 
 <!--
 - 
