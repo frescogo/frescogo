@@ -63,13 +63,13 @@ Quesitos de pontuação:
     - A pontuação da dupla será a média de pontos entre os dois atletas.
     - Se o atleta que pontuou menos estiver muito abaixo dessa média, então a
       pontuação da dupla será baseada no menor valor.
-    - O total da dupla é o menor valor entre a média dos dois e 110% do que
+    - O total da dupla é o menor valor entre a média dos dois e `110%` do que
       pontuou menos:
         - `EQUILIBRIO = MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
 - **Continuidade:**
-    - A apresentação é encerrada sumariamente na 20a queda.
+    - A apresentação é encerrada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são desconsiderados.
-    - Cada queda subtrai 2% da pontuação de equilíbrio da dupla:
+    - Cada queda subtrai `2%` da pontuação de equilíbrio da dupla:
         - `TOTAL = EQUILIBRIO x (100 - 2xQUEDAS) / 100`
 
 <!--
