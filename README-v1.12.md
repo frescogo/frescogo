@@ -4,7 +4,7 @@
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 -->
 
-# FrescoGO! (versão 2.0)
+# FrescoGO! (versão 1.12)
 
 *FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
@@ -46,45 +46,7 @@ Configuração considerada:
 
 Quesitos de pontuação:
 
-- **Atleta:**
-    - Cada atleta é avaliado individualmente pelos seguintes quesitos:
-        - **Volume:**
-            - Média quadrática da velocidade de todos os seus golpes.
-                - (A média usa as velocidades elevadas ao quadrado.)
-        - **Máximas - Normal:**
-            - Média simples da velocidade dos `24` golpes mais fortes pelo seu
-              lado preferencial ("lado normal").
-        - **Máximas - Revés:**
-            - Média simples da velocidade dos `12` golpes mais fortes pelo seu
-              lado preferencial ("lado normal").
-    - O total do atleta é a média ponderada dos três quesitos:
-        - `ATLETA = (7x Volume + 2x Normal + 1x Revez) / 10`
-- **Equilíbrio:**
-    - A pontuação da dupla será a média de pontos entre os dois atletas.
-    - Se o atleta que pontuou menos estiver muito abaixo dessa média, então a
-      pontuação da dupla será baseada no menor valor.
-    - O total da dupla é o menor valor entre a média dos dois e 110% do que
-      pontuou menos:
-        - `EQUILIBRIO = MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
-- **Continuidade:**
-    - A apresentação é encerrada sumariamente na 20a queda.
-    - Os dois últimos golpes antes de cada queda são desconsiderados.
-    - Cada queda subtrai 2% da pontuação de equilíbrio da dupla:
-        - `TOTAL = EQUILIBRIO x (100 - 2xQUEDAS) / 100`
-
-<!--
-- 
-      Exemplo:
-        - Com 5 quedas, a dupla perderá 10% dos pontos, ou seja, se ela pontuou
-          4400 após o equilíbrio, a pontuação final será de **3960 pontos**
-          (`4400x90%`).
-        - Ex., se os atletas pontuaram 4000 e 5000 pontos, pega-se a média
-          (`(5000+4000)/2 = 4500`) e 110% do menor (`4000x110% = 4400`).
-          A pontuação de equilíbrio será o menor entre os dois valores
-          (`4500 vs 4400`): **4400 pontos**.
-
-Os três quesitos são somados As três médias são 
-
+- **Volume:**
     - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
       dividida por 100 e somada ao total do atleta. Não há velocidade mínima.
       Exemplos:
@@ -114,9 +76,30 @@ Os três quesitos são somados As três médias são
           de golpe é válida, inclusive trocando a raquete de mão.
         - Os `36` golpes dentre as máximas também são considerados no quesito
           **Volume** normalmente.
+<!--
     - OBS.: Em uma apresentação de 3 minutos, 7 golpes correspondem a
       aproximadamente 10% dos golpes em posição de ataque.
 -->
+
+- **Equilíbrio:**
+    - A pontuação da dupla será a média de pontos entre os dois atletas.
+    - Se o atleta que pontuou menos estiver abaixo de 90% dessa média, então a
+      pontuação da dupla será o menor valor entre os atletas.
+    - Mais precisamente, a pontuação será o menor valor entre a média dos dois
+      e 110% do que pontuou menos:
+        - `MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
+        - Ex., se os atletas pontuaram 4000 e 5000 pontos, pega-se a média
+          (`(5000+4000)/2 = 4500`) e 110% do menor (`4000x110% = 4400`).
+          A pontuação de equilíbrio será o menor entre os dois valores
+          (`4500 vs 4400`): **4400 pontos**.
+- **Continuidade:**
+    - Cada queda subtrai 2% da pontuação final da dupla.
+      Exemplo:
+        - Com 5 quedas, a dupla perderá 10% dos pontos, ou seja, se ela pontuou
+          4400 após o equilíbrio, a pontuação final será de **3960 pontos**
+          (`4400x90%`).
+    - Os dois últimos golpes antes da queda também são desconsiderados.
+    - A apresentação é encerrada sumariamente na 20a queda.
 
 -------------------------------------------------------------------------------
 
@@ -159,39 +142,40 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
 
 ```
 -----------------------------------------------
-                  Joao / Maria                            <-- nome dos atletas
+                  Joao / Maria                  <-- nome dos atletas
 -----------------------------------------------
 
-TOTAL .............. 41.73 pts                            <-- total de pontos
-Tempo Restante ..... 01:23                                <-- tempo restante
-Quedas ............. 10                                   <-- número de quedas
-Golpes ............. 440                                  <-- quantidade de golpes
-Média .............. 51 kmh                               <-- média geral em km/h
-Juiz ............... Arnaldo                              <-- nome do juiz
-
------------------------------------------------
-
-      Joao: 50.27 pts (50.70 vol / 63.87 nrm / 20.08 rev) <-- totais do atleta à esquerda
- rev  [ 45 44 40 39 38 35 00 00 00 00 00 00 ... ]         <-- 24 golpes de revés mais fortes
- nrm  [ 75 69 67 65 65 65 65 64 64 64 64 64 ... ]         <-- 24 golpes normais  mais fortes
+TOTAL ........ 604 pts                          <-- total de pontos
+Tempo ........ 19630ms (faltam 280s)            <-- tempo passado e restante
+Quedas ....... 5                                <-- número de quedas
+Golpes ....... 28                               <-- quantidade de golpes
+Ritmo ........ 46/48 kmh                        <-- ritmo em km/h (média simples/quadrática)
+Juiz ......... Arnaldo                          <-- nome do juiz
 
 -----------------------------------------------
 
-     Maria: 54.07 pts (53.39 vol / 64.20 nrm / 38.66 rev) <-- totais do atleta à direita
- rev  [ 48 46 41 40 38 38 36 36 36 35 35 35 ... ]         <-- 24 golpes de revés mais fortes
- nrm  [ 71 71 67 65 65 64 64 64 64 64 64 64 ... ]         <-- 24 golpes normais  mais fortes
+    Joao: 1024 pts                              <-- total do atleta à esquerda
+ rev  [ 39 36 36 36 34 33 31 ... ] => 35 kmh    <-- 12 golpes de revés mais fortes => média simples
+ nrm  [ 65 56 55 54 52 51 50 ... ] => 54 kmh    <-- 24 golpes normais  mais fortes => média simples
 
 -----------------------------------------------
 
-v200/750cm/300s/maxs(85,200)/equ1/cont20/fim20)           <-- configurações
-  \-- versão do software
-       \-- distância entre os ateltas
-            \-- tempo máximo de apresentação
-                      \-- velocidade máxima a detectar (85 km/h)
-                         \-- sensibilidade do revés (200ms)
-                              \-- quesito de equilíbrio (0=desligado, 1=ligado)
-                                    \-- desconto por queda (20 = 2.0%)
-                                           \-- número máximo de quedas
+   Maria: 646 pts                               <-- total do atleta à direita
+ rev  [ 67  0  0  0  0  0  0 ... ] =>  5 kmh    <-- 12 golpes de revés mais fortes => média simples
+ nrm  [ 71 67 65 64 64 57 36 ... ] => 60 km     <-- 24 golpes normais  mais fortes => média simples
+
+-----------------------------------------------
+
+(v1201/750cm/300s/max=1,85,200/equ1/cont20/fim20) <-- configurações
+   \-- versão do software
+        \-- distância entre os ateltas
+              \-- tempo máximo de apresentação
+                      \-- quesito de maximas (0=desligado, 1=ligado)
+                         \-- velocidade máxima a detectar
+                            \-- sensibilidade do revés (200ms)
+                                \-- quesito de equilíbrio (0=desligado, 1=ligado)
+                                      \-- desconto por queda (20 = 2.0%)
+                                             \-- número máximo de quedas
 
 -----------------------------------------------
 ```
@@ -201,35 +185,37 @@ v200/750cm/300s/maxs(85,200)/equ1/cont20/fim20)           <-- configurações
 ```
 -- Sequencia  1 ----------------        <-- Início da primeira sequência.
             ****                        <-- Maria efetuou o primeiro golpe.
-     800            (33 km/h)           <-- Joao golpeou 800ms depois.
-             440    (61 km/h)               A velocidade do primeiro golpe de
-     820            (32 km/h)               Maria foi de 33 km/h.
-             350    (77 km/h)
-     790            (34 km/h)
+     800            ( 33 / 1089)        <-- João golpeou 800ms depois.
+             440    ( 61 / 3721)            A velocidade atingida foi de 33 kmh,
+     820            ( 32 / 1024)            somando 1089 pontos para Maria
+             350    ( 77 / 5929)            (10 pontos após a divisão por 100).
+     790            ( 34 / 1156)
      ...
-             930 !  (29 km/h)           <-- Joao golpeou de esquerda (!).
-     550            (49 km/h)           <-- Maria golpeou 550ms depois.
-             610    (44 km/h)               A velocidade do golpe anterior de
-     820            (32 km/h)               Joao foi de 44 km/h.
-             360    (75 km/h)
-     700            (38 km/h)
+             930 !  ( 29 /  841)        <-- João golpeou de esquerda (!).
+     550            ( 49 / 2401)        <-- Maria golpeou 550ms depois.
+             610    ( 44 / 1936)            A velocidade atingida foi de 44 kmh,
+     820            ( 32 / 1024)            somando 1936 pontos para João
+             360    ( 75 / 5625)            (19 pontos após a divisão por 100).
+     700            ( 38 / 1444)
              370
-                                        <-- Queda.
+   -----   -----                        <-- Queda.
+     256     195                        <-- Soma acumulada por João e por Maria
+                                            (após a divisão por 100).
 -- Sequencia XX ----------------        <-- Outras sequências...
 ...
 
 -----------------------------------------------
 
-    Atleta   |    Vol     Nrm     Rev    |     Total      <-- Volume, Normal, Revés e Total
-      Joao   |   50.70   63.87   20.08   |   50.27 pts    <-- Pontuação de Joao
-     Maria   |   53.39   64.20   38.66   |   54.07 pts    <-- Pontuação de Maria
+    Atleta    Vol     Esq     Dir   Total       <-- Volume e Máximas (esq/dir)
+Atleta ESQ:   297 +   201 +   525 =  1024 pts   <-- Pontuação de João
+Atleta DIR:   374 +     0 +   272 =   646 pts   <-- Pontuação de Maria
 
 -----------------------------------------------
 
-Media ........... 52.17 pts             <-- Média entre Joao e Maria
-Equilibrio ...... 00.00 (-)             <-- Desconto de equilíbrio
-Quedas (10) .....   20% (-)             <-- Desconto de quedas
-TOTAL ........... 41.73 pts             <-- Pontuação final da dupla
+Media ........   835 pts                        <-- Média entre os dois
+Equilibrio ...   124 (-)                        <-- Desconto de equilíbrio
+Quedas .......   106 (-)                        <-- Desconto de quedas
+TOTAL ........   604 pts                        <-- Pontuação final da dupla
 ```
 
 -------------------------------------------------------------------------------
@@ -341,15 +327,11 @@ TOTAL ........... 41.73 pts             <-- Pontuação final da dupla
             - Exemplo:
                 - `distancia 800`
                 - altera a distância para 8 metros
-
-<!--
         - `maximas SIM/NAO`
             - liga ou desliga a pontuação de máximas (`nao=desligada`, `sim=ligada`)
             - Exemplo:
                 - `maximas sim`
                 - habilita a pontuação de máximas
--->
-
         - `maxima VEL`
             - altera a velocidade máxima a ser considerada para `VEL`, que deve
               ser um número em kmh (bolas acima de `VEL` serão consideradas
@@ -512,19 +494,17 @@ TOTAL ........... 41.73 pts             <-- Pontuação final da dupla
 
 -------------------------------------------------------------------------------
 
-- Por quê as velocidades são elevadas ao quadrado no quesito de *Volume*?
-    - Para incentivar os golpes mais potentes.
+- Por quê as velocidades são elevadas ao quadrado?
+    - Para bonificar os golpes mais potentes.
       Quanto maior a velocidade, maior ainda será o quadrado dela.
-      Um golpe a 100 km/h é 2 vezes mais rápido que um a 50 km/h, mas o
-      quadrado de 100 km/h é 4 vezes maior que o de 50 km/h (10000 vs 2500).
+      Um golpe a 50 kmh vale `50x50=2500`, uma a 70 kmh vale `70x70=4900`,
+      praticamente o dobro (25 vs 49 pontos, após a divisão por 100).
 
-- Qual é o objetivo do quesito de *Máximas*?
-    - Bonificando os 36 golpes mais velozes pelos dois lados do atleta (12 de
-      revés e 24 normais), a regra incentiva que o atleta ataque acima do seu
-      limite.
-      Os 36 golpes correspondem a mais ou menos 15% dos ataques de um atleta em
-      uma apresentação de 5 minutos.
-
+- Qual é o objetivo do quesito Máximas?
+    - Ao bonificar os 7 golpes mais velozes tanto de esquerda quanto de
+      direita, a regra incentiva que o atleta ataque acima do seu limite.
+      Os 14 golpes correspondem a mais ou menos 10% dos ataques de um atleta em
+      uma apresentação de 3 minutos.
 <!--
     - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
       de considerar apenas o 7o)?
