@@ -52,6 +52,8 @@ ser usados, copiados e modificados livremente.**
         - **Máximas - Revés:**
             - Média simples da velocidade dos `16` golpes mais fortes efetuados
               pelo seu lado não preferencial ("lado revés").
+            - O revés só é válido quando é 20% mais veloz do que o golpe
+              anterior do parceiro.
     - O total do atleta é a média ponderada dos três quesitos:
         - `ATLETA = 60% Volume + 25% Normal + 15% Revez`
 - **Equilíbrio:**
@@ -87,6 +89,8 @@ ser usados, copiados e modificados livremente.**
         - **Máximas - Revés:**
             - Média simples da velocidade dos `8` golpes mais fortes efetuados
               pelo seu lado não preferencial ("lado revés").
+            - O revés só é válido quando é 20% mais veloz do que o golpe
+              anterior do parceiro.
     - O total do atleta é a média ponderada dos três quesitos:
         - `ATLETA = 60% Volume + 25% Normal + 15% Revez`
 - **Equilíbrio:**
