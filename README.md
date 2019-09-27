@@ -55,7 +55,8 @@ ser usados, copiados e modificados livremente.**
     - O total do atleta é a média ponderada dos três quesitos:
         - `ATLETA = (5x Volume + 3x Normal + 2x Revez) / 10`
 - **Equilíbrio:**
-    - A pontuação da dupla será a média de pontos entre os dois atletas.
+    - A pontuação de equilíbrio da dupla é a média de pontos entre os dois
+      atletas.
     - Se o atleta que pontuou menos estiver muito abaixo dessa média, então a
       pontuação da dupla será baseada no menor valor.
     - O total da dupla é o menor valor entre a média e `105%` da menor
@@ -64,7 +65,7 @@ ser usados, copiados e modificados livremente.**
 - **Continuidade:**
     - A apresentação é encerrada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são desconsiderados.
-    - Cada queda subtrai `2%` da pontuação de equilíbrio da dupla:
+    - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
         - `TOTAL = EQUILIBRIO x (100 - 2x QUEDAS) / 100`
 
 ```
@@ -89,7 +90,8 @@ ser usados, copiados e modificados livremente.**
     - O total do atleta é a média ponderada dos três quesitos:
         - `ATLETA = (5x Volume + 3x Normal + 2x Revez) / 10`
 - **Equilíbrio:**
-    - A pontuação da dupla será a média de pontos entre os dois atletas.
+    - A pontuação de equilíbrio da dupla é a média de pontos entre os dois
+      atletas.
     - Se o atleta que pontuou menos estiver muito abaixo dessa média, então a
       pontuação da dupla será baseada no menor valor.
     - O total da dupla é o menor valor entre a média e `105%` da menor
@@ -98,7 +100,7 @@ ser usados, copiados e modificados livremente.**
 - **Continuidade:**
     - A apresentação é encerrada sumariamente na `10a` queda.
     - Os dois últimos golpes antes de cada queda são desconsiderados.
-    - Cada queda subtrai `4%` da pontuação de equilíbrio da dupla:
+    - Cada queda subtrai `4%` da pontuação após calcular o equilíbrio da dupla:
         - `TOTAL = EQUILIBRIO x (100 - 4x QUEDAS) / 100`
 
 ```
