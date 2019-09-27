@@ -53,7 +53,7 @@ ser usados, copiados e modificados livremente.**
             - Média simples da velocidade dos `16` golpes mais fortes efetuados
               pelo seu lado não preferencial ("lado revés").
     - O total do atleta é a média ponderada dos três quesitos:
-        - `ATLETA = (5x Volume + 3x Normal + 2x Revez) / 10`
+        - `ATLETA = 60% Volume + 25% Normal + 15% Revez`
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média de pontos entre os dois
       atletas.
@@ -69,7 +69,7 @@ ser usados, copiados e modificados livremente.**
         - `TOTAL = EQUILIBRIO x (100 - 2x QUEDAS) / 100`
 
 ```
-    ATLETA     = (5x Volume + 3x Normal + 2x Revez) / 10
+    ATLETA     = 60% Volume + 25% Normal + 15% Revez
     EQUILIBRIO = MIN( (ATLETA1+ATLETA2)/2, MIN(ATLETA1,ATLETA2)x1.1 )
     TOTAL      = EQUILIBRIO x (100 - 2x QUEDAS) / 100
 ```
@@ -88,7 +88,7 @@ ser usados, copiados e modificados livremente.**
             - Média simples da velocidade dos `8` golpes mais fortes efetuados
               pelo seu lado não preferencial ("lado revés").
     - O total do atleta é a média ponderada dos três quesitos:
-        - `ATLETA = (5x Volume + 3x Normal + 2x Revez) / 10`
+        - `ATLETA = 60% Volume + 25% Normal + 15% Revez`
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média de pontos entre os dois
       atletas.
@@ -104,7 +104,7 @@ ser usados, copiados e modificados livremente.**
         - `TOTAL = EQUILIBRIO x (100 - 4x QUEDAS) / 100`
 
 ```
-    ATLETA     = (5x Volume + 3x Normal + 2x Revez) / 10
+    ATLETA     = 60% Volume + 25% Normal + 15% Revez
     EQUILIBRIO = MIN( (ATLETA1+ATLETA2)/2, MIN(ATLETA1,ATLETA2)x1.1 )
     TOTAL      = EQUILIBRIO x (100 - 4x QUEDAS) / 100
 ```
