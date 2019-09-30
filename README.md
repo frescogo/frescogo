@@ -56,7 +56,7 @@ ser usados, copiados e modificados livremente.**
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
     - O total do atleta é a média ponderada entre os três quesitos:
-        - `ATLETA = 60% Volume + 25% Normal + 15% Revez`
+        - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
       atletas.
@@ -70,8 +70,8 @@ ser usados, copiados e modificados livremente.**
         - `FINAL = EQUILIBRIO x (100 - 2x QUEDAS) / 100`
 
 ```
-    ATLETA     = 60% Volume + 25% Normal + 15% Revez
-    EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.1 )
+    ATLETA     = 60% Volume + 25% Normal + 15% Revés
+    EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
     FINAL      = EQUILIBRIO x (100 - 2x QUEDAS) / 100
 ```
 
@@ -92,7 +92,7 @@ ser usados, copiados e modificados livremente.**
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
     - O total do atleta é a média ponderada entre os três quesitos:
-        - `ATLETA = 60% Volume + 25% Normal + 15% Revez`
+        - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
       atletas.
@@ -106,8 +106,8 @@ ser usados, copiados e modificados livremente.**
         - `FINAL = EQUILIBRIO x (100 - 4x QUEDAS) / 100`
 
 ```
-    ATLETA     = 60% Volume + 25% Normal + 15% Revez
-    EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.1 )
+    ATLETA     = 60% Volume + 25% Normal + 15% Revés
+    EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
     FINAL      = EQUILIBRIO x (100 - 4x QUEDAS) / 100
 ```
 
