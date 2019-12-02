@@ -39,20 +39,21 @@ ser usados, copiados e modificados livremente.**
 
 -------------------------------------------------------------------------------
 
-## Regra de Pontuação (para 5:00 minutos)
+## Regra para 5:00 minutos
 
 - **Golpes:**
     - Cada atleta é avaliado individualmente pelas médias de velocidade dos
       seguintes quesitos:
         - **Volume:**
-            - Média *quadrática* de velocidade de todos os seus golpes.
-                - (Essa média usa as velocidades elevadas ao quadrado.)
+            - Média *quadrática* da velocidade de todos os seus golpes.
+                - (A média quadrática considera as velocidades elevadas ao
+                   quadrado.)
         - **Máximas - Normal:**
-            - Média de velocidade dos `24` golpes mais fortes efetuados pelo
-              seu lado preferencial ("lado normal").
+            - Média simples da velocidade dos `24` golpes mais fortes efetuados
+              pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
-            - Média de velocidade dos `16` golpes mais fortes efetuados pelo
-              seu lado não preferencial ("lado revés").
+            - Média simples da velocidade dos `16` golpes mais fortes efetuados
+              pelo seu lado não preferencial ("lado revés").
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
     - O total do atleta é a média ponderada entre os três quesitos:
@@ -62,33 +63,34 @@ ser usados, copiados e modificados livremente.**
       atletas.
     - Se um atleta estiver abaixo dessa média (com uma margem de 5%), então a
       pontuação de equilíbrio será o menor total:
-        - `EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )`
+        - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
     - A apresentação é encerrada sumariamente na `20a` queda.
-    - Os dois últimos golpes antes de cada queda são desconsiderados.
+    - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
     - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
-        - `FINAL = EQUILIBRIO x (100 - 2x QUEDAS) / 100`
+        - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`
 
 ```
-    ATLETA     = 60% Volume + 25% Normal + 15% Revés
-    EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-    FINAL      = EQUILIBRIO x (100 - 2x QUEDAS) / 100
+  ATLETA  = 60% Volume + 25% Normal + 15% Revés
+  EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
+  FINAL   = EQUILIB x (100 - 2x QUEDAS) / 100
 ```
 
-## Regra de Pontuação (para 2:30 minutos)
+## Regra para 2:30 minutos
 
 - **Golpes:**
     - Cada atleta é avaliado individualmente pelas médias de velocidade dos
       seguintes quesitos:
         - **Volume:**
             - Média *quadrática* de velocidade de todos os seus golpes.
-                - (Essa média usa as velocidades elevadas ao quadrado.)
+                - (A média quadrática considera as velocidades elevadas ao
+                   quadrado.)
         - **Máximas - Normal:**
-            - Média de velocidade dos `12` golpes mais fortes efetuados pelo
-              seu lado preferencial ("lado normal").
+            - Média simples da velocidade dos `12` golpes mais fortes efetuados
+              pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
-            - Média de velocidade dos `8` golpes mais fortes efetuados pelo
-              seu lado não preferencial ("lado revés").
+            - Média simples da  velocidade dos `8` golpes mais fortes efetuados
+              pelo seu lado não preferencial ("lado revés").
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
     - O total do atleta é a média ponderada entre os três quesitos:
@@ -98,17 +100,17 @@ ser usados, copiados e modificados livremente.**
       atletas.
     - Se um atleta estiver abaixo dessa média (com uma margem de 5%), então a
       pontuação de equilíbrio será o menor total:
-        - `EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )`
+        - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
     - A apresentação é encerrada sumariamente na `10a` queda.
-    - Os dois últimos golpes antes de cada queda são desconsiderados.
+    - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
     - Cada queda subtrai `4%` da pontuação após calcular o equilíbrio da dupla:
-        - `FINAL = EQUILIBRIO x (100 - 4x QUEDAS) / 100`
+        - `FINAL = EQUILIB x (100 - 4x QUEDAS) / 100`
 
 ```
-    ATLETA     = 60% Volume + 25% Normal + 15% Revés
-    EQUILIBRIO = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-    FINAL      = EQUILIBRIO x (100 - 4x QUEDAS) / 100
+  ATLETA  = 60% Volume + 25% Normal + 15% Revés
+  EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
+  FINAL   = EQUILIB x (100 - 4x QUEDAS) / 100
 ```
 
 <!--

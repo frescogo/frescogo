@@ -2,6 +2,7 @@
 
 <!--
 $ pandoc README.md -H deeplists.tex -o frescogo.pdf
+$ pandoc README.md -H deeplists.tex -o frescogo.html
 -->
 
 # FrescoGO! (versão 2.0)
@@ -38,39 +39,79 @@ ser usados, copiados e modificados livremente.**
 
 -------------------------------------------------------------------------------
 
-## Regra de Pontuação
+## Regra para 5:00 minutos
 
-Configuração considerada:
-
-- Tempo: 300s cronometrados (5 minutos)
-
-Quesitos de pontuação:
-
-- **Atleta:**
-    - Cada atleta é avaliado individualmente pelos seguintes quesitos:
+- **Golpes:**
+    - Cada atleta é avaliado individualmente pelas médias de velocidade dos
+      seguintes quesitos:
         - **Volume:**
-            - Média quadrática da velocidade de todos os seus golpes.
-                - (A média usa as velocidades elevadas ao quadrado.)
+            - Média *quadrática* da velocidade de todos os seus golpes.
+                - (A média quadrática considera as velocidades elevadas ao
+                   quadrado.)
         - **Máximas - Normal:**
-            - Média simples da velocidade dos `24` golpes mais fortes pelo seu
-              lado preferencial ("lado normal").
+            - Média simples da velocidade dos `24` golpes mais fortes efetuados
+              pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
-            - Média simples da velocidade dos `12` golpes mais fortes pelo seu
-              lado preferencial ("lado normal").
-    - O total do atleta é a média ponderada dos três quesitos:
-        - `ATLETA = (7x Volume + 2x Normal + 1x Revez) / 10`
+            - Média simples da velocidade dos `16` golpes mais fortes efetuados
+              pelo seu lado não preferencial ("lado revés").
+            - O revés só é válido quando supera em 10% a velocidade do golpe
+              anterior do parceiro.
+    - O total do atleta é a média ponderada entre os três quesitos:
+        - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
 - **Equilíbrio:**
-    - A pontuação da dupla será a média de pontos entre os dois atletas.
-    - Se o atleta que pontuou menos estiver muito abaixo dessa média, então a
-      pontuação da dupla será baseada no menor valor.
-    - O total da dupla é o menor valor entre a média dos dois e `110%` do que
-      pontuou menos:
-        - `EQUILIBRIO = MIN( (A1+A2)/2, MIN(A1,A2)x1.1 )`
+    - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
+      atletas.
+    - Se um atleta estiver abaixo dessa média (com uma margem de 5%), então a
+      pontuação de equilíbrio será o menor total:
+        - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
     - A apresentação é encerrada sumariamente na `20a` queda.
-    - Os dois últimos golpes antes de cada queda são desconsiderados.
-    - Cada queda subtrai `2%` da pontuação de equilíbrio da dupla:
-        - `TOTAL = EQUILIBRIO x (100 - 2xQUEDAS) / 100`
+    - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
+    - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
+        - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`
+
+```
+  ATLETA  = 60% Volume + 25% Normal + 15% Revés
+  EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
+  FINAL   = EQUILIB x (100 - 2x QUEDAS) / 100
+```
+
+## Regra para 2:30 minutos
+
+- **Golpes:**
+    - Cada atleta é avaliado individualmente pelas médias de velocidade dos
+      seguintes quesitos:
+        - **Volume:**
+            - Média *quadrática* de velocidade de todos os seus golpes.
+                - (A média quadrática considera as velocidades elevadas ao
+                   quadrado.)
+        - **Máximas - Normal:**
+            - Média simples da velocidade dos `12` golpes mais fortes efetuados
+              pelo seu lado preferencial ("lado normal").
+        - **Máximas - Revés:**
+            - Média simples da  velocidade dos `8` golpes mais fortes efetuados
+              pelo seu lado não preferencial ("lado revés").
+            - O revés só é válido quando supera em 10% a velocidade do golpe
+              anterior do parceiro.
+    - O total do atleta é a média ponderada entre os três quesitos:
+        - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
+- **Equilíbrio:**
+    - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
+      atletas.
+    - Se um atleta estiver abaixo dessa média (com uma margem de 5%), então a
+      pontuação de equilíbrio será o menor total:
+        - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
+- **Continuidade:**
+    - A apresentação é encerrada sumariamente na `10a` queda.
+    - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
+    - Cada queda subtrai `4%` da pontuação após calcular o equilíbrio da dupla:
+        - `FINAL = EQUILIB x (100 - 4x QUEDAS) / 100`
+
+```
+  ATLETA  = 60% Volume + 25% Normal + 15% Revés
+  EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
+  FINAL   = EQUILIB x (100 - 4x QUEDAS) / 100
+```
 
 <!--
 - 
@@ -146,7 +187,8 @@ Os três quesitos são somados As três médias são
 - O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
 - Um som agudo é emitido a cada 1 minuto e também quando faltam 30, 10, e 5
   segundos para a apresentação terminar.
-- A apresentação termina após 5 minutos cronometrados ou após a 20a queda.
+- A apresentação termina após 5 minutos cronometrados ou após o limite de
+  quedas ou após aproximadamente 650 golpes (por restrições técnicas).
   Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
   golpes.
