@@ -1,3 +1,8 @@
+v2.0 (out/19)
+-------------
+
+- Regra totalmente remodelada.
+
 v1.12 (set/19)
 -------------
 
