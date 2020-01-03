@@ -1,4 +1,4 @@
-# Circuito Nacional
+# Circuito Nacional - Ranking
 
 Serão 7 etapas distribuídas pelo Brasil:
 
@@ -16,37 +16,38 @@ Devido à proximidade geográfica, somente uma das etapas RN ou PB poderá conta
 As 3 primeiras duplas do ranking nacional se classificam para a grande final do ano que inlcui outras 10 duplas dos rankings regionais.
 A final também ocorre em Copacabana nos dias seguintes à etapa nacional de Copacabana.
 
-A pontuação da dupla é a soma das suas três melhores posições dentre todas as etapas.
-Etapa não disputadas somam 10 pontos.
+O ranking da dupla é a soma dos pontos das suas três melhores posições dentre todas as etapas.
+A 1a posição vale 10 pontos, a 2a vale 9 pontos, a 3a vale 8 pontos, ..., a 10a vale 1 ponto.
+Etapas não disputadas ou posições acima da 10a valem 0 pontos.
 
 ## Exemplo:
 
 - João e Maria
 
 ```
- 5o lugar em Ponta Negra    -->  5 pontos (descartado, PB melhor)
- 2o lugar em João Pessoa    -->  2 pontos (1o melhor resultado)
-  ausente em Rio das Ostras --> 10 pontos (descartado)
- 9o lugar em Fortaleza      -->  9 pontos (3o melhor resultado)
-10o lugar em Salvador       --> 10 pontos (descartado)
-12o lugar em Maceió         --> 10 pontos (descartado)
- 7o lugar em Copacabana     -->  7 pontos (2o melhor resultado)
+ 5o lugar em Ponta Negra    -->  6 pontos (descartado, PB melhor)
+ 2o lugar em João Pessoa    -->  9 pontos (1o melhor resultado)
+  ausente em Rio das Ostras -->  0 pontos (descartado)
+ 9o lugar em Fortaleza      -->  2 pontos (3o melhor resultado)
+10o lugar em Salvador       -->  0 pontos (descartado)
+12o lugar em Maceió         -->  0 pontos (descartado)
+ 7o lugar em Copacabana     -->  4 pontos (2o melhor resultado)
                                 ---------
-                                18 pontos
+                                15 pontos
 ```
 
 - Ana e José
 
 ```
- 2o lugar em Ponta Negra    -->  2 pontos (2o melhor resultado)
-  ausente em João Pessoa    --> 10 pontos (3o melhor resultado)
-  ausente em Rio das Ostras --> 10 pontos (descartado)
-  ausente em Fortaleza      --> 10 pontos (descartado)
-  ausente em Salvador       --> 10 pontos (descartado)
-  ausente em Maceió         --> 10 pontos (descartado)
- 1o lugar em Copacabana     -->  1 ponto  (1o melhor resultado)
+ 2o lugar em Ponta Negra    -->  9 pontos (2o melhor resultado)
+  ausente em João Pessoa    -->  0 pontos (3o melhor resultado)
+  ausente em Rio das Ostras -->  0 pontos (descartado)
+  ausente em Fortaleza      -->  0 pontos (descartado)
+  ausente em Salvador       -->  0 pontos (descartado)
+  ausente em Maceió         -->  0 pontos (descartado)
+ 1o lugar em Copacabana     --> 10 pontos (1o melhor resultado)
                                 ---------
-                                13 pontos
+                                19 pontos
 ```
 
-Ana e José (13 pontos) se classificam na frente de João e Maria (18 pontos) pois somaram menos pontos.
+Ana e José (19 pontos) se classificam na frente de João e Maria (15 pontos) pois somaram mais pontos.
