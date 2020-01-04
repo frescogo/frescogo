@@ -1,6 +1,6 @@
 # Calendário FrescoGO! 2020
 
-Serão 24 eventos espalhados pelo Brasil com a grande final de Copacabana em dezembro.
+Serão 27 eventos espalhados pelo Brasil com a grande final de Copacabana em dezembro.
 
 A final terá 13 vagas para cada uma das 6 categorias: `Feminina A/B`, `Masculina A/B`, `Mista A/B`.
 
@@ -26,7 +26,7 @@ Os finalistas virão de 7 circuitos regionais além de 1 circuito nacional (que 
     6. Maceió (AL)
     7. Copacabana (RJ)
 
-As 24 etapas usarão o sistema `FrescoGO! v2`.
+As 27 etapas usarão o sistema `FrescoGO! v2`.
 
 A organização local de cada etapa decide o formato de disputa (quantidade de dias e jogos, etc) e os parâmetros do sistema (tempo, distância e revés).
 Após cada etapa, a organização local repassa as posições finais à organização regional e à nacional (caso seja uma etapa nacional).
