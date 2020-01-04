@@ -42,7 +42,7 @@ A organização nacional decide o formato do ranking do circuito nacional, compi
 
 ## Exemplo:
 
-A dupla Camila/Juninho do RJ pode participar de 3 circuitos ao mesmo tempo (`Lagos+Rio+Nacional`) disputando por 6 vagas na final:
+A dupla Camila/Juninho do RJ pode disputar 3 circuitos ao mesmo tempo (`Lagos+Rio+Nacional`) com 6 vagas para a final:
 
 - A etapa de Rio das Ostras em Junho conta para três circuitos: `Lagos+Rio+Nacional`
 - A etapa de Campos em Agosto conta para dois circuitos: `Lagos+Rio`
