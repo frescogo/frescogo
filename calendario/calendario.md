@@ -26,7 +26,7 @@ Os finalistas virão de 7 circuitos regionais além de 1 circuito nacional (que 
     6. Maceió (AL)
     7. Copacabana (RJ)
 
-As 27 etapas usarão o sistema `FrescoGO! v2`.
+Todas as etapas usarão o sistema `FrescoGO! v2`.
 
 A organização local de cada etapa decide o formato de disputa (quantidade de dias e jogos, etc) e os parâmetros do sistema (tempo, distância e revés).
 Após cada etapa, a organização local repassa as posições finais à organização regional e à nacional (caso seja uma etapa nacional).
@@ -35,6 +35,8 @@ A organização regional decide o formato do seu ranking (pontuação por etapa,
 Após todas as suas etapas, a organização regional repassa as posições finais do seu ranking e indica os seus representantes à organização nacional.
 
 A organização nacional decide o formato do ranking do circuito nacional, compila as vagas regionais e indica os 13 finalistas de cada categoria para a grande final de Copacabana.
+Caso um atleta se classifique com dois parceiros diferentes para a mesma categoria, ele deverá escolher somente um dos parceiros e a outra vaga será realocada.
+Caso uma dupla se classifique por mais de uma vaga, o seguinte critério será adotado: (1) regional com mais vagas disponíveis, (2) regional com mais etapas disputadas, (3) nacional. Permanecendo a indecisão, o atleta deverá escolher por qual regional ele quer se classificar.
 
 - Organização local: responsável por uma etapa específica
 - Organização regional: responsável pelo ranking regional
