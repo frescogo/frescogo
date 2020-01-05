@@ -13,20 +13,20 @@ eog simples-150.png
 Cada atleta é avaliado individualmente em três médias de velocidade:
 
 - Volume:
-    média de todos os golpes (ataques ou defesas).
+    média de velocidade de todos os golpes (ataques ou defesas).
 - Máximas:
     - Normal:
-        média dos `12` golpes mais fortes.
+        média de velocidade dos `12` golpes mais fortes.
     - Revés:
-        média dos `8` golpes mais fortes de revés (opcional).
+        média de velocidade dos `8` golpes mais fortes de revés.
 
 As três médias constituem a nota de cada atleta com os seguintes pesos:
 
-- `60%` Volume, `25%` Normal, `15%` Revés.
+- `60%` Volume, `25%` Normal, `15%` Revés (opcional).
 
-A pontuação final da dupla será a média entre as duas notas.
+A pontuação final da dupla será a média entre as notas dos dois atletas.
 
 Caso a nota de um dos atletas esteja muito abaixo da média (margem de `5%`),
-então a pontuação será a menor nota.
+então a pontuação final da dupla será essa menor nota.
 
 Cada queda ainda desconta `4%` da pontuação final.
