@@ -36,11 +36,11 @@ eog regra-300.png
 - **Continuidade:**
     - A dupla é desclassificada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
-    - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
-        - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`
+    - Cada queda subtrai `1%` da pontuação após calcular o equilíbrio da dupla:
+        - `FINAL = EQUILIB x (100 - 1x QUEDAS) / 100`
 
 ```
   ATLETA  = 60% Volume + 25% Normal + 15% Revés
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-  FINAL   = EQUILIB x (100 - 2x QUEDAS) / 100
+  FINAL   = EQUILIB x (100 - 1x QUEDAS) / 100
 ```

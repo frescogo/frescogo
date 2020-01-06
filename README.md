@@ -5,7 +5,7 @@ $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 $ pandoc README.md -H deeplists.tex -o frescogo.html
 -->
 
-# FrescoGO! (versão 2.0)
+# FrescoGO! (versão 2.1)
 
 *FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
@@ -65,15 +65,15 @@ ser usados, copiados e modificados livremente.**
       pontuação de equilíbrio será o menor total:
         - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
-    - A apresentação é encerrada sumariamente na `20a` queda.
+    - A dupla é desclassificada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
-    - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
-        - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`
+    - Cada queda subtrai `1%` da pontuação após calcular o equilíbrio da dupla:
+        - `FINAL = EQUILIB x (100 - 1x QUEDAS) / 100`
 
 ```
   ATLETA  = 60% Volume + 25% Normal + 15% Revés
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-  FINAL   = EQUILIB x (100 - 2x QUEDAS) / 100
+  FINAL   = EQUILIB x (100 - 1x QUEDAS) / 100
 ```
 
 ## Regra para 2:30 minutos
@@ -102,15 +102,15 @@ ser usados, copiados e modificados livremente.**
       pontuação de equilíbrio será o menor total:
         - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
-    - A apresentação é encerrada sumariamente na `10a` queda.
+    - A dupla é desclassificada sumariamente na `10a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
-    - Cada queda subtrai `4%` da pontuação após calcular o equilíbrio da dupla:
-        - `FINAL = EQUILIB x (100 - 4x QUEDAS) / 100`
+    - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
+        - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`
 
 ```
   ATLETA  = 60% Volume + 25% Normal + 15% Revés
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-  FINAL   = EQUILIB x (100 - 4x QUEDAS) / 100
+  FINAL   = EQUILIB x (100 - 2x QUEDAS) / 100
 ```
 
 <!--
@@ -225,14 +225,14 @@ Juiz ............... Arnaldo                              <-- nome do juiz
 
 -----------------------------------------------
 
-v200/750cm/300s/maxs(85,200)/equ1/cont20/fim20)           <-- configurações
+v200/750cm/300s/maxs(85,200)/equ1/cont10/fim20)           <-- configurações
   \-- versão do software
        \-- distância entre os ateltas
             \-- tempo máximo de apresentação
                       \-- velocidade máxima a detectar (85 km/h)
                          \-- sensibilidade do revés (200ms)
                               \-- quesito de equilíbrio (0=desligado, 1=ligado)
-                                    \-- desconto por queda (20 = 2.0%)
+                                    \-- desconto por queda (10 = 1.0%)
                                            \-- número máximo de quedas
 
 -----------------------------------------------
@@ -270,8 +270,8 @@ v200/750cm/300s/maxs(85,200)/equ1/cont20/fim20)           <-- configurações
 
 Media ........... 52.17 pts             <-- Média entre Joao e Maria
 Equilibrio ...... 00.00 (-)             <-- Desconto de equilíbrio
-Quedas (10) .....   20% (-)             <-- Desconto de quedas
-TOTAL ........... 41.73 pts             <-- Pontuação final da dupla
+Quedas (10) .....   10% (-)             <-- Desconto de quedas
+TOTAL ........... 46.95 pts             <-- Pontuação final da dupla
 ```
 
 -------------------------------------------------------------------------------
