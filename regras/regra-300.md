@@ -34,7 +34,7 @@ eog regra-300.png
       pontuação de equilíbrio será o menor total:
         - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
-    - A apresentação é encerrada sumariamente na `20a` queda.
+    - A dupla é desclassificada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
     - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
         - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`

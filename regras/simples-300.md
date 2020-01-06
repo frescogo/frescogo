@@ -30,3 +30,4 @@ Caso a nota de um dos atletas esteja muito abaixo da média (margem de `5%`),
 então a pontuação final da dupla será essa menor nota.
 
 Cada queda ainda desconta `2%` da pontuação final.
+Com 20 quedas, a dupla é desclassificada.
