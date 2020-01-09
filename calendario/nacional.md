@@ -19,7 +19,7 @@ A final também ocorre em Copacabana nos dias seguintes à etapa nacional de Cop
 O ranking da dupla é a soma dos pontos das suas três melhores posições dentre todas as etapas.
 A 1a posição vale 10 pontos, a 2a vale 9 pontos, a 3a vale 8 pontos, ..., a 10a vale 1 ponto.
 Etapas não disputadas ou posições acima da 10a valem 0 pontos.
-O critério de desempate é o seguinte: (1) confronto direto em etapas em comum, (2) posições mais altas (quantidade de 1os lugares, 2os lugares, etc).
+O critério de desempate é o seguinte: (1) confronto direto em etapas em comum, (2) posições mais altas (quantidade de 1os lugares, 2os lugares, etc), (3) sorteio.
 
 ## Exemplo:
 
