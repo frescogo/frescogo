@@ -18,7 +18,8 @@ Cada atleta é avaliado individualmente em três médias de velocidade:
     - Normal:
         média de velocidade dos `24` golpes mais fortes.
     - Revés:
-        média de velocidade dos `16` golpes mais fortes de revés. (opcional)
+        média de velocidade dos `16` golpes mais fortes de revés.
+        - Esse quesito é opcional e pode ser desabilitado.
 
 As três médias constituem a nota de cada atleta com os seguintes pesos:
 
