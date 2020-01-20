@@ -65,7 +65,7 @@ ser usados, copiados e modificados livremente.**
       pontuação de equilíbrio será o menor total:
         - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
-    - A dupla é desclassificada sumariamente na `20a` queda.
+    - A apresentação é encerrada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
     - Cada queda subtrai `1%` da pontuação após calcular o equilíbrio da dupla:
         - `FINAL = EQUILIB x (100 - 1x QUEDAS) / 100`
@@ -75,6 +75,10 @@ ser usados, copiados e modificados livremente.**
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
   FINAL   = EQUILIB x (100 - 1x QUEDAS) / 100
 ```
+
+Em caso de empate entre duplas, os seguintes quesitos serão usados para
+desempate: (1) maior quantidade de golpes, (2) menor quantidade de quedas, (3)
+sorteio.
 
 ## Regra para 2:30 minutos
 
@@ -102,7 +106,7 @@ ser usados, copiados e modificados livremente.**
       pontuação de equilíbrio será o menor total:
         - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
-    - A dupla é desclassificada sumariamente na `10a` queda.
+    - A apresentação é encerrada sumariamente na `10a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
     - Cada queda subtrai `2%` da pontuação após calcular o equilíbrio da dupla:
         - `FINAL = EQUILIB x (100 - 2x QUEDAS) / 100`
@@ -112,6 +116,10 @@ ser usados, copiados e modificados livremente.**
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
   FINAL   = EQUILIB x (100 - 2x QUEDAS) / 100
 ```
+
+Em caso de empate entre duplas, os seguintes quesitos serão usados para
+desempate: (1) maior quantidade de golpes, (2) menor quantidade de quedas, (3)
+sorteio.
 
 <!--
 - 
