@@ -52,11 +52,11 @@ ser usados, copiados e modificados livremente.**
             - Média simples da velocidade dos `24` golpes mais fortes efetuados
               pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
+            - Esse quesito é opcional e pode ser desabilitado.
             - Média simples da velocidade dos `16` golpes mais fortes efetuados
               pelo seu lado não preferencial ("lado revés").
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
-            - Esse quesito é opcional e pode ser desabilitado.
     - O total do atleta é a média ponderada entre os quesitos.
         - Revés habilitado:
             - `ATLETA = 60% Volume + 25% Normal + 15% Revés`

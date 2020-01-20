@@ -21,12 +21,16 @@ eog regra-300.png
             - Média simples da velocidade dos `24` golpes mais fortes efetuados
               pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
+            - Esse quesito é opcional e pode ser desabilitado.
             - Média simples da velocidade dos `16` golpes mais fortes efetuados
               pelo seu lado não preferencial ("lado revés").
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
-    - O total do atleta é a média ponderada entre os três quesitos:
-        - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
+    - O total do atleta é a média ponderada entre os quesitos.
+        - Revés habilitado:
+            - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
+        - Revés desabilitado:
+            - `ATLETA = 75% Volume + 25% Normal`
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
       atletas.
@@ -40,7 +44,7 @@ eog regra-300.png
         - `FINAL = EQUILIB x (100 - 1x QUEDAS) / 100`
 
 ```
-  ATLETA  = 60% Volume + 25% Normal + 15% Revés
+  ATLETA  = 60% Volume + 25% Normal + 15% Revés     (75% Volume com o Revés desabilitado)
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
   FINAL   = EQUILIB x (100 - 1x QUEDAS) / 100
 ```

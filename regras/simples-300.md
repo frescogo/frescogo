@@ -17,12 +17,13 @@ Cada atleta é avaliado individualmente em três médias de velocidade:
 - Máximas:
     - Normal:
         média de velocidade dos `24` golpes mais fortes.
-    - Revés:
+    - Revés (opcional):
         média de velocidade dos `16` golpes mais fortes de revés.
 
 As três médias constituem a nota de cada atleta com os seguintes pesos:
 
-- `60%` Volume, `25%` Normal, `15%` Revés (opcional).
+- `60%` Volume, `25%` Normal, `15%` Revés (quando o revés está habilitado)
+- `75%` Volume, `25%` Normal, `0%` Revés (quando o revés está desabilitado)
 
 A pontuação final da dupla será a média entre as notas dos dois atletas.
 
