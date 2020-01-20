@@ -26,11 +26,11 @@ eog regra-300.png
               pelo seu lado não preferencial ("lado revés").
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
-    - O total do atleta é a média ponderada entre os quesitos.
+    - O total do atleta é a média ponderada entre os três quesitos.
         - Revés habilitado:
             - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
         - Revés desabilitado:
-            - `ATLETA = 75% Volume + 25% Normal`
+            - `ATLETA = 75% Volume + 25% Normal + 0% Revés`
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
       atletas.
