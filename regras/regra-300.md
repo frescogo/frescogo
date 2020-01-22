@@ -50,5 +50,5 @@ eog regra-300.png
 ```
 
 Em caso de empate entre duplas, os seguintes quesitos serão usados para
-desempate: (1) maior quantidade de golpes, (2) menor quantidade de quedas, (3)
+desempate: (1) menor quantidade de quedas, (2) maior quantidade de golpes, (3)
 sorteio.
