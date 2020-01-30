@@ -161,7 +161,7 @@ Os três quesitos são somados As três médias são
 - Um golpe de revés do atleta acompanha um som grave (após o som correspondente
   à velocidade). Em seguida, caso a velocidade do revés seja validada, um som
   grave duplo acompanha o golpe seguinte do parceiro.
-- Quando a apresentação está desequilibrada, os ataques do atleta que menos
+- Quando a apresentação está desequilibrada, os ataques do atleta que mais
   pontuou acompanham um som grave.
 - Quando a bola cai, o juiz pressiona o botão de queda que emite um som
   característico.
