@@ -1,3 +1,32 @@
+v2.4 (fev/20)
+-------------
+
+- Padrão de tempo é de 4:00 (era 5:00).
+    - 1.5% por queda (1.2% para 5:00).
+    - 20 normais (25 para 5:00).
+    - 12 revés (15 para 5:00).
+- Marca tempo de descanso.
+- Aparelho detecta se placar está conectado.
+- Acumulativo dá valores comparáveis em qualquer tempo.
+
+v2.3 (jan/20)
+-------------
+
+- Envia configuração do aparelho para o placar.
+- Move os 15% da pontuação de Revés para o Volume, caso esteja desabilitado.
+
+
+v2.2 (jan/20)
+-------------
+
+- Além da pontuação média, calcula uma pontuação acumulativa.
+- Não limita desconto de quedas durante o jogo, somente no fim.
+
+v2.1 (jan/20)
+-------------
+
+- Desconto de 1% por queda (era 2%).
+
 v2.0 (out/19)
 -------------
 
