@@ -17,9 +17,11 @@ As 3 primeiras duplas do ranking nacional se classificam para a grande final do 
 A final também ocorre em Copacabana nos dias seguintes à etapa nacional de Copacabana.
 
 O ranking da dupla é a soma dos pontos das suas três melhores posições dentre todas as etapas.
-A 1a posição vale 10 pontos, a 2a vale 9 pontos, a 3a vale 8 pontos, ..., a 10a vale 1 ponto.
-Etapas não disputadas ou posições acima da 10a valem 0 pontos.
-O critério de desempate é o seguinte: (1) confronto direto em etapas em comum, (2) posições mais altas (quantidade de 1os lugares, 2os lugares, etc), (3) sorteio.
+A 1ª posição vale 10 pontos, a 2ª vale 9 pontos, a 3ª vale 8 pontos, ..., a 10ª vale 1 ponto.
+Qualquer posição acima da 10ª também vale 1 ponto.
+Etapas não disputadas valem 0 pontos.
+O critério de desempate é o seguinte: (1) confronto direto em etapas em comum, (2) posições mais altas (quantidade de 1ª posições, 2ª posições, etc), (3) sorteio.
+
 
 ## Exemplo:
 
@@ -31,7 +33,7 @@ O critério de desempate é o seguinte: (1) confronto direto em etapas em comum,
   ausente em Rio das Ostras -->  0 pontos (descartado)
  9o lugar em Fortaleza      -->  2 pontos (3o melhor resultado)
 10o lugar em Salvador       -->  0 pontos (descartado)
-12o lugar em Maceió         -->  0 pontos (descartado)
+12o lugar em Maceió         -->  1 ponto  (descartado)
  7o lugar em Copacabana     -->  4 pontos (2o melhor resultado)
                                 ---------
                                 15 pontos
