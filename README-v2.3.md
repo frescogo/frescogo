@@ -5,7 +5,7 @@ $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 $ pandoc README.md -H deeplists.tex -o frescogo.html
 -->
 
-# FrescoGO! (versão 2.4)
+# FrescoGO! (versão 2.3)
 
 *FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
@@ -39,7 +39,7 @@ ser usados, copiados e modificados livremente.**
 
 -------------------------------------------------------------------------------
 
-## Regra
+## Regra para 5:00 minutos
 
 - **Golpes:**
     - Cada atleta é avaliado individualmente pelas médias de velocidade dos
@@ -49,18 +49,12 @@ ser usados, copiados e modificados livremente.**
                 - (A média quadrática considera as velocidades elevadas ao
                    quadrado.)
         - **Máximas - Normal:**
-            - Média simples da velocidade dos golpes mais fortes efetuados pelo
-              seu lado preferencial ("lado normal"). Serão computados um total
-              de `5` golpes para cada minuto de apresentação. Por exemplo, em
-              uma apresentação de `4` minutos, serão computados os `20` golpes
-              mais fortes.
+            - Média simples da velocidade dos `24` golpes mais fortes efetuados
+              pelo seu lado preferencial ("lado normal").
         - **Máximas - Revés:**
             - Esse quesito é opcional e pode ser desabilitado.
-            - Média simples da velocidade dos golpes mais fortes efetuados pelo
-              seu lado não preferencial ("lado revés"). Serão computados um total
-              de `3` golpes para cada minuto de apresentação. Por exemplo, em
-              uma apresentação de `4` minutos, serão computados os `12` golpes
-              mais fortes.
+            - Média simples da velocidade dos `16` golpes mais fortes efetuados
+              pelo seu lado não preferencial ("lado revés").
             - O revés só é válido quando supera em 10% a velocidade do golpe
               anterior do parceiro.
     - O total do atleta é a média ponderada entre os quesitos.
@@ -75,20 +69,15 @@ ser usados, copiados e modificados livremente.**
       pontuação de equilíbrio será o menor total:
         - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
 - **Continuidade:**
-    - A apresentação é encerrada sumariamente ao atingir o limite máximo de
-      quedas. O limite corresponde a `4` quedas por minuto. Por exemplo, em uma
-      apresentação de `4` minutos, o limite será de `16` quedas.
+    - A apresentação é encerrada sumariamente na `20a` queda.
     - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
-    - Cada queda subtrai um percentual da pontuação final após calcular o
-      equilíbrio da dupla. O percentual é de `6%` divididos pelo total de
-      minutos da apresentação. Por exemplo, em uma apresentação de `4` minutos,
-      o percentual será de `1.5%`.
-        - `FINAL = EQUILIB x (100 - PCT x QUEDAS) / 100`
+    - Cada queda subtrai `1%` da pontuação após calcular o equilíbrio da dupla:
+        - `FINAL = EQUILIB x (100 - 1x QUEDAS) / 100`
 
 ```
   ATLETA  = 60% Volume + 25% Normal + 15% Revés     (75% Volume com o Revés desabilitado)
   EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-  FINAL   = EQUILIB x (100 - PCT x QUEDAS) / 100
+  FINAL   = EQUILIB x (100 - 1x QUEDAS) / 100
 ```
 
 Em caso de empate entre duplas, os seguintes quesitos serão usados para
@@ -146,8 +135,7 @@ Os três quesitos são somados As três médias são
 ## Fluxo da Apresentação
 
 - Um som agudo longo indica que a uma nova apresentação irá começar.
-- Um som agudo indica que o atleta pode sacar. Após 5 segundos, o tempo de
-  descanso começa a acumular até que o atleta saque.
+- Um som agudo indica que o atleta pode sacar.
 - Após o saque, o juiz pressiona o botão correspondente a cada atleta toda vez
   que ele acerta a bola. O tempo só passa quando o botão é pressionado.
 - Um som identifica a faixa de velocidade do golpe anterior:
@@ -158,9 +146,8 @@ Os três quesitos são somados As três médias são
     - ` < 80 kmh`: som duplo   médio
     - ` < 90 kmh`: som duplo   agudo
     - `>= 90 kmh`: som duplo   muito agudo
-- Um golpe de revés do atleta acompanha um som grave (após o som correspondente
-  à velocidade). Em seguida, caso a velocidade do revés seja validada, um som
-  grave duplo acompanha o golpe seguinte do parceiro.
+- Um golpe do lado não preferencial do atleta acompanha um som grave (após o
+  som correspondente à velocidade).
 - Quando a apresentação está desequilibrada, os ataques do atleta que mais
   pontuou acompanham um som grave.
 - Quando a bola cai, o juiz pressiona o botão de queda que emite um som
@@ -171,7 +158,7 @@ Os três quesitos são somados As três médias são
 - O juiz então pressiona o botão que habilita o saque e o fluxo reinicia.
 - Um som agudo é emitido a cada 1 minuto e também quando faltam 30, 10, e 5
   segundos para a apresentação terminar.
-- A apresentação termina após o tempo total cronometrado ou após o limite de
+- A apresentação termina após 5 minutos cronometrados ou após o limite de
   quedas ou após aproximadamente 650 golpes (por restrições técnicas).
   Um som grave longo indica que a apresentação terminou.
 - Ao fim da apresentação, é gerado um relatório com todas as medições de
@@ -190,7 +177,6 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
 
 TOTAL .............. 41.73 pts                            <-- total de pontos
 Tempo Restante ..... 01:23                                <-- tempo restante
-Descanso ........... 25s                                  <-- tempo de descanso
 Quedas ............. 10                                   <-- número de quedas
 Golpes ............. 440                                  <-- quantidade de golpes
 Média .............. 51 kmh                               <-- média geral em km/h
@@ -210,14 +196,14 @@ Juiz ............... Arnaldo                              <-- nome do juiz
 
 -----------------------------------------------
 
-v240/750cm/240s/maxs(85,200)/equ1/cont15/fim16)           <-- configurações
+v200/750cm/300s/maxs(85,200)/equ1/cont10/fim20)           <-- configurações
   \-- versão do software
        \-- distância entre os ateltas
             \-- tempo máximo de apresentação
                       \-- velocidade máxima a detectar (85 km/h)
                          \-- sensibilidade do revés (200ms)
                               \-- quesito de equilíbrio (0=desligado, 1=ligado)
-                                    \-- desconto por queda (15 = 1.5%)
+                                    \-- desconto por queda (10 = 1.0%)
                                            \-- número máximo de quedas
 
 -----------------------------------------------
@@ -414,13 +400,11 @@ TOTAL ........... 46.95 pts             <-- Pontuação final da dupla
             - Exemplo:
                 - `juiz Arnaldo`
                 - altera o nome do juiz para *Arnaldo*
-<!--
         - `modo MODO`
             - altera o modo de exibição para `MODO`, que deve ser `cel` ou `pc`
             - Exemplo:
                 - `modo pc`
                 - altera o modo de exibição para `pc`
--->
 
 - Envio de relatórios:
     <a name="envio-de-relatorios"></a>
