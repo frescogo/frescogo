@@ -1,30 +1,32 @@
 # Calendário FrescoGO! 2020
 
-Serão 27 eventos espalhados pelo Brasil com a grande final de Copacabana em dezembro.
+Serão 30 eventos espalhados pelo Brasil com a grande final de Copacabana em dezembro.
 
-A final terá 13 vagas para cada uma das 6 categorias: `Feminina A/B`, `Masculina A/B`, `Mista A/B`.
+A final terá 14 vagas para cada uma das 6 categorias: `Feminina A/B`, `Masculina A/B`, `Mista A/B`.
 
-Os finalistas virão de 7 circuitos regionais além de 1 circuito nacional (que aproveita 7 etapas regionais).
+Os finalistas virão de 8 circuitos regionais além de 1 circuito nacional (que aproveita 8 etapas regionais).
 
 - Circuitos Regionais:
 
     1. Rio de Janeiro (4 etapas com 1 vaga para a final em cada categoria)
     2. Região dos Lagos (7 etapas / 2 vagas)
-    3. Salvador (4 etapas / 2 vagas)
-    4. Alagoas/Pernambuco (3 etapas / 1 vaga)
-    5. João Pessoa (3 etapas / 1 vaga)
-    6. Rio Grande do Norte (4 etapas / 1 vaga)
-    7. Fortaleza (3 etapas / 2 vagas)
+    3. Espírito Santo (3 etapas / 1 vaga)
+    4. Salvador (4 etapas / 2 vagas)
+    5. Alagoas/Pernambuco (3 etapas / 1 vaga)
+    6. João Pessoa (3 etapas / 1 vaga)
+    7. Rio Grande do Norte (4 etapas / 1 vaga)
+    8. Fortaleza (3 etapas / 2 vagas)
 
 - Circuito Nacional:
 
     1. Ponta Negra (RN)
     2. João Pessoa (PB)
-    3. Rio das Ostras (RJ)
-    4. Fortaleza (CE)
-    5. Salvador (BA)
-    6. Maceió (AL)
-    7. Copacabana (RJ)
+    3. Jacaraípe (ES)
+    4. Rio das Ostras (RJ)
+    5. Fortaleza (CE)
+    6. Salvador (BA)
+    7. Maceió (AL)
+    8. Copacabana (RJ)
 
 Todas as etapas usarão o sistema `FrescoGO! v2`.
 
@@ -44,7 +46,7 @@ Caso uma dupla se classifique por mais de uma vaga, o seguinte critério será a
 
 ## Exemplo:
 
-A dupla Camila/Juninho do RJ pode disputar 3 circuitos ao mesmo tempo (`Lagos+Rio+Nacional`) com 6 vagas para a final:
+A dupla Camila/Juninho do RJ pode concorrer a uma das 6 vagas para a final disputando 3 circuitos ao mesmo tempo (`Lagos+Rio+Nacional`):
 
 - A etapa de Rio das Ostras em Junho conta para três circuitos: `Lagos+Rio+Nacional`
 - A etapa de Campos em Agosto conta para dois circuitos: `Lagos+Rio`
@@ -55,4 +57,3 @@ Indo a essas três etapas, a dupla já tem participação em `2xLagos+3xRio+2xNa
 - O circuito Rio pontua até 3 etapas, então a dupla já consegue pontuar o suficiente.
 - O circuito Nacional pontua até 3 etapas, então a dupla ainda precisa viajar para uma dentre as outras 5 etapas.
 - O circuito Lagos pontua até 5 etapas, então a dupla ainda precisa participar de outras 3 etapas.
-

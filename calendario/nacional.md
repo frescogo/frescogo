@@ -1,16 +1,17 @@
 # Circuito Nacional - Ranking
 
-Serão 7 etapas distribuídas pelo Brasil:
+Serão 8 etapas distribuídas pelo Brasil:
 
 1. Ponta Negra (RN)
 2. João Pessoa (PB)
-3. Rio das Ostras (RJ)
-4. Fortaleza (CE)
-5. Salvador (BA)
-6. Maceió (AL)
-7. Copacabana (RJ)
+3. Jacaraípe (ES)
+4. Rio das Ostras (RJ)
+5. Fortaleza (CE)
+6. Salvador (BA)
+7. Maceió (AL)
+8. Copacabana (RJ)
 
-Os 3 melhores resultados de cada dupla (dentre as 7 etapas) serão considerados para um ranking.
+Os 3 melhores resultados de cada dupla (dentre as 8 etapas) serão considerados para um ranking.
 Devido à proximidade geográfica, somente uma das etapas RN ou PB poderá contar para o ranking (a outra deve ser descartada).
 
 As 3 primeiras duplas do ranking nacional se classificam para a grande final do ano que inlcui outras 10 duplas dos rankings regionais.
