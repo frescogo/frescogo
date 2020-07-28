@@ -44,10 +44,10 @@ ser usados, copiados e modificados livremente.**
 - **Golpes:**
     - Somente golpes acima de 50 km/h são contabilizados.
     - Somente os golpes mais potentes de cada atleta são contabilizados:
-        - até `120` golpes do lado     preferencial do atleta ("golpes normais")
-        - até  `16` golpes do lado não preferencial do atleta ("golpes revés")
+        - até `108` golpes do lado     preferencial do atleta ("golpes normais")
+        - até  `12` golpes do lado não preferencial do atleta ("golpes revés")
         - Opcionalmente, os golpes revés podem ser desabilitados e então serão
-          contabilizados até `136` golpes normais.
+          contabilizados até `120` golpes normais.
     - Cada atleta é avaliado em separado com uma pontuação:
         - `A = Nn x Vn  +  Nr x Vr`
             - `A` é a pontuação do atleta a ser calculada.

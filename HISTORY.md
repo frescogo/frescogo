@@ -2,6 +2,7 @@ v3.0 (jul/20)
 -------------
 
 - Regra nova com limite de golpes e velocidade mínima de ataque.
+- Base: 4 minutos, 50 km/h, 120 ataques (108+12).
 
 v2.4 (fev/20)
 -------------
