@@ -1,3 +1,8 @@
+v3.0 (jul/20)
+-------------
+
+- Regra nova com limite de golpes e velocidade mínima de ataque.
+
 v2.4 (fev/20)
 -------------
 

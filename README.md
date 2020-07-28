@@ -5,7 +5,7 @@ $ pandoc README.md -H deeplists.tex -o frescogo.pdf
 $ pandoc README.md -H deeplists.tex -o frescogo.html
 -->
 
-# FrescoGO! (versão 2.4)
+# FrescoGO! (versão 3.0)
 
 *FrescoGO!* é um marcador eletrônico semiautomático para treinamento e
 competições de Frescobol.
@@ -39,106 +39,46 @@ ser usados, copiados e modificados livremente.**
 
 -------------------------------------------------------------------------------
 
-## Regra
+## Regra - 4 minutos
 
 - **Golpes:**
-    - Cada atleta é avaliado individualmente pelas médias de velocidade dos
-      seguintes quesitos:
-        - **Volume:**
-            - Média *quadrática* da velocidade de todos os seus golpes.
-                - (A média quadrática considera as velocidades elevadas ao
-                   quadrado.)
-        - **Máximas - Normal:**
-            - Média simples da velocidade dos golpes mais fortes efetuados pelo
-              seu lado preferencial ("lado normal"). Serão computados um total
-              de `5` golpes para cada minuto de apresentação. Por exemplo, em
-              uma apresentação de `4` minutos, serão computados os `20` golpes
-              mais fortes.
-        - **Máximas - Revés:**
-            - Esse quesito é opcional e pode ser desabilitado.
-            - Média simples da velocidade dos golpes mais fortes efetuados pelo
-              seu lado não preferencial ("lado revés"). Serão computados um total
-              de `3` golpes para cada minuto de apresentação. Por exemplo, em
-              uma apresentação de `4` minutos, serão computados os `12` golpes
-              mais fortes.
-            - O revés só é válido quando supera em 10% a velocidade do golpe
-              anterior do parceiro.
-    - O total do atleta é a média ponderada entre os quesitos.
-        - Revés habilitado:
-            - `ATLETA = 60% Volume + 25% Normal + 15% Revés`
-        - Revés desabilitado:
-            - `ATLETA = 75% Volume + 25% Normal`
+    - Somente golpes acima de 50 km/h são contabilizados.
+    - Somente os golpes mais potentes de cada atleta são contabilizados:
+        - até `120` golpes do lado     preferencial do atleta ("golpes normais")
+        - até  `16` golpes do lado não preferencial do atleta ("golpes revés")
+        - Opcionalmente, os golpes revés podem ser desabilitados e então serão
+          contabilizados até `136` golpes normais.
+    - Cada atleta é avaliado em separado com uma pontuação:
+        - `A = Nn x Vn  +  Nr x Vr`
+            - `A` é a pontuação do atleta a ser calculada.
+            - `Nn` e `Nr` são as quantidades de golpes normais e revés,
+              respectivamente.
+            - `Vn` e `Vr` são as médias de velocidade dos golpes normais e
+              revés.
+
 - **Equilíbrio:**
-    - A pontuação de equilíbrio da dupla é a média entre os totais dos dois
-      atletas.
-    - Se um atleta estiver abaixo dessa média (com uma margem de 5%), então a
-      pontuação de equilíbrio será o menor total:
-        - `EQUILIB = MENOR((ATL1+ATL2)/2, MENOR(ATL1,ATL2)x1.05)`
-- **Continuidade:**
-    - A apresentação é encerrada sumariamente ao atingir o limite máximo de
-      quedas. O limite corresponde a `4` quedas por minuto. Por exemplo, em uma
-      apresentação de `4` minutos, o limite será de `16` quedas.
-    - Os dois últimos golpes antes de cada queda são sempre desconsiderados.
-    - Cada queda subtrai um percentual da pontuação final após calcular o
-      equilíbrio da dupla. O percentual é de `6%` divididos pelo total de
-      minutos da apresentação. Por exemplo, em uma apresentação de `4` minutos,
-      o percentual será de `1.5%`.
-        - `FINAL = EQUILIB x (100 - PCT x QUEDAS) / 100`
+    - A pontuação de equilíbrio da dupla é a média de pontuação dos atletas:
+        `(A1 + A2) / 2`.
+    - Se um atleta estiver muito abaixo dessa média (com uma margem de 10%),
+      então a pontuação de equilíbrio será o menor total:
+        - `EQU = MENOR((A1+A2)/2, MENOR(A1,A2)x1.10)`
+
+- **Quedas:**
+    - A apresentação é encerrada sumariamente ao atingir `16` quedas.
+    - Cada queda desconta `2%` da pontuação de equilíbrio:
+        - `FIM = EQU - (2% por queda)`
 
 ```
-  ATLETA  = 60% Volume + 25% Normal + 15% Revés     (75% Volume com o Revés desabilitado)
-  EQUILIB = MENOR( (ATLETA1+ATLETA2)/2, MENOR(ATLETA1,ATLETA2)x1.05 )
-  FINAL   = EQUILIB x (100 - PCT x QUEDAS) / 100
+  A1  = Nn x Vn  +  Nr x Vr
+  A2  = Nn x Vn  +  Nr x Vr
+  EQU = MENOR((A1+A2)/2, MENOR(A1,A2)+10%)`
+  FIM = EQU - (2% por queda)
 ```
 
+<!--
 Em caso de empate entre duplas, os seguintes quesitos serão usados para
 desempate: (1) menor quantidade de quedas, (2) maior quantidade de golpes, (3)
 sorteio.
-
-<!--
-- 
-      Exemplo:
-        - Com 5 quedas, a dupla perderá 10% dos pontos, ou seja, se ela pontuou
-          4400 após o equilíbrio, a pontuação final será de **3960 pontos**
-          (`4400x90%`).
-        - Ex., se os atletas pontuaram 4000 e 5000 pontos, pega-se a média
-          (`(5000+4000)/2 = 4500`) e 110% do menor (`4000x110% = 4400`).
-          A pontuação de equilíbrio será o menor entre os dois valores
-          (`4500 vs 4400`): **4400 pontos**.
-
-Os três quesitos são somados As três médias são 
-
-    - A velocidade de cada golpe efetuado por um atleta é elevada ao quadrado,
-      dividida por 100 e somada ao total do atleta. Não há velocidade mínima.
-      Exemplos:
-        - 30 kmh vale **09 pontos**: `30x30/100 =  900/100 =  9`.
-        - 40 kmh vale **16 pontos**: `40x40/100 = 1600/100 = 16`.
-        - 50 kmh vale **25 pontos**: `50x50/100 = 2500/100 = 25`.
-        - 60 kmh vale **36 pontos**: `60x60/100 = 3600/100 = 36`.
-        - 70 kmh vale **49 pontos**: `70x70/100 = 4900/100 = 49`.
-        - 80 kmh vale **64 pontos**: `80x80/100 = 6400/100 = 64`.
-        - 90 kmh vale **81 pontos**: `90x90/100 = 8100/100 = 81`.
-- **Máximas:**
-    - A média de pontuação dos `36` golpes mais velozes de cada atleta é
-      multiplicada por `72` e somada ao seu total (bônus `x2` por cada golpe).
-    - São considerados `24` golpes efetuados pelo lado preferencial do atleta
-      ("lado normal") e `12` golpes efetuados pelo lado não preferencial do
-      atleta ("lado revés").
-    - Exemplo:
-        - A média dos `24` golpes mais velozes do lado normal foi de `75 kmh`.
-        - A média dos `12` golpes mais velozes do lado revés  foi de `55 kmh`.
-        - A média dos `36` golpes mais velozes foi então de `68 kmh` com `46`
-          pontos por golpe.
-        - Esse atleta vai então obter **3312 pontos** (`46 x 72`) no quesito
-          de *Máximas* que ainda serão somados aos seus pontos de *Volume*.
-    - OBS.:
-        - Tipicamente, golpes pelo lado normal são efetuados de *forehand* e
-          golpes pelo lado revés de *backhand*. No entanto, qualquer qualidade
-          de golpe é válida, inclusive trocando a raquete de mão.
-        - Os `36` golpes dentre as máximas também são considerados no quesito
-          **Volume** normalmente.
-    - OBS.: Em uma apresentação de 3 minutos, 7 golpes correspondem a
-      aproximadamente 10% dos golpes em posição de ataque.
 -->
 
 -------------------------------------------------------------------------------
@@ -151,11 +91,10 @@ Os três quesitos são somados As três médias são
 - Após o saque, o juiz pressiona o botão correspondente a cada atleta toda vez
   que ele acerta a bola. O tempo só passa quando o botão é pressionado.
 - Um som identifica a faixa de velocidade do golpe anterior:
-    - ` < 40 kmh`: som simples grave
-    - ` < 50 kmh`: som simples médio
-    - ` < 60 kmh`: som simples agudo
-    - ` < 70 kmh`: som duplo   grave
-    - ` < 80 kmh`: som duplo   médio
+    - `até 50 kmh`: som grave
+    - `até 60 kmh`: som médio
+    - `até 70 kmh`: som agudo
+    - `>= 80 kmh`: som duplo   médio
     - ` < 90 kmh`: som duplo   agudo
     - `>= 90 kmh`: som duplo   muito agudo
 - Um golpe de revés do atleta acompanha um som grave (após o som correspondente
@@ -537,10 +476,6 @@ TOTAL ........... 46.95 pts             <-- Pontuação final da dupla
 <!--
 - Como eu posso contribuir financeiramente?
     -
--->
-
--------------------------------------------------------------------------------
-
 - Por quê as velocidades são elevadas ao quadrado no quesito de *Volume*?
     - Para incentivar os golpes mais potentes.
       Quanto maior a velocidade, maior ainda será o quadrado dela.
@@ -554,7 +489,6 @@ TOTAL ........... 46.95 pts             <-- Pontuação final da dupla
       Os 36 golpes correspondem a mais ou menos 15% dos ataques de um atleta em
       uma apresentação de 5 minutos.
 
-<!--
     - E por quê a regra não considera todos os 7 golpes mais velozes (no lugar
       de considerar apenas o 7o)?
         - Para minimizar a imprecisão da marcação do juiz.
@@ -576,9 +510,20 @@ TOTAL ........... 46.95 pts             <-- Pontuação final da dupla
       seguinte será adiantado.
       O golpe "A" terá a velocidade reduzida e o golpe "B" terá a velocidade
       aumentada.
+      Se muitos atrasos acontecerem no ataque, a pontuação da dupla será
+      prejudicada.
+      Se muitos avanços acontecerem no ataque, a pontuação da dupla será
+      beneficiada.
+      De qualquer maneira, o som emitido pela aferição permite identificar os
+      atrasos e avanços.
+
+<!--
       Como a regra usa o quadrado das velocidades, esse atraso e adiantamento
       (se forem sistemáticos) podem afetar a pontuação final.
+-->
 
 - Tem como o atleta "roubar" ou "tirar vantagem" da regra?
     - O atleta pode projetar o corpo para frente e adiantar ao máximo os golpes
       para aumentar a medição das velocidades.
+      É recomendado um árbitro de linha para garantir que a distância mínima é
+      sempre respeitada.
