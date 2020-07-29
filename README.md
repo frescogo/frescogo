@@ -43,13 +43,44 @@ ser usados, copiados e modificados livremente.**
 
 - **Golpes:**
     - Somente golpes acima de 50 km/h são contabilizados.
+    - Somente os `120` golpes mais potentes de cada atleta são contabilizados.
+    - Cada atleta é avaliado em separado com uma pontuação:
+        - `A = N x V`
+            - `A` é a pontuação do atleta a ser calculada.
+            - `N` é a quantidade de golpes.
+            - `V` é a média de velocidade dos golpes.
+
+- **Equilíbrio:**
+    - A pontuação de equilíbrio da dupla é a média de pontuação dos atletas:
+        `(A1 + A2) / 2`.
+    - Se um atleta estiver muito abaixo dessa média (com uma margem de 10%),
+      então a pontuação de equilíbrio será o menor total:
+        - `EQU = MENOR((A1+A2)/2, MENOR(A1,A2)x1.10)`
+
+- **Quedas:**
+    - A apresentação é encerrada sumariamente ao atingir `16` quedas.
+    - Cada queda desconta `2%` da pontuação de equilíbrio:
+        - `FIM = EQU - (2% por queda)`
+
+```
+  A1  = N x V
+  A2  = N x V
+  EQU = MENOR((A1+A2)/2, MENOR(A1,A2)+10%)`
+  FIM = EQU - (2% por queda)
+```
+
+<!--
+## Regra - 4 minutos
+
+- **Golpes:**
+    - Somente golpes acima de 50 km/h são contabilizados.
     - Somente os golpes mais potentes de cada atleta são contabilizados:
         - até `108` golpes do lado     preferencial do atleta ("golpes normais")
         - até  `12` golpes do lado não preferencial do atleta ("golpes revés")
         - Opcionalmente, os golpes revés podem ser desabilitados e então serão
           contabilizados até `120` golpes normais.
     - Cada atleta é avaliado em separado com uma pontuação:
-        - `A = Nn x Vn  +  Nr x Vr`
+        - `A = (Nn x Vn) + (Nr x Vr)`
             - `A` é a pontuação do atleta a ser calculada.
             - `Nn` e `Nr` são as quantidades de golpes normais e revés,
               respectivamente.
@@ -69,13 +100,12 @@ ser usados, copiados e modificados livremente.**
         - `FIM = EQU - (2% por queda)`
 
 ```
-  A1  = Nn x Vn  +  Nr x Vr
-  A2  = Nn x Vn  +  Nr x Vr
+  A1  = (Nn x Vn) + (Nr x Vr)
+  A2  = (Nn x Vn) + (Nr x Vr)
   EQU = MENOR((A1+A2)/2, MENOR(A1,A2)+10%)`
   FIM = EQU - (2% por queda)
 ```
 
-<!--
 Em caso de empate entre duplas, os seguintes quesitos serão usados para
 desempate: (1) menor quantidade de quedas, (2) maior quantidade de golpes, (3)
 sorteio.
@@ -127,15 +157,17 @@ A seguir são explicados os formatos de exibição do resultado da apresentaçã
                   Joao / Maria                            <-- nome dos atletas
 -----------------------------------------------
 
-TOTAL .............. 41.73 pts                            <-- total de pontos
-Tempo Restante ..... 01:23                                <-- tempo restante
+PONTOS ............. 4055 pontos                          <-- total de pontos
+Tempo Restante ..... 00:23                                <-- tempo restante
 Descanso ........... 25s                                  <-- tempo de descanso
-Quedas ............. 10                                   <-- número de quedas
-Golpes ............. 440                                  <-- quantidade de golpes
-Média .............. 51 kmh                               <-- média geral em km/h
+Quedas ............. 5                                    <-- número de quedas
+Ataques ............ 192                                  <-- quantidade de golpes válidos
+Ritmo .............. 47 kmh                               <-- média geral em km/h
 Juiz ............... Arnaldo                              <-- nome do juiz
 
 -----------------------------------------------
+
+(essa parte do manual ainda está na v240)
 
       Joao: 50.27 pts (50.70 vol / 63.87 nrm / 20.08 rev) <-- totais do atleta à esquerda
  rev  [ 45 44 40 39 38 35 00 00 00 00 00 00 ... ]         <-- 24 golpes de revés mais fortes
@@ -183,6 +215,8 @@ v240/750cm/240s/maxs(85,200)/equ1/cont15/fim16)           <-- configurações
                                         <-- Queda.
 -- Sequencia XX ----------------        <-- Outras sequências...
 ...
+
+(essa parte do manual ainda está na v240)
 
 -----------------------------------------------
 
