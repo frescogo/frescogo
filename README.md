@@ -52,7 +52,7 @@ ser usados, copiados e modificados livremente.**
 
 - **Equilíbrio:**
     - A pontuação de equilíbrio da dupla é a média de pontuação dos atletas:
-        `(A1 + A2) / 2`.
+        - `(A1 + A2) / 2`
     - Se um atleta estiver muito abaixo dessa média (com uma margem de 10%),
       então a pontuação de equilíbrio será o menor total:
         - `EQU = MENOR((A1+A2)/2, MENOR(A1,A2)x1.10)`
