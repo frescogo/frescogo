@@ -42,7 +42,7 @@ ser usados, copiados e modificados livremente.**
 ## Regra - 4 minutos
 
 - **Golpes:**
-    - Somente golpes acima de 50 km/h são contabilizados.
+    - Somente golpes acima de `50` km/h são contabilizados.
     - Somente os `120` golpes mais potentes de cada atleta são contabilizados.
     - Cada atleta é avaliado em separado com uma pontuação:
         - `A = N x V`
