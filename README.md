@@ -62,6 +62,8 @@ ser usados, copiados e modificados livremente.**
     - Cada queda desconta `2%` da pontuação de equilíbrio:
         - `FIM = EQU - (2% por queda)`
 
+- **Fórmula:**
+
 ```
   A1  = N x V
   A2  = N x V
