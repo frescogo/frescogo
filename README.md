@@ -63,6 +63,7 @@ ser usados, copiados e modificados livremente.**
         - `FIM = EQU - (2% por queda)`
 
 - **Fórmula:**
+
 ```
     A1  = N x V
     A2  = N x V
