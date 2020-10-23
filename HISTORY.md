@@ -1,3 +1,15 @@
+v3.1 (ago/20)
+-------------
+
+- Suporte ao radar.
+- Operação manual pelo teclado.
+- Jogo de trincas.
+- Máximo de 100 ataques por atleta.
+- v3.1.2
+    - Modo "esquenta".
+    - Não toca sons abaixo de 50 (mas continua exibindo).
+    - Corrige CTRL-BACKSPACE.
+
 v3.0 (jul/20)
 -------------
 
