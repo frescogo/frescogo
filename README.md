@@ -23,7 +23,13 @@ Links do projeto:
 
 ## Regra
 
+<!--
 ![Tabela de Pontuação de Golpes](bonus.png)
+-->
+
+<p>
+<img src="bonus.png" width="300" align="right">
+</p>
 
 - Tempo:
     - 5 minutos cronometrados.
