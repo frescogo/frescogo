@@ -21,8 +21,25 @@ Links do projeto:
 **O software e a regra do FrescoGO! são de domínio público, podendo ser usados,
   copiados e modificados livremente.**
 
-## Regra - 4 minutos
+## Regra
 
+<img src="bonus.png"\>
+
+- Tempo:
+    - 5 minutos cronometrados.
+- Golpes:
+    - Cada golpe pontua de acordo com a tabela ao lado.
+    - São considerados somente os 150 golpes mais fortes de cada atleta.
+- Equilíbrio:
+    - A diferença de pontuação entre os atletas fica limitada a até 20%.
+      (ex, se um atleta pontua 10000, o outro fica limitado a até 12000)
+- Quedas:
+    - As primeiras 5 quedas não descontam pontos.
+    - A partir da 6ᵃ queda, cada queda desconta 3% da pontuação final.
+      (ex, um jogo que termina com 10 quedas tem 15% de penalização)
+    - A 20ᵃ queda interrompe o jogo sumariamente.
+
+<!--
 - Cada atleta é avaliado em separado com uma pontuação:
     - `ATL = Ata x Vel`
         - `ATL` é a pontuação do atleta a ser calculada.
@@ -43,6 +60,7 @@ Links do projeto:
     ATL2  = Ata x Vel
     TOTAL = (ATL1 + ATL2) - (2% por queda)
 ```
+-->
 
 ## Agradecimentos
 
