@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 3.1)
+# FrescoGO! (versão 4.0)
 
 O *FrescoGO!* é um software para avaliação de apresentações de Frescobol
 competitivo.
@@ -23,7 +23,7 @@ Links do projeto:
 
 ## Regra
 
-<img src="bonus.png"\>
+![Tabela de Pontuação de Golpes](bonus.png)
 
 - Tempo:
     - 5 minutos cronometrados.
