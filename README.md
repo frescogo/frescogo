@@ -28,7 +28,7 @@ Links do projeto:
 -->
 
 <p>
-<img src="bonus.png" width="300" align="right">
+<img src="bonus.png" width="250" align="right">
 </p>
 
 - Tempo:
@@ -38,11 +38,11 @@ Links do projeto:
     - São considerados somente os 150 golpes mais fortes de cada atleta.
 - Equilíbrio:
     - A diferença de pontuação entre os atletas fica limitada a até 20%.
-      (ex, se um atleta pontua 10000, o outro fica limitado a até 12000)
+        - (ex, se um atleta pontua 10000, o outro fica limitado a até 12000)
 - Quedas:
     - As primeiras 5 quedas não descontam pontos.
     - A partir da 6ᵃ queda, cada queda desconta 3% da pontuação final.
-      (ex, um jogo que termina com 10 quedas tem 15% de penalização)
+        - (ex, um jogo que termina com 10 quedas tem 15% de penalização)
     - A 20ᵃ queda interrompe o jogo sumariamente.
 
 <!--
