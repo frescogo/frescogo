@@ -28,7 +28,7 @@ Links do projeto:
 -->
 
 <p>
-<img src="bonus.png" width="200" align="right">
+<img src="bonus.png" width="225" align="right">
 </p>
 
 - Tempo:
