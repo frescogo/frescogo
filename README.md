@@ -37,8 +37,8 @@ Links do projeto:
     - Cada golpe pontua de acordo com a tabela ao lado.
     - São considerados somente os 150 golpes mais fortes de cada atleta.
 - Equilíbrio (opcional):
-    - A diferença de pontuação entre os atletas fica limitada a até 20%.
-        - (ex, se um atleta pontua 10000, o outro fica limitado a até 12000)
+    - A diferença de pontuação entre os atletas fica limitada a até 30%.
+        - (ex, se um atleta pontua 10000, o outro fica limitado a até 13000)
 - Quedas:
     - As primeiras 5 quedas não descontam pontos.
     - A partir da 6ᵃ queda, cada queda desconta 3% da pontuação final.
