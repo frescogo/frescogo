@@ -83,3 +83,5 @@ Agradecemos a todos os que contribuíram para o desenvolvimento do FrescoGO!:
 - Luciano Paredão (RN)
 - Luiz Negão (RJ)
 - Mateus (RJ)
+- PH (RJ)
+- Wal (RJ)

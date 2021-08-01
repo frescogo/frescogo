@@ -1,3 +1,11 @@
+v4.0 (jun/21)
+-------------
+
+- Nova regra.
+- Novos sons. Faixas de 10 em 10 km/h.
+- v4.0.2
+    - Nova configuração `RADAR_REPS` para calibre do radar.
+
 v3.1 (ago/20)
 -------------
 
@@ -6,9 +14,16 @@ v3.1 (ago/20)
 - Jogo de trincas.
 - Máximo de 100 ataques por atleta.
 - v3.1.2
-    - Modo "esquenta".
+    - Modo "esquenta" de aquecimento.
     - Não toca sons abaixo de 50 (mas continua exibindo).
     - Corrige CTRL-BACKSPACE.
+- v3.1.3
+    - Relatório geral da competição em "resultados.csv".
+    - Correções no tempo de aquecimento.
+    - Tempo máximo de descanso com contagem regressiva.
+    - Som acima de 90 km/h.
+    - Tempo passa a cada segundo.
+    - Tamanho das fontes maiores.
 
 v3.0 (jul/20)
 -------------
