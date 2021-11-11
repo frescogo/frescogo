@@ -1,3 +1,13 @@
+v4.1 (nov/21)
+-------------
+
+- Fundo vermelho para atleta que está atrás (e não o contrário).
+- Som diferente para velocidade >100kmh.
+- Corrige backspace que não funcionava na edição dos nomes.
+- Nova aferição para evitar duplicatas.
+    - Também permite configurar tempo mínimo entre golpes.
+- Launcher para Linux.
+
 v4.0 (jun/21)
 -------------
 

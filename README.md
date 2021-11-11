@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 4.0)
+# FrescoGO! (versão 4.0 e 4.1)
 
 O *FrescoGO!* é um software para avaliação de apresentações de Frescobol
 competitivo.
