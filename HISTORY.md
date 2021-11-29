@@ -1,3 +1,19 @@
+v4.3 (jan/22)
+-------------
+
+- Nova faixa de som acima de 100kmh.
+- Toca som ao adicionar/diminuir quedas.
+- Aplica desequilibrio paulatinamente entre 0-100s.
+- Exibe a soma bruta no placar.
+- Limita pontuacao a 300 pontos (equivalente a 100kmh).
+
+v4.2 (dez/21)
+-------------
+
+- Mostra o percentual de desequilíbrio.
+- Permite voltar bola mesmo após término do jogo.
+- Conta golpes manuais no modo radar sempre com a velocidade 30km/h.
+
 v4.1 (nov/21)
 -------------
 
@@ -12,7 +28,7 @@ v4.0 (jun/21)
 -------------
 
 - Nova regra.
-- Novos sons. Faixas de 10 em 10 km/h.
+- Novos sons. Faixas de 10 em 10km/h.
 - v4.0.2
     - Nova configuração `RADAR_REPS` para calibre do radar.
 
