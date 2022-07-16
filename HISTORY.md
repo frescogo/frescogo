@@ -1,3 +1,15 @@
+v5.0 (jul/22)
+-------------
+
+- Modo `CTRL-M` de depuração.
+- Algumas operações por teclado requerem 3s de pressionamento.
+- Regra de ataques dos dois lados (dir/esq).
+  - Árbitro pressiona Z ou M para golpe não preferencial, que acompanha um som.
+- Nova fórmula de bônus.
+- Exibe médias de velocidade ao final do jogo (máx/min, 75+/75-, dir/esq).
+- Exibição dos atletas não mais espelhada.
+- Relatório foi simplificado.
+
 v4.3 (jan/22)
 -------------
 

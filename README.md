@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-# FrescoGO! (versão 4.0, 4.1 e 4.2)
+# FrescoGO! (v5)
 
 O *FrescoGO!* é um software para avaliação de apresentações de Frescobol
 competitivo.
@@ -36,7 +36,10 @@ Links do projeto:
 - Golpes:
     - Cada golpe pontua de acordo com a tabela ao lado.
     - São considerados somente os 150 golpes mais fortes de cada atleta.
-- Equilíbrio (opcional):
+- Ataques:
+    - Os 30 ataques mais fortes de cada lado são pontuados em dobro.
+    - Um ataque precisa ser 20% mais forte que o golpe anterior.
+- Equilíbrio:
     - A diferença de pontuação entre os atletas fica limitada a até 30%.
         - (ex, se um atleta pontua 10000, o outro fica limitado a até 13000)
 - Quedas:
