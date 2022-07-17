@@ -37,7 +37,7 @@ Links do projeto:
     - Cada golpe pontua de acordo com a tabela ao lado.
     - São considerados somente os 150 golpes mais fortes de cada atleta.
 - Ataques:
-    - Os 30 ataques mais fortes de cada lado são pontuados em dobro.
+    - Os 25 ataques mais fortes de cada lado são pontuados em dobro.
     - Um ataque precisa ser 20% mais forte que o golpe anterior.
 - Equilíbrio:
     - A diferença de pontuação entre os atletas fica limitada a até 30%.
