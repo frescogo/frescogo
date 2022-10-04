@@ -31,18 +31,23 @@ Links do projeto:
 <img src="bonus.png" width="225" align="right">
 </p>
 
-- Tempo:
+- **Tempo**:
     - 5 minutos cronometrados.
-- Golpes:
+- **Golpes**:
     - Cada golpe pontua de acordo com a tabela ao lado.
     - São considerados somente os 150 golpes mais fortes de cada atleta.
-- Ataques:
+- **Intensidade**:
+    - A cada 7 (ou mais) golpes contínuos, o 4o mais forte deles (mediana)
+      pontua em dobro.
+    - Golpes continuos são aqueles efetuados pelo mesmo atleta dentro de
+      intervalos de até 1,5s.
+- **Máximas**:
     - Os 25 ataques mais fortes de cada lado são pontuados em dobro.
-    - Um ataque precisa ser 20% mais forte que o golpe anterior.
-- Equilíbrio:
+    - Um ataque é um golpe pelo menos 20% mais forte que o golpe anterior.
+- **Equilíbrio**:
     - A diferença de pontuação entre os atletas fica limitada a até 30%.
         - (ex, se um atleta pontua 10000, o outro fica limitado a até 13000)
-- Quedas:
+- **Quedas**:
     - As primeiras 5 quedas não descontam pontos.
     - A partir da 6ᵃ queda, cada queda desconta 3% da pontuação final.
         - (ex, um jogo que termina com 10 quedas tem 15% de penalização)
