@@ -1,13 +1,9 @@
-v5.2 (out/22)
+v5.1 (out/22)
 -------------
 
 - Nova regra de intensidade.
 - Pisca tempo a partir de `0:05`, sem decrescer até terminar.
 - Renomeia regra de "Ataques" para "Máximas".
-
-v5.1 (ago/22)
--------------
-
 - Timer de teclas 2s para 3s.
 - Alternância de regras `CTRL-V` (v4 e v5).
 - Som duplo para defesa (no lugar de golpe normal).

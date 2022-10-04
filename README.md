@@ -37,8 +37,7 @@ Links do projeto:
     - Cada golpe pontua de acordo com a tabela ao lado.
     - São considerados somente os 150 golpes mais fortes de cada atleta.
 - **Intensidade**:
-    - A cada 7 golpes contínuos, o 4o mais forte deles (mediana) pontua em
-      dobro.
+    - A cada 7 golpes contínuos, o 4o mais forte deles pontua em dobro.
     - Golpes continuos são aqueles efetuados pelo mesmo atleta dentro de
       intervalos de até 1,5s.
 - **Máximas**:
