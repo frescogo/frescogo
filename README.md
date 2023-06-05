@@ -32,7 +32,7 @@ Links do projeto:
 </p>
 
 - **Tempo**:
-    - 5 minutos cronometrados.
+    - 6 minutos cronometrados.
 - **Golpes**:
     - Cada golpe pontua de acordo com a tabela ao lado.
     - São considerados somente os 150 golpes mais fortes de cada atleta.
@@ -47,10 +47,7 @@ Links do projeto:
     - A diferença de pontuação entre os atletas fica limitada a até 30%.
         - (ex, se um atleta pontua 10000, o outro fica limitado a até 13000)
 - **Quedas**:
-    - As primeiras 5 quedas não descontam pontos.
-    - A partir da 6ᵃ queda, cada queda desconta 3% da pontuação final.
-        - (ex, um jogo que termina com 10 quedas tem 15% de penalização)
-    - A 20ᵃ queda interrompe o jogo sumariamente.
+    - Cada queda subtrai 12s do tempo corrente.
 
 <!--
 - Cada atleta é avaliado em separado com uma pontuação:
