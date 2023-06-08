@@ -1,3 +1,16 @@
+v5.4 (jun/23)
+-------------
+
+- Nova regra para quedas: remove tempo em vez de pontos.
+    - Não há mais limite de 20 quedas.
+- Prefixo de categoria para os logs configurável.
+- Remove opção da regra v4.
+
+v5.3 (fev/23)
+-------------
+
+- Exibe maxs/ints no placar.
+
 v5.2 (out/22)
 -------------
 

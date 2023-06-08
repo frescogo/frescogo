@@ -42,10 +42,10 @@ Links do projeto:
    - *Simples*:
         - Cada golpe simples pontua de acordo com a tabela ao lado.
         - São considerados somente os 150 golpes mais fortes de cada atleta.
-   - *Contínuos*:
+   - *Contínuos (opcional)*:
         - A cada 10 golpes contínuos, o 5o mais forte deles pontua em dobro.
         - Um golpe contínuo deve suceder em até 1,5 segundo o golpe imediatamente anterior dado do mesmo atleta.
-    - *Potentes*:
+    - *Potentes (opcional)*:
         - Os 25 golpes mais potentes de forehand e de backhand de cada atleta são pontuados em dobro.
         - Um golpe potente deve ser 20% mais forte que o golpe imediatamente anterior.
 
