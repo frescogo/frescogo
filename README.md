@@ -33,21 +33,21 @@ Links do projeto:
 
 - **Tempo**:
     - 6 minutos cronometrados.
-- **Golpes**:
-    - Cada golpe pontua de acordo com a tabela ao lado.
-    - São considerados somente os 150 golpes mais fortes de cada atleta.
-- **Intensidade**:
-    - A cada 10 golpes contínuos, o 5o mais forte deles pontua em dobro.
-    - Golpes continuos são aqueles efetuados pelo mesmo atleta dentro de
-      intervalos de até 1,5s.
-- **Máximas**:
-    - Os 25 ataques mais fortes de cada lado são pontuados em dobro.
-    - Um ataque é um golpe pelo menos 20% mais forte que o golpe anterior.
+- **Quedas**:
+   - Cada queda subtrai 12 segundos do tempo corrente.
 - **Equilíbrio**:
     - A diferença de pontuação entre os atletas fica limitada a até 30%.
-        - (ex, se um atleta pontua 10000, o outro fica limitado a até 13000)
-- **Quedas**:
-    - Cada queda subtrai 12s do tempo corrente.
+      (Se um atleta pontua 10000, então o outro fica limitado a até 13000.)
+- **Golpes**:
+   - *Simples*:
+        - Cada golpe simples pontua de acordo com a tabela ao lado.
+        - São considerados somente os 150 golpes mais fortes de cada atleta.
+   - *Contínuos*:
+        - A cada 10 golpes contínuos, o 5o mais forte deles pontua em dobro.
+        - Um golpe contínuo deve suceder em até 1,5 segundo o golpe imediatamente anterior dado do mesmo atleta.
+    - *Potentes*:
+        - Os 25 golpes mais potentes de forehand e de backhand de cada atleta são pontuados em dobro.
+        - Um golpe potente deve ser 20% mais forte que o golpe imediatamente anterior.
 
 <!--
 - Cada atleta é avaliado em separado com uma pontuação:
